@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Post Office</title>
-        <link rel="stylesheet" href="./public/Style.css">
+        <link rel="stylesheet" href="Style.css">
     </head>
     <body>
         <div class = "container">
