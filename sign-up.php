@@ -6,7 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Post Office</title>
         <link rel="stylesheet" href="Style.css">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"> -->
     </head>
     <body>
         <div class = "container">
@@ -30,33 +30,33 @@
                 </div>
             </nav>
             <!--Form for Sign Up-->
-        </div>
-        <!-- <div class="row"> -->
-            <!-- <div class="col-md-12"> -->
-                <h2>Sign Up</h2>
-                <p>Fill out the form to create an account.</p>
-                <form action="" method="post">
-                    <div class="form-group">
-                        <label>Full Name</label>
-                        <input type="text" name="name" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>E-mail Address</label>
-                        <input type="email" name="email" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" name="password" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Confirm Password</label>
-                        <input type="password" name="confirm_password" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" name="submit" class="yellow-button" value="Submit">
-                    </div>
-                </form>
+            <!-- <div class="row"> -->
+                <!-- <div class="col-md-12"> -->
+                    <h2>Sign Up</h2>
+                    <p>Fill out the form to create an account.</p>
+                    <form action="" method="post">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" name="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>E-mail Address</label>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" name="password" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" name="confirm_password" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" name="submit" class="yellow-button" value="Submit">
+                        </div>
+                    </form>
+                <!-- </div> -->
             <!-- </div> -->
-        <!-- </div> -->
+        </div>
     </body>
 </html>
