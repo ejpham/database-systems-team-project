@@ -1,7 +1,7 @@
+<!DOCTYPE html>
 <html>
-    <title>page-one</title>
+    <title>contact-page</title>
     <h1>This is contacts page</h1>
     <h2>this is a test DT</h2>
     <a href="/index.html">index</a>
 </html>
-
