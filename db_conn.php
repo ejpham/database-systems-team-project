@@ -3,7 +3,7 @@ $serverName = "team-3-server.database.windows.net";
 $connectionOptions = array(
     "Database" => "team-3-db",
     "Uid" => "website",
-    "PWD" => "Password1!"
+    "PWD" => "Password1"
 );
 
 $conn = sqlsrv_connect($serverName, $connectionOptions);
