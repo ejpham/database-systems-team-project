@@ -22,7 +22,7 @@
                         <li class="nav-link"><a href="index.php">Home</a></li>
                         <li class="nav-link"><a href="mail.php">Mail</a></li>
                         <li class="nav-link"><a href="pricing.php">Pricing</a></li>
-                        <li class="nav-link"><a href="contact.php">Contact Us</a></li>
+                        <li class="nav-link"><a href="contact-us.php">Contact Us</a></li>
                         <a href="sign-in.php"><button class="yellow-button">Sign In</button></a>
                         <a href="sign-up.php"><button class="yellow-button">Sign Up</button></a>
                     </ul>
