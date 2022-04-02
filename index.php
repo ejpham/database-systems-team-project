@@ -21,10 +21,10 @@
                     <ul class = "navbar-nav">
                         <!--<li class="nav-link">Mail</li>-->
                         <!-- D-Ten: I'm trying to make the class items become links-->
-                        <li class="nav-link"><a href="page-one.html">Mail</a></li>
-                        <li class="nav-link"><a href="pricing-page.html">Pricing</a></li>
-                        <li class="nav-link"><a href="contact-page.html">Contact Us</a></li>
-                        <a href="sign-in-page.html">
+                        <li class="nav-link">Mail</li>
+                        <li class="nav-link"><a href="pricing-page.php">Pricing</a></li>
+                        <li class="nav-link"><a href="contact-page.php">Contact Us</a></li>
+                        <a href="sign-in-page.php">
                             <button class = "sign-in">Sign In</button>
                         </a>
                         
