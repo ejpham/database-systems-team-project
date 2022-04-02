@@ -23,8 +23,8 @@
                         <li class="nav-link"><a href="mail-page.php">Mail</a></li>
                         <li class="nav-link"><a href="pricing-page.php">Pricing</a></li>
                         <li class="nav-link"><a href="contact-page.php">Contact Us</a></li>
-                        <a href="sign-in-page.php"><button class="sign-in">Sign In</button></a>
-                        <a href="sign-up-page.php"><button class="sign-up">Sign Up</button></a>
+                        <a href="sign-in-page.php"><button class="yellow-button">Sign In</button></a>
+                        <a href="sign-up-page.php"><button class="yellow-button">Sign Up</button></a>
                     </ul>
                 </div>
             </nav>
