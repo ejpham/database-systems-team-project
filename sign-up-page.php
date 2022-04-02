@@ -13,7 +13,7 @@
             <nav class="navbar">
                 <div class="brand-name">
                     <h5>Post Office</h5>
-                    <h6>Contact</h6>
+                    <h6>Sign Up</h6>
                 </div>
                 <div class="nav-items">
                     <ul class="navbar-nav">
