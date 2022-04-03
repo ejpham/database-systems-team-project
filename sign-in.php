@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["id"] = $id;
                             $_SESSION["email"] = $email;
                             $success = "Login successful.";
-                            header("refresh:2; location:index.php");
+                            header("refresh:1; location:index.php");
                         }
                         else $login_err = "Invalid e-mail address or password.";
                     }
