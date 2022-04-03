@@ -12,6 +12,22 @@ session_start();
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     </head>
     <body>
+        <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+        body {
+            display: table;
+        }
+        .middle-page {
+            text-align: center;
+            display: table-cell;
+            vertical-align: middle;
+        }
+        </style>
         <!--Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
             <div class="container-fluid">
@@ -41,7 +57,7 @@ session_start();
             </div>
         </nav>
         <div class="container-fluid">
-            <div class="text-center align-middle">
+            <div class="middle-page">
                 <h1 class="display-1"><b>Team 3 Postal Service</b></h1>
                 <h6 class="display-6"><small class="text-muted">COSC 3380 Database Project</small></h6>
             </div>
