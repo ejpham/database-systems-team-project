@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     else {
         $email = trim($_POST["email"]);
     }
-    if (empty(trim($_POST["password"]))) {
+    if (empty(trim($_POST["password"])) || strlen(trim($_POST["password"])) < 6 || strlen(trim($_POST["password"])) > 16) {
         $password_err = "Please enter your password.";
     }
     else {
