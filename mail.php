@@ -16,8 +16,12 @@
                 <a href="mail.php" class="nav-item nav-link active">Mail</a>
                 <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                 <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
-                <button type="button" class="btn btn-light"><a href="sign-in.php" class="nav-item nav-link">Sign In</a></button>
-                <button type="button" class="btn btn-light"><a href="sign-up.php" class="nav-item nav-link">Sign Up</a></button>
+                <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
+                    <button type="button" class="btn btn-light"><a href="my-account.php" class="nav-item nav-link">My Account</a></button>
+                <?php } else { ?>
+                    <button type="button" class="btn btn-light"><a href="sign-in.php" class="nav-item nav-link">Sign In</a></button>
+                    <button type="button" class="btn btn-light"><a href="sign-up.php" class="nav-item nav-link">Sign Up</a></button>
+                <?php } ?>
             </div>
         </nav>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
