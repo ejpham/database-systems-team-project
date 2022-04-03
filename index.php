@@ -11,7 +11,7 @@
         <!--Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class = "container-fluid">
-                <a href="#" class="navbar-brand"><img src="images/brand-logo.jpeg" height="64" alt="Post Office"</a>
+                <a href="#" class="navbar-brand"><img src="images/brand-logo.jpeg" height="96" alt="Post Office"</a>
                 <a href="index.php" class="nav-item nav-link active">Home</a>
                 <a href="mail.php" class="nav-item nav-link">Mail</a>
                 <a href="pricing.php" class="nav-item nav-link">Pricing</a>
