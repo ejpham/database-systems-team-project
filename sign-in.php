@@ -70,16 +70,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <body>
         <!--Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
+            <div class="container-fluid py-3 my-3">
                 <a href="#" class="navbar-brand">Post Office</a>
                 <div class="nav-items">
-                    <div class="navbar-nav">
+                    <div class="navbar-nav justify-content-left">
                         <a href="index.php" class="nav-item nav-link">Home</a>
                         <a href="mail.php" class="nav-item nav-link">Mail</a>
                         <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                         <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
                     </div>
-                    <div class="navbar-nav ms-auto">
+                    <div class="navbar-nav ms-auto justify-content-right">
                         <a href="sign-in.php" class="nav-item nav-link active"><button type="button" class="btn btn-light">Sign In</button></a>
                         <a href="sign-up.php" class="nav-item nav-link"><button type="button" class="btn btn-light">Sign Up</button></a>
                     </div>
