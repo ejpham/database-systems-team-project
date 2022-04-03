@@ -13,7 +13,7 @@ session_start();
     <link href="styles.css" rel="stylesheet">
 </head>
 <body>
-    <span class="badge bg-dark rounded-pill">this is the center</span>
+    <div class="text-center"><span class="badge rounded-pill bg-dark">this is the center</span></div>
     <!--Navigation-->
     <div class="m-4">
         <nav class="navbar navbar-expand-sm navbar-light" style="background-color: #e3f2fd;">
