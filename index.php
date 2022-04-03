@@ -40,7 +40,7 @@ session_start();
                 <?php } ?>
             </div>
         </nav>
-        <div class="container-fluid text-center">
+        <div class="container-fluid col-sm-6">
             <h1 class="display-1"><b>Team 3 Postal Service</b></h1>
             <h6 class="display-6"><small class="text-muted">COSC 3380 Database Project</small></h6>
         </div>
