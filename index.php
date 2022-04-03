@@ -41,10 +41,10 @@ session_start();
             </div>
         </nav>
         <div class="container-fluid">
-            <p class="text-center text-primary">
+            <div class="text-center text-primary">
                 <h1 class="display-1"><b>Team 3 Postal Service</b></h1>
                 <h6 class="display-6"><small class="text-muted">COSC 3380 Database Project</small></h6>
-            </p>
+            </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     </body>
