@@ -41,7 +41,7 @@ session_start();
             </div>
         </nav>
         <div class="container-fluid">
-            <p class="text-center; text-primary">
+            <p class="text-center text-primary">
                 <h1 class="display-1"><b>Team 3 Postal Service</b></h1>
                 <h6 class="display-6"><small class="text-muted">COSC 3380 Database Project</small></h6>
             </p>
