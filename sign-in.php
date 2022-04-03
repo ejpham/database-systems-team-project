@@ -12,56 +12,40 @@ $email = $password = "";
 $email_err = $password_err = $login_err = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (empty(trim($_POST["email"]))) {
-        $email_err = "Please enter your e-mail address.";
-    }
-    else {
-        $email = trim($_POST['email']);
-        $check_email = "SELECT * FROM WebLogins.users WHERE email = '$email'";
-        $result = mysqli_query($conn_WebLogins, $check_email);
-        if (mysqli_num_rows($result) === 0) {
-            $email_err = "E-mail is not registered.";
-        }
-        else {
-            if (empty(trim($_POST["password"]))) {
-                $password_err = "Please enter your password.";
-            }
-            else if (strlen(trim($_POST["password"])) < 6 || strlen(trim($_POST["password"])) > 16) {
-                $password_err = "Invalid password.";
-            }
-            else {
-                $password = trim($_POST["password"]);
-            }
+    if (empty(trim($_POST["email"]))) $email_err = "Please enter your e-mail address.";
+    else $email = trim($_POST['email']);
+    
+    if (empty(trim($_POST["password"]))) $password_err = "Please enter your password.";
+    else if (strlen(trim($_POST["password"])) < 6 || strlen(trim($_POST["password"])) > 16) $password_err = "Invalid password.";
+    else $password = trim($_POST["password"]);
+    
+    if (empty($email_err) && empty($password_err)) {
+        $sql = "SELECT id, email, pass FROM WebLogins.users WHERE email = ?";
+        
+        if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
+            mysqli_stmt_bind_param($stmt, "s", $param_email);
+            $param_email = $email;
             
-            if (empty($email_err) && empty($password_err)) {
-                $sql = "SELECT id, email, pass FROM WebLogins.users WHERE email = ?";
-                if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
-                    mysqli_stmt_bind_param($stmt, "s", $param_email);
-                    $param_email = $email;
-                    if (mysqli_stmt_execute($stmt)) {
-                        mysqli_stmt_store_result($stmt);
-                        if (mysqli_stmt_num_rows($stmt) == 1) {
-                            mysqli_stmt_bind_result($stmt, $id, $email, $hashed_password);
-                            if (mysqli_stmt_fetch($stmt)) {
-                                if (password_verify($password, $hashed_password)) {
-                                    session_start();
-                                    $_SESSION["loggedin"] = true;
-                                    $_SESSION["id"] = $id;
-                                    $_SESSION["email"] = $email;
-                                    header("refresh:2; location:index.php");
-                                }
-                                else {
-                                    $login_err = "Invalid e-mail address or password.";
-                                }
-                            }
+            if (mysqli_stmt_execute($stmt)) {
+                mysqli_stmt_store_result($stmt);
+                
+                if (mysqli_stmt_num_rows($stmt) == 1) {
+                    mysqli_stmt_bind_result($stmt, $id, $email, $hashed_password);
+                    
+                    if (mysqli_stmt_fetch($stmt)) {
+                        if (password_verify($password, $hashed_password)) {
+                            session_start();
+                            $_SESSION["loggedin"] = true;
+                            $_SESSION["id"] = $id;
+                            $_SESSION["email"] = $email;
+                            header("refresh:2; location:index.php");
                         }
+                        else $login_err = "Invalid e-mail address or password.";
                     }
-                    else {
-                        echo "Oops! Something went wrong. Please try again later.";
-                    }
-                    mysqli_stmt_close($stmt);
                 }
             }
+            else echo "Oops! Something went wrong. Please try again later.";
+            mysqli_stmt_close($stmt);
         }
     }
     mysqli_close($conn_WebLogins);
