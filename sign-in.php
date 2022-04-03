@@ -1,3 +1,62 @@
+<?php
+session_start();
+
+if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+    header("location:index.php");
+    exit;
+}
+
+require_once "db_conn_WebLogins.php";
+
+$email = $password = "";
+$email_err = $password_err = $login_err = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (empty(trim($_POST["email"]))) {
+        $email_err = "Please enter your e-mail address.";
+    }
+    else {
+        $email = trim($_POST["email"]);
+    }
+    if (empty(trim($_POST["password"]))) {
+        $password_err = "Please enter your password.";
+    }
+    else {
+        $password = trim($_POST["password"]);
+    }
+    
+    if (empty($email_err) && empty($password_err)) {
+        $sql = "SELECT id, email, pass FROM users WHERE name = ?";
+        if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
+            mysqli_stmt_bind_param($stmt, "s", $param_email);
+            $param_email = $email;
+            if (mysqli_stmt_execute($stmt)) {
+                mysqli_stmt_store_result($stmt);
+                if (mysqli_stmt_num_rows($stmt) == 1) {
+                    mysqli_stmt_bind_result($stmt, $id, $email, $hashed_password);
+                    if (mysqli_stmt_fetch($stmt)) {
+                        if (password_verify($password, $hashed_password)) {
+                            session_start();
+                            $_SESSION["loggedin"] = true;
+                            $_SESSION["id"] = $id;
+                            $_SESSION["email"] = $email;
+                            header("location:index.php");
+                        }
+                        else {
+                            $login_err = "Invalid e-mail address or password.";
+                        }
+                    }
+                }
+            }
+            else {
+                echo "Oops! Something went wrong. Please try again later.";
+            }
+            mysqli_stmt_close($stmt);
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -26,6 +85,26 @@
                     </ul>
                 </div>
             </nav>
+                <!--Form for Sign In-->
+                <div class="brand-name">
+                <p>Sign in below.</p>
+                <?php if (!empty($login_err)) { echo $login_err; } ?>
+                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                    <div class="form-group">
+                        <label>E-mail Address</label>
+                        <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>">
+                        <span class="invalid-feedback"><?php echo $password_err; ?></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="login" name="login" class="yellow-button" value="Sign In">
+                    </div>
+                    <p>Don't have an account? <a href="sign-up.php">Sign up</a> now.</p>
+                </form>
+            </div>
         </div>
     </body>
 </html>
