@@ -21,8 +21,14 @@ session_start();
                 <a href="pricing.php" class="nav-item nav-link active">Pricing</a>
                 <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
                 <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
-                    <button type="button" class="btn btn-outline-primary"><a href="my-account.php" class="nav-item nav-link">My Account</a></button>
-                    <button type="button" class="btn btn-outline-primary"><a href="sign-out.php" class="nav-item nav-link">Sign Out</a></button>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">My Account</a>
+                        <div class="dropdown-menu">
+                            <a href="my-account.php" class="dropdown-item">Account Profile</a>
+                            <a href="database-access.php" class="dropdown-item">Access Database</a>
+                            <a href="sign-out.php" class="dropdown-item">Sign Out</a>
+                        </div>
+                    </div>
                 <?php } else { ?>
                     <button type="button" class="btn btn-outline-primary"><a href="sign-in.php" class="nav-item nav-link">Sign In</a></button>
                     <button type="button" class="btn btn-outline-primary"><a href="sign-up.php" class="nav-item nav-link">Sign Up</a></button>
