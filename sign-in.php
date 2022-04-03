@@ -74,7 +74,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                     <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
                 </ul>
-                <a href="#" class="navbar-brand">Postal Office</a>
+                <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
+                    <a href="#" class="navbar-brand"><span style="margin-right:7.3rem">Postal Office</style></a>
+                <?php } else { ?>
+                    <a href="#" class="navbar-brand"><span style="margin-right:7.8rem">Postal Office</style></a>
+                <?php } ?>
                 <ul class="nav navbar-nav ms-auto">
                     <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
                         <li class="nav-item dropdown">
@@ -86,8 +90,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                         </li>
                     <?php } else { ?>
-                        <a href="sign-in.php" class="dropdown-item">Sign In</a>
-                        <a href="sign-up.php" class="dropdown-item">Sign Up</a>
+                        <a href="sign-in.php" class="nav-item nav-link active">Sign In</a>
+                        <a href="sign-up.php" class="nav-item nav-link">Sign Up</a>
                     <?php } ?>
                 </ul>
             </div>
