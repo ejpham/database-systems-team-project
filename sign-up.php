@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!--Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
             <div class="container-fluid">
-                <a href="#" class="navbar-brand"><img src="images/brand-logo.jpeg" height="40" alt="Post Office"</a>
+                <a href="#" class="navbar-brand">Postal Office</a>
                 <a href="index.php" class="nav-item nav-link">Home</a>
                 <a href="mail.php" class="nav-item nav-link">Mail</a>
                 <a href="pricing.php" class="nav-item nav-link">Pricing</a>
