@@ -22,17 +22,17 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     </head>
     <body>
         <!--Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-begin">
             <div class="container-fluid py-3 my-3">
                 <a href="#" class="navbar-brand">Post Office</a>
                 <div class="nav-items">
-                    <div class="navbar-nav justify-content-left">
+                    <div class="navbar-nav">
                         <a href="welcome.php" class="nav-item nav-link active">Home</a>
                         <a href="mail.php" class="nav-item nav-link">Mail</a>
                         <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                         <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
                     </div>
-                    <div class="navbar-nav ms-auto justify-content-right">
+                    <div class="navbar-nav ms-auto">
                         <a href="sign-out.php"><button type="button" class="btn btn-light">Sign Out</button></a>
                     </div>
                 </div>
