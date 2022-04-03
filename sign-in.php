@@ -99,8 +99,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <input type="submit" name="submit" class="btn btn-primary" value="Sign In">
                         </div>
                     </form>
-                </div>
-                <div class="row">
                     <p>Don't have an account? <a href="sign-up.php">Sign up</a> here.</p>
                 </div>
             </div>
