@@ -16,10 +16,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email_err = "Please enter your e-mail address.";
     }
     else {
-        $email = trim($_POST["email"]);
+        $param_email = trim($_POST("email"));
+        $check_db_email = "SELECT * FROM WebLogins.users WHERE email='$param_email' LIMIT 1";
+        $result = mysqli_query($conn_WebLogins, $check_db_email);
+        $email_exists = mysqli_fetch_assoc($result);
+        
+        if (!$email_exists) {
+            $email_err = "E-mail address is not registered.";
+        }
+        else {
+            $email = trim($_POST["email"]);
+        }
     }
-    if (empty(trim($_POST["password"])) || strlen(trim($_POST["password"])) < 6 || strlen(trim($_POST["password"])) > 16) {
+    
+    if (empty(trim($_POST["password"]))) {
         $password_err = "Please enter your password.";
+    }
+    else if (strlen(trim($_POST["password"])) < 6 || strlen(trim($_POST["password"])) > 16) {
+        $password_err = "Invalid password.";
     }
     else {
         $password = trim($_POST["password"]);
@@ -83,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!--Form for Sign In-->
         <div class="m-4">
             <p>Sign in below.</p>
-            <p><?php if (!empty($login_err)) { echo '<div class="alert alert-danger">' . $login_err . '</div>'; } ?></p>
+            <?php if (!empty($login_err)) { echo '<div class="alert alert-danger">' . $login_err . '</div>'; } ?>
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                 <div class="m-3">
                     <label class="form-label" for="inputEmail">E-mail Address</label>
