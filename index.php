@@ -22,7 +22,7 @@ session_start();
                     <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                     <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
                 </ul>
-                <a href="#" class="navbar-brand">Postal Office</a>
+                <a href="#" class="navbar-brand mx-auto">Postal Office</a>
                 <ul class="nav navbar-nav ms-auto">
                     <li class="nav-item dropdown">
                         <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
