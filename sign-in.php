@@ -2,7 +2,7 @@
 session_start();
 
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-    header("location:index.php");
+    header("location:welcome.php");
     exit;
 }
 
@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     
     if (empty($email_err) && empty($password_err)) {
-        $sql = "SELECT id, email, pass FROM users WHERE name = ?";
+        $sql = "SELECT id, email, pass FROM WebLogins.users WHERE email = ?";
         if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
             mysqli_stmt_bind_param($stmt, "s", $param_email);
             $param_email = $email;
@@ -41,7 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["id"] = $id;
                             $_SESSION["email"] = $email;
                             header("location:welcome.php");
-                            exit;
                         }
                         else {
                             $login_err = "Invalid e-mail address or password.";
