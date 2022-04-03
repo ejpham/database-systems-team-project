@@ -1,6 +1,6 @@
-<?php
-require_once "db_conn.php";
-require_once "session.php";
+<!-- <?php
+// require_once "db_conn.php";
+// require_once "session.php";
 // if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 //     $name = trim($_POST['name']);
 //     $email = trim($_POST['emai']);
@@ -38,7 +38,7 @@ require_once "session.php";
 //         sqlsrv_close($conn);
 //     }
 // }
-?>
+?> -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
