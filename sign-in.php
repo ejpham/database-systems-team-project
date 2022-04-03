@@ -89,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <!--Form for Sign In-->
                 <div class="brand-name">
                 <p>Sign in below.</p>
-                <?php if (!empty($login_err)) { echo $login_err; } ?>
+                <?php if (!empty($login_err)) { echo '<div class="alert alert-danger">' . $login_err . '</div>'; } ?>
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                     <div class="form-group">
                         <label>E-mail Address</label>
