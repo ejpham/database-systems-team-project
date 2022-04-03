@@ -1,4 +1,9 @@
 <?php
+if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+    header("location:index.php");
+    exit;
+}
+
 require_once "db_conn_WebLogins.php";
 
 // Define variables and initialize with empty values
