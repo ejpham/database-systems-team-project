@@ -86,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Prepare an insert statement
         $sql = "INSERT INTO WebLogins.users (email, name, pass) VALUES (?, ?, ?)";
         
-        if ($stmt = mysqli_prepare($link, $sql)) {
+        if ($stmt = mysqli_prepare($conn, $sql)) {
             // Bind variables to the prepared statement as parameters
             mysqli_stmt_bind_param($stmt, "ss", $param_email, $param_name, $param_password);
             
@@ -98,10 +98,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Attempt to execute the prepared statement
             if (mysqli_stmt_execute($stmt)) {
                 // Redirect to login page
-                header("location: sign-in.php");
+                header("location:sign-in.php");
             }
             else {
                 echo "Oops! Something went wrong. Please try again later.";
+                header("location:sign-up.php");
             }
             
             // Close statement
@@ -109,6 +110,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     // Close connection
-    mysqli_close($link);
+    mysqli_close($conn);
 }
 ?>
