@@ -78,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </nav>
         <!--Form for Sign Up-->
-        <div class="container-fluid">
+        <div class="container-fluid col-sm-6">
             <div class="row">
                 <div class="m-4">
                     <p>Fill out the form below to create an account.</p>

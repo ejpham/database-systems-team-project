@@ -81,16 +81,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </nav>
         <!--Form for Sign In-->
-        <div class="container-fluid">
+        <div class="container-fluid col-sm-6">
             <div class="row">
                 <div class="m-4">
                     <p>Sign in below.</p>
+                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                     <?php if (!empty($login_err)) echo '<div class="alert alert-danger">' . $login_err . '</div>'; ?>
                     <?php
                     if (!empty($success)) echo '<div class="alert alert-success">' . $success . '</div>';
                     else if (!empty($error)) echo '<div class="alert alert-danger">' . $login_err . '</div>';
                     ?>
-                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                         <div class="m-3">
                             <label class="form-label" for="inputEmail">E-mail Address</label>
                             <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" >
