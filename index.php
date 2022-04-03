@@ -9,7 +9,8 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Post Office</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="styles.css" rel="stylesheet">
 </head>
 <body>
     <!--Navigation-->
@@ -22,9 +23,7 @@ session_start();
                     <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                     <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
                 </ul>
-                <ul class="nav navbar-nav mx-auto">
-                    <a href="#" class="navbar-brand mx-auto">Postal Office</a>
-                </ul>
+                <a href="#" class="navbar-brand">Postal Office</a>
                 <ul class="nav navbar-nav ms-auto">
                     <li class="nav-item dropdown">
                         <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
@@ -51,6 +50,6 @@ session_start();
         <h1 class="display-1"><b>Team 3 Postal Service</b></h1>
         <h6 class="display-6"><small class="text-muted">COSC 3380 Database Project</small></h6>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 </html>
