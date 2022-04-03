@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $query = "INSERT INTO WebLogins.users (email, name, pass) VALUES ('$email', '$name', '$hashed_password')";
         mysqli_query($conn_WebLogins, $query);
         echo "Registration successful!";
-        header('location:sign-in.php');
+        header('refresh:2; location:sign-in.php');
     }
     
     // Close connection
