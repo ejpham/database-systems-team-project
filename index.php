@@ -20,8 +20,8 @@ session_start();
                 <a href="mail.php" class="nav-item nav-link">Mail</a>
                 <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                 <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
-                <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
-                    <div class="nav-item dropdown">
+                <div class="nav-item dropdown">
+                    <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">My Account</a>
                         <div class="dropdown-menu">
                             <a href="my-account.php" class="dropdown-item">Account Profile</a>
@@ -29,15 +29,14 @@ session_start();
                             <a href="sign-out.php" class="dropdown-item">Sign Out</a>
                         </div>
                     </div>
-                <?php } else { ?>
-                    <div class="nav-item dropdown">
+                    <?php } else { ?>
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Sign-in Options</a>
                         <div class="dropdown-menu">
                             <a href="sign-in.php" class="dropdown-item">Sign In</a>
                             <a href="sign-up.php" class="dropdown-item">Sign Up</a>
                         </div>
-                    </div>
-                <?php } ?>
+                    <?php } ?>
+                </div>
             </div>
         </nav>
         <br/>
