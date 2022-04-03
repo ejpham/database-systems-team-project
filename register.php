@@ -2,44 +2,49 @@
 require_once "db_conn_WebLogins.php";
 
 // Define variables and initialize with empty values
-$name = $email = $password = $confirm_password = "";
-$name_err = $email_err = $password_err = $confirm_password_err = "";
+$email = $name = $password = $confirm_password = "";
+$email_err = $name_err = $password_err = $confirm_password_err = "";
  
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Prepare a select statement
-    $sql = "SELECT id FROM users WHERE email = ?";
-    
-    if ($stmt = mysqli_prepare($link, $sql)) {
-        // Bind variables to the prepared statement as parameters
-        mysqli_stmt_bind_param($stmt, "s", $$param_email);
+    // Validate email
+    if (empty(trim($_POST["email"]))) {
+        $email_err = "Please enter a valid e-mail address.";
+    }
+    else if (strlen(trim($_POST["email"])) > 75) {
+        $email_err = "E-mail address can be no longer than 75 characters.";
+    }
+    else {
+        // Prepare a select statement
+        $sql = "SELECT email FROM users WHERE email = ?";
         
-        // Set parameters
-        $param_email = trim($_POST["email"]);
-        
-        // Attempt to execute the prepared statement
-        if (mysqli_stmt_execute($stmt)) {
-            /* store result */
-            mysqli_stmt_store_result($stmt);
+        if ($stmt = mysqli_prepare($conn, $sql)) {
+            // Bind variables to the prepared statement as parameters
+            mysqli_stmt_bind_param($stmt, "s", $param_email);
             
-            if (mysqli_stmt_num_rows($stmt) == 1) {
-                $email_err = "This email already taken.";
-            }
-            else if (strlen(trim($_POST["email"] > 75))) {
-                $email_err = "Email can be no longer than 75 characters.";
+            // Set parameters
+            $param_email = trim($_POST["email"]);
+            
+            // Attempt to execute the prepared statement
+            if (mysqli_stmt_execute($stmt)) {
+                /* store result */
+                mysqli_stmt_store_result($stmt);
+                
+                if (mysqli_stmt_num_rows($stmt) == 1) {
+                    $email_err = "This e-mail address is already taken.";
+                } else{
+                    $email = trim($_POST["email"]);
+                }
             }
             else {
-                $email_err = trim($_POST["email"]);
+                echo "Oops! Something went wrong. Please try again later.";
             }
+            
+            // Close statement
+            mysqli_stmt_close($stmt);
         }
-        else {
-            echo "Oops! Something went wrong. Please try again later.";
-        }
-        
-        // Close statement
-        mysqli_stmt_close($stmt);
     }
-
+    
     // Validate name
     if (empty(trim($_POST["name"]))) {
         $name_err = "Please enter a name.";
@@ -50,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     else {
         $name = trim($_POST["name"]);
     }
-
+    
     // Validate password
     if (empty(trim($_POST["password"]))) {
         $password_err = "Please enter a password.";     
@@ -64,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     else {
         $password = trim($_POST["password"]);
     }
-
+    
     // Validate confirm password
     if (empty(trim($_POST["confirm_password"]))) {
         $confirm_password_err = "Please confirm password.";     
@@ -77,17 +82,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     
     // Check input errors before inserting in database
-    if (empty($name_err) && empty($email_err) && empty($password_err) && empty($confirm_password_err)) {
+    if (empty($email_err) && empty($name_err) && empty($password_err) && empty($confirm_password_err)) {
         // Prepare an insert statement
-        $sql = "INSERT INTO WebLogins.users (email, name, pass) VALUES (?, ?, ?);";
-         
+        $sql = "INSERT INTO WebLogins.users (email, name, pass) VALUES (?, ?, ?)";
+        
         if ($stmt = mysqli_prepare($link, $sql)) {
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ss", $param_name, $param_email, $param_password);
+            mysqli_stmt_bind_param($stmt, "ss", $param_email, $param_name, $param_password);
             
             // Set parameters
-            $param_name = $name;
             $param_email = $email;
+            $param_name = $name;
             $param_password = password_hash($password, PASSWORD_BCRYPT); // Creates a password hash
             
             // Attempt to execute the prepared statement
@@ -98,12 +103,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             else {
                 echo "Oops! Something went wrong. Please try again later.";
             }
-
+            
             // Close statement
             mysqli_stmt_close($stmt);
         }
     }
-    
     // Close connection
     mysqli_close($link);
 }
