@@ -21,21 +21,17 @@ session_start();
                 <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                 <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
                 <div class="nav-item dropdown">
-                    <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">My Account</a>
-                        <div class="dropdown-menu">
-                            <a href="my-account.php" class="dropdown-item">Account Profile</a>
-                            <a href="database-access.php" class="dropdown-item">Access Database</a>
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account</a>
+                    <div class="dropdown-menu">
+                        <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
+                            <a href="my-account.php" class="dropdown-item">My Account</a>
+                            <a href="database-access.php" class="dropdown-item">Database Access</a>
                             <a href="sign-out.php" class="dropdown-item">Sign Out</a>
-                        </div>
-                    </div>
-                    <?php } else { ?>
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Sign-in Options</a>
-                        <div class="dropdown-menu">
+                        <?php } else { ?>
                             <a href="sign-in.php" class="dropdown-item">Sign In</a>
                             <a href="sign-up.php" class="dropdown-item">Sign Up</a>
-                        </div>
-                    <?php } ?>
+                        <?php } ?>
+                    </div>
                 </div>
             </div>
         </nav>
