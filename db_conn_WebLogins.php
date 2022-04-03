@@ -6,10 +6,10 @@ define('dbName', 'WebLogins');
 $conn = mysqli_connect(serverName, userName, password, dbName);
 
 if ($conn) {
-    echo "Connection to WebLogins Schema established.<br/>";
+    echo "Connection to WebLogins Schema established.";
 }
 else {
-    echo "Connection to WebLogins Schema could not be established.<br/>";
+    echo "Connection to WebLogins Schema could not be established.";
     die(print_r(mysqli_error(), true));
 }
 ?>

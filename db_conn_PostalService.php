@@ -6,10 +6,10 @@ define('dbName', 'PostalService');
 $conn = mysqli_connect(serverName, userName, password, dbName);
 
 if ($conn) {
-    echo "Connection to PostalService Schema established.<br/>";
+    echo "Connection to PostalService Schema established.";
 }
 else {
-    echo "Connection to PostalService Schema could not be established.<br/>";
+    echo "Connection to PostalService Schema could not be established.";
     die(print_r(mysqli_error(), true));
 }
 ?>
