@@ -43,6 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         else $login_err = "Invalid e-mail address or password.";
                     }
                 }
+                else $login_err = "Invalid e-mail address or password.";
             }
             else $login_err = "Oops! Something went wrong. Please try again later.";
             mysqli_stmt_close($stmt);
