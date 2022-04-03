@@ -68,8 +68,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <a href="mail.php" class="nav-item nav-link">Mail</a>
                 <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                 <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
-                <button type="button" class="btn btn-light"><a href="sign-in.php" class="nav-item nav-link">Sign In</a></button>
-                <a href="sign-up.php" class="nav-item nav-link active"><button type="button" class="btn btn-light">Sign Up</button></a>
+                <button type="button" class="btn"><a href="sign-in.php" class="nav-item nav-link">Sign In</a></button>
+                <a href="sign-up.php" class="nav-item nav-link active"><button type="button" class="btn">Sign Up</button></a>
             </div>
         </nav>
         <!--Form for Sign Up-->
@@ -103,7 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <span class="invalid-feedback"><?php echo $confirm_password_err; ?></span>
                         </div>
                         <div class="m-3">
-                            <input type="submit" name="submit" class="btn btn-primary" value="Submit">
+                            <input type="submit" name="submit" class="btn" value="Submit">
                         </div>
                     </form>
                     <p>Already registered? <a href="sign-in.php">Sign in</a> here.</p>
