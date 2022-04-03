@@ -21,24 +21,23 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     </head>
     <body>
-        <div class = "container">
-            <!--Navigation-->
-            <nav class="navbar">
-                <div class="brand-name">
-                    <h5>Post Office</h5>
-                    <h6>Home</h6>
-                </div>
+        <!--Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a href="#" class="navbar-brand">Post Office</a>
                 <div class="nav-items">
-                    <ul class="navbar-nav">
+                    <div class="navbar-nav">
                         <a href="welcome.php" class="nav-item nav-link active">Home</a>
                         <a href="mail.php" class="nav-item nav-link">Mail</a>
                         <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                         <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
+                    </div>
+                    <div class="navbar-nav ms-auto">
                         <a href="sign-out.php"><button type="button" class="btn btn-light">Sign Out</button></a>
-                    </ul>
+                    </div>
                 </div>
-            </nav>
-        </div>
+            </div>
+        </nav>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     </body>
 </html>
