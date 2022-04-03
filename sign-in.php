@@ -77,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                 <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
                 <a href="sign-in.php" class="nav-item nav-link active"><button type="button" class="btn btn-light">Sign In</button></a>
-                <a href="sign-up.php" class="nav-item nav-link"><button type="button" class="btn btn-light">Sign Up</button></a>
+                <button type="button" class="btn btn-light"><a href="sign-up.php" class="nav-item nav-link">Sign Up</a></button>
             </div>
         </nav>
         <!--Form for Sign In-->
