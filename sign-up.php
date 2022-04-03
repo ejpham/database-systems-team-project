@@ -73,22 +73,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </ul>
                 <a href="#" class="navbar-brand">Postal Office</a>
                 <ul class="nav navbar-nav ms-auto">
-                    <li class="nav-item dropdown">
-                        <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
+                    <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
+                        <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account Options</a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a href="my-account.php" class="dropdown-item">My Account</a>
                                 <a href="database-access.php" class="dropdown-item">Database Access</a>
                                 <a href="sign-out.php" class="dropdown-item">Sign Out</a>
                             </div>
-                        <?php } else { ?>
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Sign-in Options</a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a href="sign-in.php" class="dropdown-item">Sign In</a>
-                                <a href="sign-up.php" class="dropdown-item">Sign Up</a>
-                            </div>
-                        <?php } ?>
-                    </li>
+                        </li>
+                    <?php } else { ?>
+                        <a href="sign-in.php" class="dropdown-item">Sign In</a>
+                        <a href="sign-up.php" class="dropdown-item">Sign Up</a>
+                    <?php } ?>
                 </ul>
             </div>
         </nav>
