@@ -13,7 +13,7 @@ session_start();
     </head>
     <body>
         <!--Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
             <div class="container-fluid">
                 <a href="#" class="navbar-brand"><img src="images/brand-logo.jpeg" height="80" alt="Post Office"</a>
                 <a href="index.php" class="nav-item nav-link">Home</a>
@@ -21,6 +21,7 @@ session_start();
                 <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                 <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
                 <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
+                    <button type="button" class="btn btn-primary"><a href="my-account.php" class="nav-item nav-link">My Account</a></button>
                     <button type="button" class="btn btn-light"><a href="sign-out.php" class="nav-item nav-link">Sign Out</a></button>
                 <?php } else { ?>
                     <button type="button" class="btn btn-light"><a href="sign-in.php" class="nav-item nav-link">Sign In</a></button>
@@ -28,6 +29,9 @@ session_start();
                 <?php } ?>
             </div>
         </nav>
+        <div class="container-fluid">
+            
+        </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     </body>
 </html>
