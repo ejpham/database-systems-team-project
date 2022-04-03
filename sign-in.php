@@ -40,7 +40,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
                             $_SESSION["email"] = $email;
-                            header("location:index.php");
+                            header("location:welcome.php");
+                            exit;
                         }
                         else {
                             $login_err = "Invalid e-mail address or password.";
