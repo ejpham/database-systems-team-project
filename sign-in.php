@@ -93,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     ?>
                         <div class="m-3">
                             <label class="form-label" for="inputEmail">E-mail Address</label>
-                            <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" >
+                            <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" id="inputEmail" placeholder="Email">
                         </div>
                         <div class="m-3">
                             <label class="form-label" for="inputPassword">Password</label>
