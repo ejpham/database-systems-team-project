@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check input errors before inserting in database
     if (empty($username_err) && empty($email_err) && empty($password_err) && empty($confirm_password_err)) {
         // Prepare an insert statement
-        $sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?);";
+        $sql = "INSERT INTO WebLogins.users (email, name, pass) VALUES (?, ?, ?);";
          
         if ($stmt = mysqli_prepare($link, $sql)) {
             // Bind variables to the prepared statement as parameters
