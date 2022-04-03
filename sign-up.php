@@ -90,53 +90,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </head>
     <body>
         <!--Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-begin">
+        <nav class="nav justify-content-end">
             <div class="container-fluid py-3 my-3">
                 <a href="#" class="navbar-brand">Post Office</a>
-                <div class="nav-items">
-                    <div class="navbar-nav">
-                        <a href="index.php" class="nav-item nav-link">Home</a>
-                        <a href="mail.php" class="nav-item nav-link">Mail</a>
-                        <a href="pricing.php" class="nav-item nav-link">Pricing</a>
-                        <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
-                    </div>
-                    <div class="navbar-nav ms-auto">
-                        <a href="sign-in.php" class="nav-item nav-link"><button type="button" class="btn btn-light">Sign In</button></a>
-                        <a href="sign-up.php" class="nav-item nav-link active"><button type="button" class="btn btn-light">Sign Up</button></a>
-                    </div>
-                </div>
+                <a href="index.php" class="nav-item nav-link">Home</a>
+                <a href="mail.php" class="nav-item nav-link">Mail</a>
+                <a href="pricing.php" class="nav-item nav-link">Pricing</a>
+                <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
+                <a href="sign-in.php" class="nav-item nav-link"><button type="button" class="btn btn-light">Sign In</button></a>
+                <a href="sign-up.php" class="nav-item nav-link active"><button type="button" class="btn btn-light">Sign Up</button></a>
             </div>
         </nav>
-            <!--Form for Sign Up-->
-            <div class="brand-name">
-                <p>Fill out the form below to create an account.</p>
-                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                    <div class="form-group">
-                        <label>Full Name</label>
-                        <input type="text" name="name" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>">
-                        <span class="invalid-feedback"><?php echo $name_err; ?></span>
-                    </div>
-                    <div class="form-group">
-                        <label>E-mail Address</label>
-                        <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>">
-                        <span class="invalid-feedback"><?php echo $email_err; ?></span>
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>">
-                        <span class="invalid-feedback"><?php echo $password_err; ?></span>
-                    </div>
-                    <div class="form-group">
-                        <label>Confirm Password</label>
-                        <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $confirm_password; ?>">
-                        <span class="invalid-feedback"><?php echo $confirm_password_err; ?></span>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" name="submit" class="btn btn-light" value="Submit">
-                    </div>
-                    <p>Already registered? <a href="sign-in.php" class="nav-item nav-link">Sign in</a> now.</p>
-                </form>
-            </div>
+        <!--Form for Sign Up-->
+        <div class="brand-name">
+            <p>Fill out the form below to create an account.</p>
+            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>">
+                    <span class="invalid-feedback"><?php echo $name_err; ?></span>
+                </div>
+                <div class="form-group">
+                    <label>E-mail Address</label>
+                    <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>">
+                    <span class="invalid-feedback"><?php echo $email_err; ?></span>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>">
+                    <span class="invalid-feedback"><?php echo $password_err; ?></span>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $confirm_password; ?>">
+                    <span class="invalid-feedback"><?php echo $confirm_password_err; ?></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" name="submit" class="btn btn-light" value="Submit">
+                </div>
+                <p>Already registered? <a href="sign-in.php" class="nav-item nav-link">Sign in</a> now.</p>
+            </form>
+        </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     </body>
 </html>

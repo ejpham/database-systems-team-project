@@ -69,43 +69,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </head>
     <body>
         <!--Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-begin">
+        <nav class="nav justify-content-end">
             <div class="container-fluid py-3 my-3">
                 <a href="#" class="navbar-brand">Post Office</a>
-                <div class="nav-items">
-                    <div class="navbar-nav">
-                        <a href="index.php" class="nav-item nav-link">Home</a>
-                        <a href="mail.php" class="nav-item nav-link">Mail</a>
-                        <a href="pricing.php" class="nav-item nav-link">Pricing</a>
-                        <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
-                    </div>
-                    <div class="navbar-nav ms-auto">
-                        <a href="sign-in.php" class="nav-item nav-link active"><button type="button" class="btn btn-light">Sign In</button></a>
-                        <a href="sign-up.php" class="nav-item nav-link"><button type="button" class="btn btn-light">Sign Up</button></a>
-                    </div>
-                </div>
+                <a href="index.php" class="nav-item nav-link">Home</a>
+                <a href="mail.php" class="nav-item nav-link">Mail</a>
+                <a href="pricing.php" class="nav-item nav-link">Pricing</a>
+                <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
+                <a href="sign-in.php" class="nav-item nav-link active"><button type="button" class="btn btn-light">Sign In</button></a>
+                <a href="sign-up.php" class="nav-item nav-link"><button type="button" class="btn btn-light">Sign Up</button></a>
             </div>
         </nav>
-                <!--Form for Sign In-->
-                <div class="brand-name">
-                <p>Sign in below.</p>
-                <?php if (!empty($login_err)) { echo '<div class="alert alert-danger">' . $login_err . '</div>'; } ?>
-                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                    <div class="form-group">
-                        <label>E-mail Address</label>
-                        <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>">
-                        <span class="invalid-feedback"><?php echo $password_err; ?></span>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" name="submit" class="btn btn-light" value="Sign In">
-                    </div>
-                    <p>Don't have an account? <a href="sign-up.php" class="nav-item nav-link">Sign up</a> now.</p>
-                </form>
-            </div>
+        <!--Form for Sign In-->
+        <div class="brand-name">
+            <p>Sign in below.</p>
+            <?php if (!empty($login_err)) { echo '<div class="alert alert-danger">' . $login_err . '</div>'; } ?>
+            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                <div class="form-group">
+                    <label>E-mail Address</label>
+                    <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>">
+                    <span class="invalid-feedback"><?php echo $password_err; ?></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" name="submit" class="btn btn-light" value="Sign In">
+                </div>
+                <p>Don't have an account? <a href="sign-up.php" class="nav-item nav-link">Sign up</a> now.</p>
+            </form>
+        </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     </body>
 </html>
