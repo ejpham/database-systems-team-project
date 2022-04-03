@@ -30,8 +30,13 @@ session_start();
                         </div>
                     </div>
                 <?php } else { ?>
-                    <button type="button" class="btn btn-outline-primary"><a href="sign-in.php" class="nav-item nav-link">Sign In</a></button>
-                    <button type="button" class="btn btn-outline-primary"><a href="sign-up.php" class="nav-item nav-link">Sign Up</a></button>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Sign-in Options</a>
+                        <div class="dropdown-menu">
+                            <a href="sign-in.php" class="dropdown-item">Sign In</a>
+                            <a href="sign-up.php" class="dropdown-item">Sign Up</a>
+                        </div>
+                    </div>
                 <?php } ?>
             </div>
         </nav>

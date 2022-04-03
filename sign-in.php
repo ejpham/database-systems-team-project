@@ -71,8 +71,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <a href="mail.php" class="nav-item nav-link">Mail</a>
                 <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                 <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
-                <button type="button" class="btn btn-outline-primary"><a href="sign-in.php" class="nav-item nav-link active">Sign In</a></button>
-                <button type="button" class="btn btn-outline-primary"><a href="sign-up.php" class="nav-item nav-link">Sign Up</a></button>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Sign-in Options</a>
+                    <div class="dropdown-menu">
+                        <a href="sign-in.php" class="dropdown-item">Sign In</a>
+                        <a href="sign-up.php" class="dropdown-item">Sign Up</a>
+                    </div>
+                </div>
             </div>
         </nav>
         <!--Form for Sign In-->
