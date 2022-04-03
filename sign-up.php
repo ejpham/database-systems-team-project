@@ -102,33 +102,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </nav>
         <!--Form for Sign Up-->
-        <div class="brand-name">
+        <div class="m-4">
             <p>Fill out the form below to create an account.</p>
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" name="name" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>">
+                <div class="m-3">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" name="name" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>" id="inputName" placeholder="Full name">
                     <span class="invalid-feedback"><?php echo $name_err; ?></span>
                 </div>
-                <div class="form-group">
-                    <label>E-mail Address</label>
-                    <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>">
+                <div class="m-3">
+                    <label class="form-label" for="inputEmail">E-mail Address</label>
+                    <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" id="inputEmail" placeholder="Email">
                     <span class="invalid-feedback"><?php echo $email_err; ?></span>
                 </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>">
+                <div class="m-3">
+                    <label class="form-label" for="inputPassword">Password</label>
+                    <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>" id="inputPassword" placeholder="Password">
                     <span class="invalid-feedback"><?php echo $password_err; ?></span>
                 </div>
-                <div class="form-group">
-                    <label>Confirm Password</label>
-                    <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $confirm_password; ?>">
+                <div class="m-3">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $confirm_password; ?>" id="inputPassword" placeholder="Confirm Password">
                     <span class="invalid-feedback"><?php echo $confirm_password_err; ?></span>
                 </div>
-                <div class="form-group">
-                    <input type="submit" name="submit" class="btn btn-light" value="Submit">
+                <div class="m-3">
+                    <input type="submit" name="submit" class="btn btn-primary" value="Submit">
                 </div>
-                <p>Already registered? <a href="sign-in.php" class="nav-item nav-link">Sign in</a> now.</p>
+                <div class="m-3">
+                    <p>Already registered? <a href="sign-in.php" class="nav-item nav-link">Sign in now.</a></p>
+                </div>
             </form>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
