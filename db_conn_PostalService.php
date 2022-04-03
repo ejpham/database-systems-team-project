@@ -5,10 +5,7 @@ define('password', 'Password1');
 define('dbName', 'PostalService');
 $conn_PostalService = mysqli_connect(serverName, userName, password, dbName);
 
-if ($conn_PostalService) {
-    echo "Connection to PostalService Schema established.";
-}
-else {
+if (!$conn_PostalService) {
     echo "Connection to PostalService Schema could not be established.";
     die(print_r(mysqli_error(), true));
 }

@@ -5,10 +5,7 @@ define('password', 'Password1');
 define('dbName', 'WebLogins');
 $conn_WebLogins = mysqli_connect(serverName, userName, password, dbName);
 
-if ($conn_WebLogins) {
-    echo "Connection to WebLogins Schema established.";
-}
-else {
+if (!$conn_WebLogins) {
     echo "Connection to WebLogins Schema could not be established.";
     die(print_r(mysqli_error(), true));
 }

@@ -113,7 +113,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                     <div class="form-group">
                         <label>Full Name</label>
-                        <input type="text" name="name" class="form-control" required>
+                        <input type="text" name="name" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>">
+                        <span class="invalid-feedback"><?php echo $name_err; ?></span>
                     </div>
                     <div class="form-group">
                         <label>E-mail Address</label>
