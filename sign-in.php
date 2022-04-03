@@ -16,13 +16,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email_err = "Please enter your e-mail address.";
     }
     else {
-        $param_email = trim($_POST("email"));
-        $check_db_email = "SELECT * FROM WebLogins.users WHERE email='$param_email' LIMIT 1";
-        $result = mysqli_query($conn_WebLogins, $check_db_email);
-        $email_exists = mysqli_fetch_assoc($result);
-        
-        if (!$email_exists) {
-            $email_err = "E-mail address is not registered.";
+        $temp_email = trim($_POST['email']);
+        $check_email = "SELECT * FROM WebLogins.users WHERE email = '$temp_email'";
+        $result = mysqli_query($conn_WebLogins, $check_email);
+        if (mysqli_num_rows($result) === 0) {
+            $email_err = "E-mail is not registered.";
         }
         else {
             $email = trim($_POST["email"]);
