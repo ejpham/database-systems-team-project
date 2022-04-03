@@ -9,14 +9,13 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 require_once "db_conn_WebLogins.php";
 
 $email = $password = "";
-$email_err = $password_err = $login_err = "";
+$email_err = $password_err = $login_err = $success = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["email"]))) $email_err = "Please enter your e-mail address.";
     else $email = trim($_POST['email']);
     
     if (empty(trim($_POST["password"]))) $password_err = "Please enter your password.";
-    else if (strlen(trim($_POST["password"])) < 6 || strlen(trim($_POST["password"])) > 16) $password_err = "Invalid password.";
     else $password = trim($_POST["password"]);
     
     if (empty($email_err) && empty($password_err)) {
@@ -38,13 +37,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
                             $_SESSION["email"] = $email;
+                            $success = "Login successful.";
                             header("refresh:2; location:index.php");
                         }
                         else $login_err = "Invalid e-mail address or password.";
                     }
                 }
             }
-            else echo "Oops! Something went wrong. Please try again later.";
+            else $login_err = "Oops! Something went wrong. Please try again later.";
             mysqli_stmt_close($stmt);
         }
     }
@@ -77,7 +77,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!--Form for Sign In-->
         <div class="m-4">
             <p>Sign in below.</p>
-            <?php if (!empty($login_err)) { echo '<div class="alert alert-danger">' . $login_err . '</div>'; } ?>
+            <?php if (!empty($login_err)) echo '<div class="alert alert-danger">' . $login_err . '</div>'; ?>
+            <?php
+            if (!empty($success)) echo '<div class="alert alert-success">' . $success . '</div>';
+            else if (!empty($error)) echo '<div class="alert alert-danger">' . $login_err . '</div>';
+            ?>
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                 <div class="m-3">
                     <label class="form-label" for="inputEmail">E-mail Address</label>
