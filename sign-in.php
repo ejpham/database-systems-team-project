@@ -76,28 +76,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </nav>
         <!--Form for Sign In-->
-        <div class="m-4">
-            <p>Sign in below.</p>
-            <?php if (!empty($login_err)) echo '<div class="alert alert-danger">' . $login_err . '</div>'; ?>
-            <?php
-            if (!empty($success)) echo '<div class="alert alert-success">' . $success . '</div>';
-            else if (!empty($error)) echo '<div class="alert alert-danger">' . $login_err . '</div>';
-            ?>
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                <div class="m-3">
-                    <label class="form-label" for="inputEmail">E-mail Address</label>
-                    <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" >
-                </div>
-                <div class="m-3">
-                    <label class="form-label" for="inputPassword">Password</label>
-                    <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" id="inputPassword" placeholder="Password">
-                    <span class="invalid-feedback"><?php echo $password_err; ?></span>
-                </div>
-                <div class="m-3">
-                    <input type="submit" name="submit" class="btn btn-primary" value="Sign In">
-                </div>
-            </form>
-            <p>Don't have an account? <a href="sign-up.php" class="nav-item nav-link">Sign up now.</a></p>
+        <div class="row">
+            <div class="m-4">
+                <p>Sign in below.</p>
+                <?php if (!empty($login_err)) echo '<div class="alert alert-danger">' . $login_err . '</div>'; ?>
+                <?php
+                if (!empty($success)) echo '<div class="alert alert-success">' . $success . '</div>';
+                else if (!empty($error)) echo '<div class="alert alert-danger">' . $login_err . '</div>';
+                ?>
+                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                    <div class="m-3">
+                        <label class="form-label" for="inputEmail">E-mail Address</label>
+                        <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" >
+                    </div>
+                    <div class="m-3">
+                        <label class="form-label" for="inputPassword">Password</label>
+                        <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" id="inputPassword" placeholder="Password">
+                        <span class="invalid-feedback"><?php echo $password_err; ?></span>
+                    </div>
+                    <div class="m-3">
+                        <input type="submit" name="submit" class="btn btn-primary" value="Sign In">
+                    </div>
+                </form>
+            </div>
+            <div class="row">
+                <p>Don't have an account? <a href="sign-up.php">Sign up</a> here.</p>
+            </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     </body>
