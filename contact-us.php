@@ -40,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Post Office</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="styles.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 <body>
     <!--Navigation-->
@@ -110,7 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <?php } ?>
                     <div class="m-3">
                         <label class="form-label" for="inputMessage">Message</label>
-                        <textarea class="form-control <?php echo (!empty($message_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $message; ?>" name="message" id="inputMessage" maxlength="255" style="resize:none" rows="3" placeholder="Enter a message"></textarea>
+                        <textarea class="form-control <?php echo (!empty($message_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $message; ?>" name="message" id="inputMessage" maxlength="255" style="resize:none" placeholder="Enter a message"></textarea>
                         <span class="invalid-feedback"><?php echo $message_err; ?></span>
                         <div id="count">
                             <span id="current_count">0</span>
