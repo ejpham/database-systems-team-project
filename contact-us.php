@@ -14,13 +14,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
         if (empty(trim($_POST["name"]))) $name_err = "Please enter a name.";
         else if (strlen(trim($_POST["name"])) > 75) $name_err = "Name can be no longer than 75 characters.";
-        else $name = trim($mysqli->real_escape_string($_POST["name"]));
+        else $name = trim($_POST["name"]);
         if (empty(trim($_POST["email"]))) $email_err = "Please enter a valid e-mail address.";
         else if (strlen(trim($_POST["email"])) > 75) $email_err = "E-mail address can be no longer than 75 characters.";
-        else $email = trim($mysqli->real_escape_string($_POST["email"]));
+        else $email = trim($_POST["email"]);
     }
     if (empty(trim($_POST["message"]))) $message_err = "Please enter a message.";
-    else $message = trim($mysqli->real_escape_string($_POST["message"]));
+    else $message = trim($_POST["message"]);
     if (empty($email_err) && empty($name_err) && empty($message_err)) {
         $sql = "INSERT INTO PostalService.Contact_Logs (full_name, email, message) VALUES (?, ?, ?)";
         if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {

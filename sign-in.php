@@ -9,9 +9,9 @@ $email = $password = "";
 $email_err = $password_err = $success = $error = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["email"]))) $email_err = "Please enter your e-mail address.";
-    else $email = trim($mysqli->real_escape_string($_POST['email']));
+    else $email = trim($_POST['email']);
     if (empty(trim($_POST["password"]))) $password_err = "Please enter your password.";
-    else $password = trim($mysqli->real_escape_string($_POST["password"]));
+    else $password = trim($_POST["password"]);
     if (empty($email_err) && empty($password_err)) {
         $sql = "SELECT email, pass FROM WebLogins.users WHERE email = ?";
         if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
