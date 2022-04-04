@@ -53,6 +53,9 @@ session_start();
             <h1 class="display-1"><b>Team 3 Postal Service</b></h1>
             <h6 class="display-6"><small class="text-muted">COSC 3380 Database Project</small></h6>
         </div>
+        <div class="row">
+            <img src="images/pic/jpg">
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
