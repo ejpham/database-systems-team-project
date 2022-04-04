@@ -1,5 +1,34 @@
 <?php
 session_start();
+require_once "db_conn_WebLogins.php";
+$name = $email = $message = "";
+$name_err = $email_err = $message_err = "";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+        $email = trim($_SESSION["email"]);
+        $grab_name_sql = "SELECT name FROM WebLogins.users WHERE email='$email'";
+        if ($result = mysqli_query($conn_WebLogins, $grab_name_sql)) $name = mysqli_fetch_assoc($result);
+        else $name_err = '<div class="alert alert-danger" role="alert">Error fetching name.</div>';
+    }
+    else {
+        if (empty(trim($_POST["name"]))) $name_err = "Please enter a name.";
+        else if (strlen(trim($_POST["name"])) > 75) $name_err = "Name can be no longer than 75 characters.";
+        else $name = trim($_POST["name"]);
+        if (empty(trim($_POST["email"]))) $email_err = "Please enter a valid e-mail address.";
+        else if (strlen(trim($_POST["email"])) > 75) $email_err = "E-mail address can be no longer than 75 characters.";
+        else $email = trim($_POST["email"]);
+    }
+    if (empty(trim($_POST["message"]))) $message_err = "Please enter a message.";
+    else if (strlen(trim($_POST["message"])) > 255) $message_err = "Message can be no longer than 255 characters.";
+    else $message = trim($_POST["message"]);
+    if (empty($email_err) && empty($name_err) && empty($message_err)) {
+        $headers = "MIME-Version: 1.0" . "\r\n";
+        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+        $headers .= 'From: <' . $email . '>' . "\r\n";
+        mail("ejpham1999@gmail.com", "Postal Office: Message from " + $name, $message, $headers);
+    }
+    mysqli_close($conn_WebLogins);
+}
 ?>
 
 <!DOCTYPE html>
@@ -46,6 +75,71 @@ session_start();
             </div>
         </nav>
     </div>
+    <!--Form for Email-->
+    <div class="container-fluid col-sm-6">
+        <div class="row">
+            <div class="m-4">
+                <h6 class="display-6">Contact Us</h6>
+                <p>Fill out the form below to contact us.</p>
+                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                    <?php
+                        echo $success;
+                        echo $error;
+                    ?>
+                    <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
+                        <div class="m-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="name" class="form-control-plaintext <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>" id="inputName" placeholder="$name" disabled>
+                            <span class="invalid-feedback"><?php echo $name_err; ?></span>
+                        </div>
+                        <div class="m-3">
+                            <label class="form-label" for="inputEmail">E-mail Address</label>
+                            <input type="email" name="email" class="form-control-plaintext <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" id="inputEmail" placeholder="$email" disabled>
+                            <span class="invalid-feedback"><?php echo $email_err; ?></span>
+                        </div>
+                        <div class="m-3">
+                            <label class="form-label" for="inputMessage">Message</label>
+                            <textarea name="message" class="form-control <?php echo (!empty($message_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $message; ?>" rows="3" maxlength="255" id="inputMessage" placeholder="Enter a message..."></textarea>
+                            <div id="count">
+                                <span id="current_count">0</span>
+                                <span id="max_count">255</span>
+                            </div>
+                            <span class="invalid-feedback"><?php echo $message_err; ?></span>
+                        </div>
+                    <?php } else { ?>
+                        <div class="m-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="name" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>" id="inputName" placeholder="Full Name">
+                            <span class="invalid-feedback"><?php echo $name_err; ?></span>
+                        </div>
+                        <div class="m-3">
+                            <label class="form-label" for="inputEmail">E-mail Address</label>
+                            <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" id="inputEmail" placeholder="E-mail Address">
+                            <span class="invalid-feedback"><?php echo $email_err; ?></span>
+                        </div>
+                        <div class="m-3">
+                            <label class="form-label" for="inputMessage">Message</label>
+                            <textarea name="message" class="form-control <?php echo (!empty($message_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $message; ?>" rows="3" maxlength="255" id="inputMessage" placeholder="Enter a message..."></textarea>
+                            <div id="count">
+                                <span id="current_count">0</span>
+                                <span id="max_count">255</span>
+                            </div>
+                            <span class="invalid-feedback"><?php echo $message_err; ?></span>
+                        </div>
+                    <?php } ?>
+                </form>
+            </div>
+        </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        $('textarea').keyup(function() {    
+            var characterCount = $(this).val().length,
+                current_count = $('#current_count'),
+                maximum_count = $('#max'),
+                count = $('#count');    
+                current_count.text(characterCount);        
+        });
+    </script>
 </body>
 </html>
