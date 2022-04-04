@@ -115,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <span class="invalid-feedback"><?php echo $message_err; ?></span>
                         <div id="count">
                             <span id="current_count">0</span>
-                            <span id="maximum_count">255</span>
+                            <span id="maximum_count">/ 255</span>
                         </div>
                     </div>
                 </form>
