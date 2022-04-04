@@ -9,7 +9,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 require_once "db_conn_WebLogins.php";
 
 $email = $password = "";
-$email_err = $password_err = $login_err = $success = "";
+$email_err = $password_err = $success = $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["email"]))) $email_err = "Please enter your e-mail address.";
@@ -40,12 +40,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $success = "Login successful.";
                             header("location:index.php");
                         }
-                        else $login_err = "Invalid e-mail address or password.";
+                        else $password_err = "Invalid e-mail address or password.";
                     }
                 }
-                else $login_err = "Invalid e-mail address or password.";
+                else $email_err = "Invalid e-mail address or password.";
             }
-            else $login_err = "Oops! Something went wrong. Please try again later.";
+            else $error = "Oops! Something went wrong. Please try again later.";
             mysqli_stmt_close($stmt);
         }
     }
@@ -101,13 +101,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container-fluid col-sm-6">
         <div class="row">
             <div class="m-4">
-                <p>Sign in below.</p>
+                <h6 class="display-6">Sign In</h6>
+                <p>Sign in below. Forgot your password? Click <a href="reset-password.php">here</a>.</p>
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                <?php if (!empty($login_err)) echo '<div class="alert alert-danger">' . $login_err . '</div>'; ?>
-                <?php
-                if (!empty($success)) echo '<div class="alert alert-success">' . $success . '</div>';
-                else if (!empty($error)) echo '<div class="alert alert-danger">' . $login_err . '</div>';
-                ?>
+                    <?php
+                    if (!empty($success)) echo '<div class="alert alert-success">' . $success . '</div>';
+                    else if (!empty($error)) echo '<div class="alert alert-danger">' . $error . '</div>';
+                    ?>
                     <div class="m-3">
                         <label class="form-label" for="inputEmail">E-mail Address</label>
                         <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" id="inputEmail" placeholder="E-mail Address">

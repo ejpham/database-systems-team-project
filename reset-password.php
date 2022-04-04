@@ -5,46 +5,52 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     header("location:index.php");
     exit;
 }
-
+ 
 require_once "db_conn_WebLogins.php";
-
-$email = $name = $password = $confirm_password = "";
-$email_err = $name_err = $password_err = $confirm_password_err = $success = $error = "";
+ 
+$email = $new_password = $confirm_password = "";
+$email_err = $new_password_err = $confirm_password_err = $success = $error = "";
  
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (empty(trim($_POST["email"]))) $email_err = "Please enter a valid e-mail address.";
-    else if (strlen(trim($_POST["email"])) > 75) $email_err = "E-mail address can be no longer than 75 characters.";
-    else $email = trim($_POST["email"]);
+    if (empty(trim($_POST["email"]))) $email_err = "Please enter your e-mail address.";
+    else $email = trim($_POST['email']);
     
-    if (empty(trim($_POST["name"]))) $name_err = "Please enter a name.";
-    else if (strlen(trim($_POST["name"])) > 75) $name_err = "Name can be no longer than 75 characters.";
-    else $name = trim($_POST["name"]);
+    if (empty(trim($_POST["new_password"]))) $new_password_err = "Please enter the new password.";     
+    else if (strlen(trim($_POST["new_password"])) < 6) $new_password_err = "Password must have at least 6 characters.";
+    else if (strlen(trim($_POST["new_password"])) > 16) $new_password_err = "Password can be no longer than 16 characters.";
+    else $new_password = trim($_POST["new_password"]);
     
-    if (empty(trim($_POST["password"]))) $password_err = "Please enter a password.";
-    else if (strlen(trim($_POST["password"])) < 6) $password_err = "Password must have at least 6 characters.";
-    else if (strlen(trim($_POST["password"])) > 16) $password_err = "Password can be no longer than 16 characters.";
-    else $password = trim($_POST["password"]);
-    
-    if (empty(trim($_POST["confirm_password"]))) $confirm_password_err = "Please confirm password.";
+    if (empty(trim($_POST["confirm_password"]))) $confirm_password_err = "Please confirm the password.";
     else {
         $confirm_password = trim($_POST["confirm_password"]);
-        if (empty($password_err) && ($password != $confirm_password)) $confirm_password_err = "Password did not match.";
+        if (empty($new_password_err) && ($new_password != $confirm_password)) $confirm_password_err = "Password did not match.";
     }
     
     $check_db_email = "SELECT * FROM WebLogins.users WHERE email='$email'";
     $result = mysqli_query($conn_WebLogins, $check_db_email);
     $email_exists = mysqli_fetch_assoc($result);
     
-    if ($email_exists) $email_err = "E-mail address is already taken.";
+    if (!$email_exists) $email_err = "Invalid e-mail address";
     
-    if (empty($email_err) && empty($name_err) && empty($password_err) && empty($confirm_password_err)) {
-        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-        $query = "INSERT INTO WebLogins.users (email, name, pass) VALUES ('$email', '$name', '$hashed_password')";
-        if (mysqli_query($conn_WebLogins, $query)) {
-            $success = "Your account has been created.";
-            header('location:index.php');
+    if (empty($email_err) && empty($new_password_err) && empty($confirm_password_err)) {
+        $sql = "UPDATE WebLogins.users SET password = ? WHERE email = ?";
+        
+        if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
+            mysqli_stmt_bind_param($stmt, "si", $param_password, $param_email);
+            $param_password = password_hash($new_password, PASSWORD_BCRYPT);
+            $param_email = $email;
+            
+            if (mysqli_stmt_execute($stmt)) {
+                mysqli_stmt_store_result($stmt);
+                session_destroy();
+                $success = "Successfully changed password.";
+                header("location:reset-password.php");
+                exit();
+            }
+            else $error = "Oops! Something went wrong. Please try again later.";
+            
+            mysqli_stmt_close($stmt);
         }
-        else $error = "Oops, something went wrong. Please try again later.";
     }
     mysqli_close($conn_WebLogins);
 }
@@ -88,48 +94,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </li>
                     <?php } else { ?>
                         <a href="sign-in.php" class="nav-item nav-link">Sign In</a>
-                        <a href="sign-up.php" class="nav-item nav-link active">Sign Up</a>
+                        <a href="sign-up.php" class="nav-item nav-link">Sign Up</a>
                     <?php } ?>
                 </ul>
             </div>
         </nav>
     </div>
-    <!--Form for Sign Up-->
+    <!--Form for Reset Password-->
     <div class="container-fluid col-sm-6">
         <div class="row">
             <div class="m-4">
-                <h6 class="display-6">Sign Up</h6>
-                <p>Fill out the form below to create an account.</p>
-                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                <h6 class="display-6">Reset Password</h6>
+                <p>Please fill out this form to reset your password.</p>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                     <?php
                     if (!empty($success)) echo '<div class="alert alert-success">' . $success . '</div>';
                     else if (!empty($error)) echo '<div class="alert alert-danger">' . $error . '</div>';
                     ?>
                     <div class="m-3">
-                        <label class="form-label">Full Name</label>
-                        <input type="text" name="name" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>" id="inputName" placeholder="Full Name">
-                        <span class="invalid-feedback"><?php echo $name_err; ?></span>
-                    </div>
-                    <div class="m-3">
                         <label class="form-label" for="inputEmail">E-mail Address</label>
                         <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" id="inputEmail" placeholder="E-mail Address">
-                        <span class="invalid-feedback"><?php echo $email_err; ?></span>
                     </div>
                     <div class="m-3">
-                        <label class="form-label" for="inputPassword">Password</label>
-                        <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>" id="inputPassword" placeholder="Password">
-                        <span class="invalid-feedback"><?php echo $password_err; ?></span>
+                        <label class="form-label" for="inputNewPassword">New Password</label>
+                        <input type="password" name="new_password" class="form-control <?php echo (!empty($new_password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $new_password; ?>" id="inputNewPassword" placeholder="New Password">
+                        <span class="invalid-feedback"><?php echo $new_password_err; ?></span>
                     </div>
                     <div class="m-3">
-                        <label class="form-label">Confirm Password</label>
-                        <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $confirm_password; ?>" id="inputPassword" placeholder="Confirm Password">
+                        <label class="form-label" for="inputConfirmPassword">Confirm Password</label>
+                        <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" id="inputConfirmPassword" placeholder="Confirm New Password">
                         <span class="invalid-feedback"><?php echo $confirm_password_err; ?></span>
                     </div>
                     <div class="m-3">
-                        <input type="submit" name="submit" class="btn btn-outline-secondary" value="Submit">
+                        <input type="submit" name="submit" class="btn btn-outline-secondary" value="Reset Password">
                     </div>
                 </form>
-                <p>Already registered? <a href="sign-in.php">Sign in</a> here.</p>
+                <p>Change your mind? <a href="sign-in.php">Sign in</a> here.</p>
             </div>
         </div>
     </div>
