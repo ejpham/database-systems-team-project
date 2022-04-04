@@ -89,12 +89,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
                         <div class="m-3">
                             <label class="form-label">Full Name</label>
-                            <input type="text" name="name" class="form-control-plaintext <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>" id="inputName" placeholder="$name" disabled>
+                            <input type="text" name="name" class="form-control-plaintext <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>" id="inputName" value="<?php echo $name ?>" disabled>
                             <span class="invalid-feedback"><?php echo $name_err; ?></span>
                         </div>
                         <div class="m-3">
                             <label class="form-label" for="inputEmail">E-mail Address</label>
-                            <input type="email" name="email" class="form-control-plaintext <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" id="inputEmail" placeholder="$email" disabled>
+                            <input type="email" name="email" class="form-control-plaintext <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" id="inputEmail" value="<?php echo $email ?>" disabled>
                             <span class="invalid-feedback"><?php echo $email_err; ?></span>
                         </div>
                     <?php } else { ?>
