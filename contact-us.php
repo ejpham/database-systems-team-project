@@ -2,7 +2,7 @@
 session_start();
 require_once "db_conn_WebLogins.php";
 $name = $email = $message = "";
-$name_err = $email_err = $message_err = "";
+$name_err = $email_err = $message_err = $success = $error = "";
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     $email = $_SESSION["email"];
     $grab_name_sql = "SELECT name FROM WebLogins.users WHERE email='$email'";
@@ -22,11 +22,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["message"]))) $message_err = "Please enter a message.";
     else $message = trim($_POST["message"]);
     if (empty($email_err) && empty($name_err) && empty($message_err)) {
-        $success = '<div class="alert alert-success" role="alert">Your message has been sent.</div>';
         // $headers = "MIME-Version: 1.0" . "\r\n";
         // $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
         // $headers .= 'From: <' . $email . '>' . "\r\n";
-        // mail("ejpham1999@gmail.com", "Postal Office: Message from " + $name, $message, $headers);
+        if (mail("ejpham1999@gmail.com", "Postal Office: Message from " + $name, $message)) $success = '<div class="alert alert-success" role="alert">Your message has been sent.</div>';
+        else $error = '<div class="alert alert-danger" role="alert">Your message could not be sent.</div>';
     }
     mysqli_close($conn_WebLogins);
 }
