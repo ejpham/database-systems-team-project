@@ -110,7 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <?php } ?>
                     <div class="m-3">
                         <label class="form-label" for="inputMessage">Message</label>
-                        <textarea class="form control <?php echo (!empty($message_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $message; ?>" name="message" id="inputMessage" maxlength="255" style="resize:none" rows="3" placeholder="Enter a message"></textarea>
+                        <textarea class="form-control <?php echo (!empty($message_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $message; ?>" name="message" id="inputMessage" maxlength="255" style="resize:none" rows="3" placeholder="Enter a message"></textarea>
                         <span class="invalid-feedback"><?php echo $message_err; ?></span>
                     </div>
                 </form>
