@@ -38,13 +38,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($email_exists) $email_err = "E-mail address is already taken.";
     
     if (empty($email_err) && empty($name_err) && empty($password_err) && empty($confirm_password_err)) {
-        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-        $query = "INSERT INTO WebLogins.users (email, name, pass) VALUES ('$email', '$name', '$hashed_password')";
-        if (mysqli_query($conn_WebLogins, $query)) {
-            $success = '<div class="alert alert-success" role="alert">Your account has been created.</div>';
-            header('refresh:1; url=sign-in.php');
+        $sql = "INSERT INTO WebLogins.users (email, name, pass) VALUES (?, ?, ?)";
+        if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
+            mysqli_stmt_bind_param($stmt, "sss", $param_email, $param_name, $param_pass);
+            $param_email = $email;
+            $param_name = $name;
+            $param_pass = password_hash($password, PASSWORD_BCRYPT);
+            if (mysqli_stmt_execute($stmt)) {
+                mysqli_stmt_store_result($stmt);
+                session_destroy();
+                $success = '<div class="alert alert-success" role="alert">Your account has been created.</div>';
+                header('refresh:1; url=sign-in.php');
+            }
+            else $error = '<div class="alert alert-danger" role="alert">Oops, something went wrong. Please try again later.</div>';
         }
-        else $error = '<div class="alert alert-danger" role="alert">Oops, something went wrong. Please try again later.</div>';
+        else $error = '<div class="alert alert-danger" role="alert">Please make sure your information is valid.</div>';
     }
     mysqli_close($conn_WebLogins);
 }
