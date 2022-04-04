@@ -85,8 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <?php
                         echo $success;
                         echo $error;
-                    ?>
-                    <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
+                        if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
                         <div class="m-3">
                             <label class="form-label">Full Name</label>
                             <input type="text" name="name" class="form-control-plaintext <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>" id="inputName" placeholder="$name" disabled>
@@ -96,15 +95,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <label class="form-label" for="inputEmail">E-mail Address</label>
                             <input type="email" name="email" class="form-control-plaintext <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" id="inputEmail" placeholder="$email" disabled>
                             <span class="invalid-feedback"><?php echo $email_err; ?></span>
-                        </div>
-                        <div class="m-3">
-                            <label class="form-label" for="inputMessage">Message</label>
-                            <textarea name="message" class="form-control <?php echo (!empty($message_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $message; ?>" rows="3" maxlength="255" id="inputMessage" placeholder="Enter a message..."></textarea>
-                            <div id="count">
-                                <span id="current_count">0</span>
-                                <span id="max_count">255</span>
-                            </div>
-                            <span class="invalid-feedback"><?php echo $message_err; ?></span>
                         </div>
                     <?php } else { ?>
                         <div class="m-3">
@@ -117,23 +107,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" id="inputEmail" placeholder="E-mail Address">
                             <span class="invalid-feedback"><?php echo $email_err; ?></span>
                         </div>
-                        <div class="m-3">
-                            <label class="form-label" for="inputMessage">Message</label>
-                            <textarea name="message" class="form-control <?php echo (!empty($message_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $message; ?>" rows="3" maxlength="255" id="inputMessage" placeholder="Enter a message..."></textarea>
-                            <div id="count">
-                                <span id="current_count">0</span>
-                                <span id="max_count">255</span>
-                            </div>
-                            <span class="invalid-feedback"><?php echo $message_err; ?></span>
-                        </div>
                     <?php } ?>
+                    <div class="m-3">
+                        <label class="form-label" for="inputMessage">Message</label>
+                        <textarea name="message" class="form-control <?php echo (!empty($message_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $message; ?>" rows="3" maxlength="255" id="inputMessage" placeholder="Enter a message..."></textarea>
+                        <div id="count">
+                            <span id="current_count">0</span>
+                            <span id="max_count">255</span>
+                        </div>
+                        <span class="invalid-feedback"><?php echo $message_err; ?></span>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script type="text/javascript">
-        $('message').keyup(function() {    
+        $('inputMessage').keyup(function() {    
             var characterCount = $(this).val().length,
                 current_count = $('#current_count'),
                 maximum_count = $('#max_count'),
