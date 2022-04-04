@@ -110,10 +110,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <?php } ?>
                     <div class="m-3">
                         <label class="form-label" for="inputMessage">Message</label>
-                        <textarea name="message" class="form-control <?php echo (!empty($message_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $message; ?>" rows="3" maxlength="255" id="message" placeholder="Enter a message..."></textarea>
+                        <textarea name="textarea" id="textarea" maxlength="255" rows="5" style="width: 100%" placeholder="Enter a message"></textarea>
                         <div id="count">
                             <span id="current_count">0</span>
-                            <span id="max_count">255</span>
+                            <span id="maximum_count">255</span>
                         </div>
                         <span class="invalid-feedback"><?php echo $message_err; ?></span>
                     </div>
@@ -121,15 +121,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> -->
 </body>
 </html>
 <script type="text/javascript">
-    $('message').keyup(function() {    
+    $('textarea').keyup(function() {    
         var characterCount = $(this).val().length,
             current_count = $('#current_count'),
-            maximum_count = $('#max_count'),
-            count = $('#count');
-            current_count.text(characterCount);
+            maximum_count = $('#maximum_count'),
+            count = $('#count');    
+            current_count.text(characterCount);        
     });
 </script>
