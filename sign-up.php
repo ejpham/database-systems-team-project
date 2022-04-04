@@ -15,20 +15,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // validate email from textbox
     if (empty(trim($_POST["email"]))) $email_err = "Please enter a valid e-mail address.";
     else if (strlen(trim($_POST["email"])) > 75) $email_err = "E-mail address can be no longer than 75 characters.";
-    else $email = trim($_POST["email"]);
+    else $email = trim(mysqli_real_escape_string($_POST["email"]));
     // validate name from textbox
     if (empty(trim($_POST["name"]))) $name_err = "Please enter a name.";
     else if (strlen(trim($_POST["name"])) > 75) $name_err = "Name can be no longer than 75 characters.";
-    else $name = trim($_POST["name"]);
+    else $name = trim(mysqli_real_escape_string($_POST["name"]));
     // validate password from textbox
     if (empty(trim($_POST["password"]))) $password_err = "Please enter a password.";
     else if (strlen(trim($_POST["password"])) < 6) $password_err = "Password must have at least 6 characters.";
     else if (strlen(trim($_POST["password"])) > 16) $password_err = "Password can be no longer than 16 characters.";
-    else $password = trim($_POST["password"]);
+    else $password = trim(mysqli_real_escape_string($_POST["password"]));
     // validate confirm password from textbox
     if (empty(trim($_POST["confirm_password"]))) $confirm_password_err = "Please confirm password.";
     else {
-        $confirm_password = trim($_POST["confirm_password"]);
+        $confirm_password = trim(mysqli_real_escape_string($_POST["confirm_password"]));
         // make sure password === confirm password
         if (empty($password_err) && ($password != $confirm_password)) $confirm_password_err = "Password did not match.";
     }
