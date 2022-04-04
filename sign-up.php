@@ -41,10 +41,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $hashed_password = password_hash($password, PASSWORD_BCRYPT);
         $query = "INSERT INTO WebLogins.users (email, name, pass) VALUES ('$email', '$name', '$hashed_password')";
         if (mysqli_query($conn_WebLogins, $query)) {
-            $success = "Your account has been created.";
+            $success = '<div class="alert alert-success" role="alert">Your account has been created.</div>';
             header('refresh:2; url=sign-in.php');
         }
-        else $error = "Oops, something went wrong. Please try again later.";
+        else $error = '<div class="alert alert-danger" role="alert">Oops, something went wrong. Please try again later.</div>';
     }
     mysqli_close($conn_WebLogins);
 }
@@ -102,8 +102,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <p>Fill out the form below to create an account.</p>
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                     <?php
-                        if (!empty($success)) echo '<span class="valid-feedback">' . $success . '</div>';
-                        if (!empty($error)) echo '<span class="invalid-feedback">' . $error . '</div>';
+                        echo $sucess;
+                        echo $error;
                     ?>
                     <div class="m-3">
                         <label class="form-label">Full Name</label>

@@ -43,11 +43,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (mysqli_stmt_execute($stmt)) {
                 mysqli_stmt_store_result($stmt);
                 session_destroy();
-                $success = "Successfully changed password.";
+                $success = '<div class="alert alert-success role="alert">Successfully changed password.</div>';
                 header("refresh:2; url=sign-in.php");
                 exit();
             }
-            else $error = "Oops! Something went wrong. Please try again later.";
+            else $error = '<div class="alert alert-danger" role="alert">Oops! Something went wrong. Please try again later.</div>';
             
             mysqli_stmt_close($stmt);
         }
@@ -108,8 +108,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <p>Please fill out this form to reset your password.</p>
                 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                     <?php
-                        if (!empty($success)) echo '<span class="valid-feedback">' . $success . '</div>';
-                        if (!empty($error)) echo '<span class="invalid-feedback">' . $error . '</div>';
+                        echo $success;
+                        echo $error;
                     ?>
                     <div class="m-3">
                         <label class="form-label" for="inputEmail">E-mail Address</label>
