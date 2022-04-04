@@ -88,7 +88,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h6 class="display-6">Contact Us</h6>
                 <p>Fill out the form below to contact us.</p>
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                    <?php echo $success; ?>
+                    <?php
+                        echo $success;
+                        echo $error;
+                    ?>
                     <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
                         <div class="m-3">
                             <label class="form-label">Full Name</label>
