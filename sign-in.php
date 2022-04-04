@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["loggedin"] = true;
                             $_SESSION["email"] = $email;
                             $success = '<div class="alert alert-success" role="alert">Login successful.</div>';
-                            header("refresh:2; url=index.php");
+                            header("refresh:1; url=index.php");
                         }
                         else $error = '<div class="alert alert-danger" role="alert">Invalid e-mail address or password.</div>';
                     }

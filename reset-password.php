@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 mysqli_stmt_store_result($stmt);
                 session_destroy();
                 $success = '<div class="alert alert-success role="alert">Successfully changed password.</div>';
-                header("refresh:2; url=sign-in.php");
+                header("refresh:1; url=sign-in.php");
                 exit();
             }
             else $error = '<div class="alert alert-danger" role="alert">Oops! Something went wrong. Please try again later.</div>';
