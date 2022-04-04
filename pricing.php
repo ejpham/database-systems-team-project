@@ -24,9 +24,9 @@ session_start();
                     <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
                 </ul>
                 <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
-                    <a href="#" class="navbar-brand"><span style="margin-right:7.3rem">Postal Office</style></a>
+                    <a href="index.php" class="navbar-brand"><span style="margin-right:7.3rem">Postal Office</style></a>
                 <?php } else { ?>
-                    <a href="#" class="navbar-brand"><span style="margin-right:7.8rem">Postal Office</style></a>
+                    <a href="index.php" class="navbar-brand"><span style="margin-right:7.8rem">Postal Office</style></a>
                 <?php } ?>
                 <ul class="nav navbar-nav ms-auto">
                     <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
