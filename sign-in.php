@@ -103,8 +103,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h6 class="display-6">Sign In</h6>
                 <p>Sign in below. Forgot your password? Click <a href="reset-password.php">here</a>.</p>
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                    <div class="alert alert-success"><?php echo $success; ?></div>
-                    <div class="alert alert-danger"><?php echo $error; ?></div>
+                    <div class="alert alert-success" role="alert"><?php echo $success; ?></div>
+                    <div class="alert alert-danger" role="alert"><?php echo $error; ?></div>
                     <div class="m-3">
                         <label class="form-label" for="inputEmail">E-mail Address</label>
                         <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" id="inputEmail" placeholder="E-mail Address">
