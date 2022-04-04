@@ -104,8 +104,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <p>Sign in below. Forgot your password? Click <a href="reset-password.php">here</a>.</p>
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                     <?php
-                        if (!empty($empty)) echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-                        if (!empty($success)) echo '<div class="alert alert-success" role="alert">' . $success . '</div>';
+                        echo '<div class="alert alert-success" role="alert">' . $success . '</div>';
+                        echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
                     ?>
                     <div class="m-3">
                         <label class="form-label" for="inputEmail">E-mail Address</label>
