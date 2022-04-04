@@ -101,10 +101,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h6 class="display-6">Sign Up</h6>
                 <p>Fill out the form below to create an account.</p>
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                    <?php
-                    if (!empty($success)) echo '<div class="alert alert-success">' . $success . '</div>';
-                    else if (!empty($error)) echo '<div class="alert alert-danger">' . $error . '</div>';
-                    ?>
+                    <div class="alert alert-success"><?php echo $success; ?></div>
+                    <div class="alert alert-danger"><?php echo $error; ?></div>
                     <div class="m-3">
                         <label class="form-label">Full Name</label>
                         <input type="text" name="name" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>" id="inputName" placeholder="Full Name">
