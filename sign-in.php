@@ -1,43 +1,33 @@
 <?php
 session_start();
-
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     header("location:index.php");
     exit;
 }
-
 require_once "db_conn_WebLogins.php";
-
 $email = $password = "";
 $email_err = $password_err = $success = $error = "";
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["email"]))) $email_err = "Please enter your e-mail address.";
     else $email = trim($_POST['email']);
-    
     if (empty(trim($_POST["password"]))) $password_err = "Please enter your password.";
     else $password = trim($_POST["password"]);
-    
     if (empty($email_err) && empty($password_err)) {
         $sql = "SELECT email, pass FROM WebLogins.users WHERE email = ?";
-        
         if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
             mysqli_stmt_bind_param($stmt, "s", $param_email);
             $param_email = $email;
-            
             if (mysqli_stmt_execute($stmt)) {
                 mysqli_stmt_store_result($stmt);
-                
                 if (mysqli_stmt_num_rows($stmt) == 1) {
                     mysqli_stmt_bind_result($stmt, $email, $hashed_password);
-                    
                     if (mysqli_stmt_fetch($stmt)) {
                         if (password_verify($password, $hashed_password)) {
                             session_start();
                             $_SESSION["loggedin"] = true;
                             $_SESSION["email"] = $email;
                             $success = '<div class="alert alert-success" role="alert">Login successful.</div>';
-                            header("refresh:1; url=index.php");
+                            header("refresh:2; url=index.php");
                         }
                         else $error = '<div class="alert alert-danger" role="alert">Invalid e-mail address or password.</div>';
                     }
