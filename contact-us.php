@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once "db_conn_WebLogins.php";
+require_once "db_conn_PostalService.php";
 $name = $email = $message = "";
 $name_err = $email_err = $message_err = $success = $error = "";
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
@@ -22,11 +23,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["message"]))) $message_err = "Please enter a message.";
     else $message = trim($_POST["message"]);
     if (empty($email_err) && empty($name_err) && empty($message_err)) {
-        // $headers = "MIME-Version: 1.0" . "\r\n";
-        // $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-        // $headers .= 'From: <' . $email . '>' . "\r\n";
-        if (mail("ejpham1999@gmail.com", "Postal Office: Message from " + $name, $message)) $success = '<div class="alert alert-success" role="alert">Your message has been sent.</div>';
-        else $error = '<div class="alert alert-danger" role="alert">Your message could not be sent.</div>';
+        $sql = "INSERT INTO PostalService.Contact_Logs (full_name, email, message) VALUES (?, ?, ?)";
+        if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
+            mysqli_stmt_bind_param($stmt, "sss", $param_name, $param_email, $param_message);
+            $param_name = $name;
+            $param_email = $email;
+            $param_message = $message;
+            if (mysqli_stmt_execute($stmt)) {
+                $success = '<div class="alert alert-success" role="alert">Your message has been sent.</div>';
+                header('refresh:2; url=contact-us.php');
+            }
+            else $error = '<div class="alert alert-danger" role="alert">Your message could not be sent.</div>';
+        }
     }
     mysqli_close($conn_WebLogins);
 }
