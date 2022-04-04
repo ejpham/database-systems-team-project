@@ -36,15 +36,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             session_start();
                             $_SESSION["loggedin"] = true;
                             $_SESSION["email"] = $email;
-                            $success = "Login successful.";
+                            $success = '<div class="alert alert-success" role="alert">Login successful.</div>';
                             header("refresh:2; url=index.php");
                         }
-                        else $error = "Invalid e-mail address or password.";
+                        else $error = '<div class="alert alert-danger" role="alert">Invalid e-mail address or password.</div>';
                     }
                 }
-                else $error = "Invalid e-mail address or password.";
+                else $error = '<div class="alert alert-danger" role="alert">Invalid e-mail address or password.</div>';
             }
-            else $error = "Oops! Something went wrong. Please try again later.";
+            else $error = '<div class="alert alert-danger" role="alert">Oops! Something went wrong. Please try again later.</div>';
             mysqli_stmt_close($stmt);
         }
     }
@@ -104,8 +104,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <p>Sign in below. Forgot your password? Click <a href="reset-password.php">here</a>.</p>
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                     <?php
-                        echo '<span class="valid-feedback">' . $success . '</div>';
-                        echo '<span class="invalid-feedback">' . $error . '</div>';
+                        echo $success;
+                        echo $error;
                     ?>
                     <div class="m-3">
                         <label class="form-label" for="inputEmail">E-mail Address</label>

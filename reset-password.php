@@ -108,8 +108,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <p>Please fill out this form to reset your password.</p>
                 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                     <?php
-                        echo '<span class="valid-feedback">' . $success . '</div>';
-                        echo '<span class="invalid-feedback">' . $error . '</div>';
+                        if (!empty($success)) echo '<span class="valid-feedback">' . $success . '</div>';
+                        if (!empty($error)) echo '<span class="invalid-feedback">' . $error . '</div>';
                     ?>
                     <div class="m-3">
                         <label class="form-label" for="inputEmail">E-mail Address</label>
