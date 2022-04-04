@@ -47,7 +47,7 @@ session_start();
             </div>
         </nav>
     </div>
-    <div class="container-fluid">
+    <div class="container-fluid text-center">
         <div class="row">
             <div class="m-4">
                 <h6 class="display-6"> Pricing </h6>
