@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $query = "INSERT INTO WebLogins.users (email, name, pass) VALUES ('$email', '$name', '$hashed_password')";
         if (mysqli_query($conn_WebLogins, $query)) {
             $success = "Your account has been created.";
-            header('location:index.php');
+            header('refresh:1; url=sign-in.php');
         }
         else $error = "Oops, something went wrong. Please try again later.";
     }
