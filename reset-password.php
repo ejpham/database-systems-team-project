@@ -45,7 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 session_destroy();
                 $success = '<div class="alert alert-success" role="alert">Successfully changed password.</div>';
                 header("refresh:1; url=sign-in.php");
-                exit();
             }
             else $error = '<div class="alert alert-danger" role="alert">Oops! Something went wrong. Please try again later.</div>';
             
