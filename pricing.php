@@ -56,6 +56,7 @@ session_start();
                 <li>Packages size
                     <li> 8 x 8 x 6: $10</li>
                 </li>
+                <\<ul></ul>
                 
             </div>
         </div>
