@@ -118,6 +118,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <span id="maximum_count">/ 255</span>
                         </div>
                     </div>
+                    <div class="m-3">
+                        <input type="submit" name="submit" class="btn btn-outline-secondary" value="Send">
+                    </div>
                 </form>
             </div>
         </div>
