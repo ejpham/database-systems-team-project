@@ -40,10 +40,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $success = "Login successful.";
                             header("location:index.php");
                         }
-                        else $password_err = "Invalid e-mail address or password.";
+                        else $error = "Invalid e-mail address or password.";
                     }
                 }
-                else $email_err = "Invalid e-mail address or password.";
+                else $error = "Invalid e-mail address or password.";
             }
             else $error = "Oops! Something went wrong. Please try again later.";
             mysqli_stmt_close($stmt);
@@ -111,6 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="m-3">
                         <label class="form-label" for="inputEmail">E-mail Address</label>
                         <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" id="inputEmail" placeholder="E-mail Address">
+                        <span class="invalid-feedback"><?php echo $email_err; ?></span>
                     </div>
                     <div class="m-3">
                         <label class="form-label" for="inputPassword">Password</label>
