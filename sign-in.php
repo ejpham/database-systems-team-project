@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["loggedin"] = true;
                             $_SESSION["email"] = $email;
                             $success = "Login successful.";
-                            header("refresh:1; url=index.php");
+                            header("refresh:2; url=index.php");
                         }
                         else $error = "Invalid e-mail address or password.";
                     }
