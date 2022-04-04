@@ -1,6 +1,6 @@
 <?php
 define('serverName', 'database-cosc-3380-team-3.cp6t5hjmtlcw.us-east-1.rds.amazonaws.com');
-define('userName', 'admin');
+define('userName', 'website');
 define('password', 'Password1');
 define('dbName', 'PostalService');
 $conn_PostalService = mysqli_connect(serverName, userName, password, dbName);
