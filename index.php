@@ -47,12 +47,12 @@ session_start();
             </div>
         </nav>
     </div>
-    <br/>
     <div class="container-fluid text-center">
         <div class="row">
             <h1 class="display-1"><b>Team 3 Postal Service</b></h1>
             <h6 class="display-6"><small class="text-muted">COSC 3380 Database Project</small></h6>
         </div>
+        <br/>
         <div class="row">
             <img src="images/pic.jpg" class="rounded mx-auto d-block" style="max-width:60%; height:auto;">
         </div>
