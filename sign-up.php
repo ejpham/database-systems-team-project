@@ -102,8 +102,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <p>Fill out the form below to create an account.</p>
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                     <?php
-                        echo '<div class="alert alert-success" role="alert">' . $success . '</div>';
-                        echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+                        echo '<span class="valid-feedback">' . $success . '</div>';
+                        echo '<span class="invalid-feedback">' . $error . '</div>';
                     ?>
                     <div class="m-3">
                         <label class="form-label">Full Name</label>
