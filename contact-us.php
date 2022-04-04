@@ -2,7 +2,7 @@
 session_start();
 require_once "db_conn_WebLogins.php";
 $name = $email = $message = "";
-$name_err = $email_err = $message_err = $error = "";
+$name_err = $email_err = $message_err = "";
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     $email = $_SESSION["email"];
     $grab_name_sql = "SELECT name FROM WebLogins.users WHERE email='$email'";
@@ -20,13 +20,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         else $email = trim($_POST["email"]);
     }
     if (empty(trim($_POST["message"]))) $message_err = "Please enter a message.";
-    else if (strlen(trim($_POST["message"])) > 255) $message_err = "Message can be no longer than 255 characters.";
     else $message = trim($_POST["message"]);
     if (empty($email_err) && empty($name_err) && empty($message_err)) {
-        $headers = "MIME-Version: 1.0" . "\r\n";
-        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-        $headers .= 'From: <' . $email . '>' . "\r\n";
-        mail("ejpham1999@gmail.com", "Postal Office: Message from " + $name, $message, $headers);
+        $success = '<div class="alert alert-success" role="alert">Your message has been sent.</div>';
+        // $headers = "MIME-Version: 1.0" . "\r\n";
+        // $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+        // $headers .= 'From: <' . $email . '>' . "\r\n";
+        // mail("ejpham1999@gmail.com", "Postal Office: Message from " + $name, $message, $headers);
     }
     mysqli_close($conn_WebLogins);
 }
@@ -84,10 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h6 class="display-6">Contact Us</h6>
                 <p>Fill out the form below to contact us.</p>
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                    <?php
-                        echo $success;
-                        echo $error;
-                    ?>
+                    <?php echo $success; ?>
                     <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
                         <div class="m-3">
                             <label class="form-label">Full Name</label>
