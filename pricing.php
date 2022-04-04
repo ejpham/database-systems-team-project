@@ -51,13 +51,12 @@ session_start();
             <div class="m-4">
                 <h6 class="display-6"> Pricing </h6>
 
-                <h4 class="display-4">Mail</h4>
+                <h8 class="display-8">Mail</h8>
                 <ul style = "list-style-type:square">
                     <li> Fast: $3<\li>
                     <li> Express: $6<\li>
-                <\ul>
-                
-                <h4 class="display-4">Packages Based on size</h4>
+                </ul>
+                <h8 class="display-8">Packages Based on size</h8>
                 <ul style = "list-style-type:square">
                     <li> 8 x 8 x 6: $6</li>
                     <li> 8 x 8 x 8: $7</li>
@@ -65,7 +64,7 @@ session_start();
                     <li> 12 x 6 x 6: $9</li>
                     <li> 12 x 9 x 3: $10</li>
                     <li> 12 x 9 x 4: $11</li>
-                <\ul>
+                </ul>
                 
             </div>
         </div>
