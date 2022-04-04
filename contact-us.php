@@ -112,20 +112,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <label class="form-label" for="inputMessage">Message</label>
                         <textarea class="form-control <?php echo (!empty($message_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $message; ?>" name="message" id="inputMessage" maxlength="255" style="resize:none" rows="3" placeholder="Enter a message"></textarea>
                         <span class="invalid-feedback"><?php echo $message_err; ?></span>
+                        <div id="count">
+                            <span id="current_count">0</span>
+                            <span id="maximum_count">255</span>
+                        </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        $('textarea').keyup(function() {
+            var characterCount = $(this).val().length,
+            current_count = $('#current_count'),
+            maximum_count = $('#maximum_count'),
+            count = $('#count');
+            current_count.text(characterCount);
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 </html>
-<script type="text/javascript">
-    const textarea = document.querySelector("inputMessage");
-    textarea.addEventListener("input", ({ currentTarget: target }) => {
-        const maxLength = target.getAttribute("maxlength");
-        const currentLength = target.value.length;
-        if (currentLength >= maxLength) return console.log("You have reached the maximum number of characters.");
-        console.log(`${maxLength - currentLength} chars left`);
-    });
-</script>
