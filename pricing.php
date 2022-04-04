@@ -50,13 +50,22 @@ session_start();
         <div class="row">
             <div class="m-4">
                 <h6 class="display-6"> Pricing </h6>
+                
                 <ul style = "list-style-type:square">
 
-                <li>Mail: $5</li>
-                <li>Packages size
-                    <li> 8 x 8 x 6: $10</li>
-                </li>
-                <\<ul></ul>
+                <h4 class="display-4">Mail</h4>
+                <li> Fast: $3<\li>
+                <li> Express: $6<\li>
+                <h4 class="display-4">Mail</h4>
+                <li>Packages Based on size</l1>
+                <li> 8 x 8 x 6: $6</li>
+                <li> 8 x 8 x 8: $7</li>
+                <li> 10 x 8 x 6: $8</li>
+                <li> 12 x 6 x 6: $9</li>
+                <li> 12 x 9 x 3: $10</li>
+                <li> 12 x 9 x 4: $11</li>
+
+                <\ul>
                 
             </div>
         </div>
