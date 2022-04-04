@@ -2,15 +2,15 @@
 session_start();
 require_once "db_conn_WebLogins.php";
 $name = $email = $message = "";
-$name_err = $email_err = $message_err = "";
+$name_err = $email_err = $message_err = $error = "";
+if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+    $email = $_SESSION["email"];
+    $grab_name_sql = "SELECT name FROM WebLogins.users WHERE email='$email'";
+    if ($result = mysqli_query($conn_WebLogins, $grab_name_sql)) $name = mysqli_fetch_assoc($result);
+    else $error = '<div class="alert alert-danger" role="alert">Error fetching name.</div>';
+}
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-        $email = trim($_SESSION["email"]);
-        $grab_name_sql = "SELECT name FROM WebLogins.users WHERE email='$email'";
-        if ($result = mysqli_query($conn_WebLogins, $grab_name_sql)) $name = mysqli_fetch_assoc($result);
-        else $name_err = '<div class="alert alert-danger" role="alert">Error fetching name.</div>';
-    }
-    else {
+    if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
         if (empty(trim($_POST["name"]))) $name_err = "Please enter a name.";
         else if (strlen(trim($_POST["name"])) > 75) $name_err = "Name can be no longer than 75 characters.";
         else $name = trim($_POST["name"]);
@@ -86,16 +86,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <?php
                         echo $success;
                         echo $error;
-                        if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
+                    ?>
+                    <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
                         <div class="m-3">
                             <label class="form-label">Full Name</label>
-                            <input type="text" name="name" class="form-control-plaintext <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>" id="inputName" value="<?php echo $name; ?>" disabled>
-                            <span class="invalid-feedback"><?php echo $name_err; ?></span>
+                            <input type="text" name="name" class="form-control-plaintext" value="<?php echo $name; ?>" id="inputName" disabled>
                         </div>
                         <div class="m-3">
                             <label class="form-label" for="inputEmail">E-mail Address</label>
-                            <input type="email" name="email" class="form-control-plaintext <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" id="inputEmail" value="<?php echo $_SESSION["email"]; ?>" disabled>
-                            <span class="invalid-feedback"><?php echo $email_err; ?></span>
+                            <input type="email" name="email" class="form-control-plaintext" value="<?php echo $email; ?>" id="inputEmail" disabled>
                         </div>
                     <?php } else { ?>
                         <div class="m-3">
