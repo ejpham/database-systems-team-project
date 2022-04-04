@@ -6,8 +6,9 @@ $name_err = $email_err = $message_err = $error = "";
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     $email = $_SESSION["email"];
     $grab_name_sql = "SELECT name FROM WebLogins.users WHERE email='$email'";
-    if ($result = mysqli_query($conn_WebLogins, $grab_name_sql)) $name = mysqli_fetch_assoc($result);
-    else $error = '<div class="alert alert-danger" role="alert">Error fetching name.</div>';
+    $result = mysqli_query($conn_WebLogins, $grab_name_sql);
+    $fetch_name = mysqli_fetch_assoc($result);
+    $name = $fetch_name["name"];
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
