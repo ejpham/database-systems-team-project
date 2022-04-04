@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!$email_exists) $email_err = "Invalid e-mail address";
     
     if (empty($email_err) && empty($new_password_err) && empty($confirm_password_err)) {
-        $sql = "UPDATE WebLogins.users SET password = ? WHERE email = ?";
+        $sql = "UPDATE WebLogins.users SET pass = ? WHERE email = ?";
         
         if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
             mysqli_stmt_bind_param($stmt, "si", $param_password, $param_email);
