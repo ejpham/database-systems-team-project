@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["loggedin"] = true;
                             $_SESSION["email"] = $email;
                             $_SESSION["is_employee"] = $is_employee;
-                            $success = '<div class="alert alert-success" role="alert">Login successful. Access level: <?php echo $is_employee; ?></div>';
+                            $success = '<div class="alert alert-success" role="alert">Login successful.</div>';
                             header("refresh:1; url=index.php");
                         }
                         else $error = '<div class="alert alert-danger" role="alert">Invalid e-mail address or password.</div>';
