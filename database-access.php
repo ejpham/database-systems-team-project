@@ -19,60 +19,67 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <link href="sidebars.css" rel="stylesheet">
     <script src="sidebars.js"></script>
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <link href="headers.css" rel="stylesheet">
 </head>
 <body>
-<main>
+    <header>
+        <div class="px-3 py-2 bg-dark text-white">
+            <div class="container">
+                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                </div>
+            </div>
+        </div>
+    </header>
     <div class="flex-shrink-0 p-3 bg-white" style="width: 280px;">
-        <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
-            <span class="fs-5 fw-semibold">Collapsible</span>
+        <a href="#" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+            <span class="fs-5 fw-semibold">Postal Service Database</span>
         </a>
         <ul class="list-unstyled ps-0">
             <li class="mb-1">
-                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">Home</button>
-            <div class="collapse show" id="home-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark rounded">Overview</a></li>
-                    <li><a href="#" class="link-dark rounded">Updates</a></li>
-                    <li><a href="#" class="link-dark rounded">Reports</a></li>
-                </ul>
-            </div>
-        </li>
-        <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">Dashboard
-            <div class="collapse" id="dashboard-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark rounded">Overview</a></li>
-                    <li><a href="#" class="link-dark rounded">Weekly</a></li>
-                    <li><a href="#" class="link-dark rounded">Monthly</a></li>
-                    <li><a href="#" class="link-dark rounded">Annually</a></li>
-                </ul>
-            </div>
-        </li>
-        <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">Orders</button>
-            <div class="collapse" id="orders-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="#" class="link-dark rounded">New</a></li>
-                    <li><a href="#" class="link-dark rounded">Processed</a></li>
-                    <li><a href="#" class="link-dark rounded">Shipped</a></li>
-                    <li><a href="#" class="link-dark rounded">Returned</a></li>
-                </ul>
-            </div>
-        </li>
+                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                    Dashboard
+                </button>
+                <div class="collapse show" id="home-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li><a href="#" class="link-dark rounded">Mail</a></li>
+                        <li><a href="#" class="link-dark rounded">Employees</a></li>
+                        <li><a href="#" class="link-dark rounded">Managers</a></li>
+                        <li><a href="#" class="link-dark rounded">Locations</a></li>
+                        <li><a href="#" class="link-dark rounded">Vehicles</a></li>
+                        <li><a href="#" class="link-dark rounded">Contact Logs</a></li>
+                    </ul>
+                </div>
+            </li>
             <li class="border-top my-3"></li>
             <li class="mb-1">
-                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">Account</button>
+                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+                    Administration
+                </button>
                 <div class="collapse" id="account-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <li><a href="#" class="link-dark rounded">New...</a></li>
-                        <li><a href="#" class="link-dark rounded">Profile</a></li>
-                        <li><a href="#" class="link-dark rounded">Settings</a></li>
-                        <li><a href="#" class="link-dark rounded">Sign out</a></li>
+                        <li><a href="#" class="link-dark rounded">View Accounts</a></li>
+                        <li><a href="#" class="link-dark rounded">Sign Out</a></li>
                     </ul>
                 </div>
             </li>
         </ul>
     </div>
+    <main>
     </main>
 </body>
 </html>
