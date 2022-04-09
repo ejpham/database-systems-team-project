@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // if all error strings are empty meaning all info is valid
     if (empty($email_err) && empty($name_err) && empty($password_err) && empty($confirm_password_err)) {
         // variable containing query to insert info into database
-        $sql = "INSERT INTO WebLogins.users (email, name, pass) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO WebLogins.users (email, name, pass, is_employee) VALUES (?, ?, ?, 0)";
         // prepare query statement
         if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
             // bind parameters into query statement
@@ -91,27 +91,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                     <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
                 </ul>
-                <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
-                    <a href="index.php" class="navbar-brand"><span style="margin-right:7.3rem">Postal Office</style></a>
-                <?php } else { ?>
-                    <a href="index.php" class="navbar-brand"><span style="margin-right:7.8rem">Postal Office</style></a>
-                <?php } ?>
+                <a href="index.php" class="navbar-brand"><span style="margin-right:7.8rem">Postal Office</style></a>
                 <ul class="nav navbar-nav ms-auto">
-                    <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
-                        <li class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account Options</a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a href="my-account.php" class="dropdown-item">My Account</a>
-                                <?php if ($_SESSION["is_employee"] === "1") { ?>
-                                    <a href="database-access.php" class="dropdown-item">Database Access</a>
-                                <?php } ?>
-                                <a href="sign-out.php" class="dropdown-item">Sign Out</a>
-                            </div>
-                        </li>
-                    <?php } else { ?>
-                        <a href="sign-in.php" class="nav-item nav-link">Sign In</a>
-                        <a href="sign-up.php" class="nav-item nav-link active">Sign Up</a>
-                    <?php } ?>
+                    <a href="sign-in.php" class="nav-item nav-link">Sign In</a>
+                    <a href="sign-up.php" class="nav-item nav-link active">Sign Up</a>
                 </ul>
             </div>
         </nav>
