@@ -29,23 +29,22 @@
 </head>
 <body>
     <header>
-        <div class="px-3 py-2 bg-dark text-white">
-            <div class="container">
-                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                </div>
+        <div class="px-3 py-2 bg-light text-black">
+            <div class="container-fluid text-center">
+                <h6 class="display-6">Postal Service Query Editor</h1>
             </div>
         </div>
     </header>
     <div class="flex-shrink-0 p-3 bg-white" style="width: 280px;">
         <a href="#" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
-            <span class="fs-5 fw-semibold">Postal Service Database</span>
+            <span class="fs-5 fw-semibold">Databases</span>
         </a>
         <ul class="list-unstyled ps-0">
             <li class="mb-1">
-                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
-                    Dashboard
+                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#postal-service-collapse" aria-expanded="true">
+                    Postal Service
                 </button>
-                <div class="collapse show" id="home-collapse">
+                <div class="collapse show" id="postal-service-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                         <li><a href="#" class="link-dark rounded">Mail</a></li>
                         <li><a href="#" class="link-dark rounded">Employees</a></li>
@@ -56,14 +55,23 @@
                     </ul>
                 </div>
             </li>
+            <li class="mb-1">
+                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#web-logins-collapse" aria-expanded="true">
+                    Web Logins
+                </button>
+                <div class="collapse show" id="web-logins-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li><a href="#" class="link-dark rounded">Users</a></li>
+                    </ul>
+                </div>
+            </li>
             <li class="border-top my-3"></li>
             <li class="mb-1">
-                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#admin-collapse" aria-expanded="true">
                     Administration
                 </button>
-                <div class="collapse" id="account-collapse">
+                <div class="collapse show" id="admin-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <li><a href="#" class="link-dark rounded">View Accounts</a></li>
                         <li><a href="#" class="link-dark rounded">Sign Out</a></li>
                     </ul>
                 </div>
