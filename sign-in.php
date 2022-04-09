@@ -6,6 +6,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 }
 require_once "db_conn_WebLogins.php";
 $email = $password = "";
+$is_employee = false;
 $email_err = $password_err = $success = $error = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["email"]))) $email_err = "Please enter your e-mail address.";
@@ -13,19 +14,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["password"]))) $password_err = "Please enter your password.";
     else $password = trim($_POST["password"]);
     if (empty($email_err) && empty($password_err)) {
-        $sql = "SELECT email, pass FROM WebLogins.users WHERE email = ?";
+        $sql = "SELECT email, pass, is_employee FROM WebLogins.users WHERE email = ?";
         if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
             mysqli_stmt_bind_param($stmt, "s", $param_email);
             $param_email = $email;
             if (mysqli_stmt_execute($stmt)) {
                 mysqli_stmt_store_result($stmt);
                 if (mysqli_stmt_num_rows($stmt) == 1) {
-                    mysqli_stmt_bind_result($stmt, $email, $hashed_password);
+                    mysqli_stmt_bind_result($stmt, $email, $hashed_password, $is_employee);
                     if (mysqli_stmt_fetch($stmt)) {
                         if (password_verify($password, $hashed_password)) {
                             session_start();
                             $_SESSION["loggedin"] = true;
                             $_SESSION["email"] = $email;
+                            $_SESSION["is_employee"] = $is_employee;
                             $success = '<div class="alert alert-success" role="alert">Login successful.</div>';
                             header("refresh:1; url=index.php");
                         }
@@ -64,25 +66,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                     <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
                 </ul>
-                <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
-                    <a href="index.php" class="navbar-brand"><span style="margin-right:7.3rem">Postal Office</style></a>
-                <?php } else { ?>
-                    <a href="index.php" class="navbar-brand"><span style="margin-right:7.8rem">Postal Office</style></a>
-                <?php } ?>
+                <a href="index.php" class="navbar-brand"><span style="margin-right:7.8rem">Postal Office</style></a>
                 <ul class="nav navbar-nav ms-auto">
-                    <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
-                        <li class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account Options</a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a href="my-account.php" class="dropdown-item">My Account</a>
-                                <a href="database-access.php" class="dropdown-item">Database Access</a>
-                                <a href="sign-out.php" class="dropdown-item">Sign Out</a>
-                            </div>
-                        </li>
-                    <?php } else { ?>
-                        <a href="sign-in.php" class="nav-item nav-link active">Sign In</a>
-                        <a href="sign-up.php" class="nav-item nav-link">Sign Up</a>
-                    <?php } ?>
+                    <a href="sign-in.php" class="nav-item nav-link active">Sign In</a>
+                    <a href="sign-up.php" class="nav-item nav-link">Sign Up</a>
                 </ul>
             </div>
         </nav>

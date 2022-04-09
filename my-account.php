@@ -29,25 +29,18 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
                     <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                     <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
                 </ul>
-                <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
-                    <a href="index.php" class="navbar-brand"><span style="margin-right:7.3rem">Postal Office</style></a>
-                <?php } else { ?>
-                    <a href="index.php" class="navbar-brand"><span style="margin-right:7.8rem">Postal Office</style></a>
-                <?php } ?>
+                <a href="index.php" class="navbar-brand"><span style="margin-right:7.3rem">Postal Office</style></a>
                 <ul class="nav navbar-nav ms-auto">
-                    <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
-                        <li class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account Options</a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a href="my-account.php" class="dropdown-item">My Account</a>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account Options</a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a href="my-account.php" class="dropdown-item">My Account</a>
+                            <?php if ($_SESSION["is_employee"] === true) { ?>
                                 <a href="database-access.php" class="dropdown-item">Database Access</a>
-                                <a href="sign-out.php" class="dropdown-item">Sign Out</a>
-                            </div>
-                        </li>
-                    <?php } else { ?>
-                        <a href="sign-in.php" class="nav-item nav-link">Sign In</a>
-                        <a href="sign-up.php" class="nav-item nav-link">Sign Up</a>
-                    <?php } ?>
+                            <?php } ?>
+                            <a href="sign-out.php" class="dropdown-item">Sign Out</a>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </nav>

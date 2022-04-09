@@ -35,7 +35,9 @@ session_start();
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account Options</a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a href="my-account.php" class="dropdown-item">My Account</a>
-                                <a href="database-access.php" class="dropdown-item">Database Access</a>
+                                <?php if ($_SESSION["is_employee"] === true) { ?>
+                                    <a href="database-access.php" class="dropdown-item">Database Access</a>
+                                <?php } ?>
                                 <a href="sign-out.php" class="dropdown-item">Sign Out</a>
                             </div>
                         </li>
