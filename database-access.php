@@ -15,47 +15,64 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Post Office</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link href="styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link href="sidebars.css" rel="stylesheet">
+    <script src="sidebars.js"></script>
 </head>
 <body>
-    <!--Navigation-->
-    <div class="m-4">
-        <nav class="navbar navbar-expand-sm navbar-light" style="background-color: #e3f2fd;">
-            <div class="container-fluid">
-                <ul class="nav navbar-nav me-auto">
-                    <a href="index.php" class="nav-item nav-link">Home</a>
-                    <a href="mail.php" class="nav-item nav-link">Mail</a>
-                    <a href="pricing.php" class="nav-item nav-link">Pricing</a>
-                    <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
-                </ul>
-                <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
-                    <a href="index.php" class="navbar-brand"><span style="margin-right:7.3rem">Postal Office</style></a>
-                <?php } else { ?>
-                    <a href="index.php" class="navbar-brand"><span style="margin-right:7.8rem">Postal Office</style></a>
-                <?php } ?>
-                <ul class="nav navbar-nav ms-auto">
-                    <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
-                        <li class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account Options</a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a href="my-account.php" class="dropdown-item">My Account</a>
-                                <a href="database-access.php" class="dropdown-item">Database Access</a>
-                                <a href="sign-out.php" class="dropdown-item">Sign Out</a>
-                            </div>
-                        </li>
-                    <?php } else { ?>
-                        <a href="sign-in.php" class="nav-item nav-link">Sign In</a>
-                        <a href="sign-up.php" class="nav-item nav-link">Sign Up</a>
-                    <?php } ?>
+<main>
+    <div class="flex-shrink-0 p-3 bg-white" style="width: 280px;">
+        <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+            <span class="fs-5 fw-semibold">Collapsible</span>
+        </a>
+        <ul class="list-unstyled ps-0">
+            <li class="mb-1">
+                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">Home</button>
+            <div class="collapse show" id="home-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="#" class="link-dark rounded">Overview</a></li>
+                    <li><a href="#" class="link-dark rounded">Updates</a></li>
+                    <li><a href="#" class="link-dark rounded">Reports</a></li>
                 </ul>
             </div>
-        </nav>
+        </li>
+        <li class="mb-1">
+            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">Dashboard
+            <div class="collapse" id="dashboard-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="#" class="link-dark rounded">Overview</a></li>
+                    <li><a href="#" class="link-dark rounded">Weekly</a></li>
+                    <li><a href="#" class="link-dark rounded">Monthly</a></li>
+                    <li><a href="#" class="link-dark rounded">Annually</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">Orders</button>
+            <div class="collapse" id="orders-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="#" class="link-dark rounded">New</a></li>
+                    <li><a href="#" class="link-dark rounded">Processed</a></li>
+                    <li><a href="#" class="link-dark rounded">Shipped</a></li>
+                    <li><a href="#" class="link-dark rounded">Returned</a></li>
+                </ul>
+            </div>
+        </li>
+            <li class="border-top my-3"></li>
+            <li class="mb-1">
+                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">Account</button>
+                <div class="collapse" id="account-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li><a href="#" class="link-dark rounded">New...</a></li>
+                        <li><a href="#" class="link-dark rounded">Profile</a></li>
+                        <li><a href="#" class="link-dark rounded">Settings</a></li>
+                        <li><a href="#" class="link-dark rounded">Sign out</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
     </div>
-    <br/>
-    <div class="container-fluid text-center">
-        <h6 class="display-6"><small class="text-muted">This content is currently unavailable.</small></h6>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    </main>
 </body>
 </html>
