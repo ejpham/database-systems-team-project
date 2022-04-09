@@ -6,7 +6,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 }
 require_once "db_conn_WebLogins.php";
 $email = $password = "";
-$is_employee = false;
+$is_employee = "0";
 $email_err = $password_err = $success = $error = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["email"]))) $email_err = "Please enter your e-mail address.";
