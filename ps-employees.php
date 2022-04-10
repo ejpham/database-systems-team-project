@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "db_conn_PostalService.php";
+require "db_conn_PostalService.php";
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location:sign-in.php");
     exit;
