@@ -19,8 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         else if (strlen(trim($_POST["email"])) > 75) $email_err = "E-mail address can be no longer than 75 characters.";
         else $email = trim($_POST["email"]);
 
-        if (trim($_POST["mailtype"]) == "Select Mail Type") $mail_error = "Please select mail type.";
-        else $mail_type = trim($_POST["mailtype"]);
+        
     }
 
     
@@ -108,7 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                     <?php } ?>
                     <div class="m-3">
-                        <select class="form-select" aria-label="Default select example" type = "mailtype">
+                        <select class="form-select" aria-label="Default select example">
                             <option selected>Select Mail Type</option>
                             <option value="Letter">Letter</option>
                             <option value="Package">Package</option>
