@@ -107,14 +107,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <?php } ?>
 
                     <div class="m-3">
-                        <label class="form-label">From Address</label>
+                        <label class="form-label">To Address</label>
                         <input type="text" name="Address" class="form-control <?php echo (!empty($address_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $address; ?>" id="inputAddress" placeholder="To Address">
                         <span class="invalid-feedback"><?php echo $address_err; ?></span>
                     </div>
 
-                    <div class="m-3">
+                    <div class="input-group mb-3">
                         <select class="form-select" aria-label="Default select example" type = "state" id = "stateSelector">
-                        <option value="AL">AL</option>
+                            <option value = "">State</option>
+                            <option value="AL">AL</option>
                             <option value="AK">AK</option>
                             <option value="AR">AR</option>	
                             <option value="AZ">AZ</option>
@@ -166,7 +167,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <option value="WV">WV</option>
                             <option value="WY">WY</option>
                         </select>
-                        <span class="input-group-text">@</span>
+                        <span class="input-group-text"></span>
                         <input type="text" name="City" class="form-control <?php echo (!empty($city_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $city; ?>" id="inputCity" placeholder="city">
                         <span class="invalid-feedback"><?php echo $address_err; ?></span>
                     </div>
