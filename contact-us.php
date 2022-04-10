@@ -68,10 +68,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account Options</a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a href="my-account.php" class="dropdown-item">My Account</a>
                                 <?php if ($_SESSION["is_employee"] == "1") { ?>
                                     <a href="database-access.php" class="dropdown-item">Database Access</a>
                                 <?php } ?>
+                                <a href="my-account.php" class="dropdown-item">My Account</a>
                                 <a href="sign-out.php" class="dropdown-item">Sign Out</a>
                             </div>
                         </li>
