@@ -4,7 +4,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location:sign-in.php");
     exit;
 }
-if ($_SESSION["is_employee"] === "0") {
+if ($_SESSION["is_employee"] == "0") {
     header("location:index.php");
     exit;
 }
