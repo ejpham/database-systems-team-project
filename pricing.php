@@ -66,6 +66,8 @@ session_start();
                     <li>12 x 6 x 6: $9</li>
                     <li>12 x 9 x 3: $10</li>
                     <li>12 x 9 x 4: $11</li>
+                    <li>12 x 10 x 4: $12</li>
+                    <li>12 x 12 x 3: $13</li>
                 </ul>
             </div>
         </div>

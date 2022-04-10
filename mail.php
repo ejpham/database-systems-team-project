@@ -129,6 +129,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </select>
                     </div>
 
+                    <div class="m-3" id = "packageSize" style="display: none;">
+                        <select class="form-select" aria-label="Default select example" type = "packageSize" id = "sizeSelector">
+                            <option value = "">Select Package Size</option>
+                            <option value="1">8 x 8 x 6</option>
+                            <option value="2">8 x 8 x 8</option>
+                            <option value="3">10 x 8 x 6</option>
+                            <option value="4">12 x 6 x 6</option>
+                            <option value="5">12 x 9 x 3</option>
+                            <option value="6">12 x 9 x 4</option>
+                            <option value="7">12 x 10 x 4</option>
+                            <option value="8">12 x 12 x 3</option>
+                        </select>
+                    </div>
+
+                    <div class="m-3" id = "packageWeight" style="display: none;">
+                        <label for="customRange2" class="form-label">Slide for weight</label>
+                        <input type="weight" class="form-range" min="0" max="100" id="customRange2">
+
+                    </div>
+
                     <div class="m-3">
                         <input type="submit" name="submit" class="btn btn-outline-secondary" value="Send">
                     </div>
@@ -142,14 +162,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if(that.value == "Letter"){
                 document.getElementById("ifLetter").style.display = "block";
                 document.getElementById("ifPackage").style.display = "none";
+                document.getElementById("packageSize").style.display = "none";
+                document.getElementById("packageWeight").style.display = "none";
             }
             else if (that.value == "Package") {
                 document.getElementById("ifPackage").style.display = "block";
+                document.getElementById("packageSize").style.display = "block";
+                document.getElementById("packageWeight").style.display = "block";
                 document.getElementById("ifLetter").style.display = "none";
             }
             else {
                 document.getElementById("ifLetter").style.display = "none";
                 document.getElementById("ifPackage").style.display = "none";
+                document.getElementById("packageSize").style.display = "none";
+                document.getElementById("packageWeight").style.display = "none";
             }
         }
     </script>
