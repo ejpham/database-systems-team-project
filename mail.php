@@ -230,7 +230,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 
-    <div class="container-fluid col-sm-6" id = "nextForm" style = "display: none;">
+    <div class="container-fluid col-sm-6" id = "nextForm" style = "display: block;">
         <div class="row">
             <div class="m-4">
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
