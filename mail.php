@@ -3,7 +3,7 @@ session_start();
 require_once "db_conn_WebLogins.php";
 require_once "db_conn_PostalService.php";
 $name = $email = $message = $mail_type = "";
-$name_err = $email_err  = $success = $error = $mail_error"";
+$name_err = $email_err = $mail_type_err = $success = $error = "";
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     $email = $_SESSION["email"];
     $grab_name_sql = "SELECT name FROM WebLogins.users WHERE email='$email'";
