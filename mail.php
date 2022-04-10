@@ -23,7 +23,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         else $mail_type = trim($_POST["mailtype"]);
     }
 
-    
+    echo"<script language='javascript'>
+        document.getElementById("ifLetter").style.display = "block";
+    </script>
+    ";
 }
 ?>
 
@@ -215,7 +218,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="m-3" id = "packageWeight" style="display: none;">
                         <label for="weight" class="form-label">Slide for weight (round down)</label>
                         <input type="range" class="form-range" min="0" max="100" step = "10" id="weight">
-
+                        <label for="weight" class="form-label">Slide for weight: <span id="changeRange1Value">0</span></label>
+                        <input type="range" class="form-range" id="weight" min="0" max="100" step="1" value="0">
                     </div>
 
                     <div class="m-3">
@@ -225,6 +229,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
     </div>
+
+    <div class="container-fluid col-sm-6" id = "nextForm" style = "display: none;">
+        <div class="row">
+            <div class="m-4">
+                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                    <div class="m-3">
+                        y
+                    </div>
+                        
+                    <div class="m-3">
+                        <input type="submit" name="submit" class="btn btn-outline-secondary" value="Send">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+    $('input').mousemove(function() {
+        var customRange1_VAL = document.getElementById("weight").value;
+        changeRange1Value = $('#changeRange1Value');
+        changeRange1Value.text(customRange1_VAL);
+    });
+    </script>
 
     <script type = "text/javascript">
         function MailCheck(that) {
