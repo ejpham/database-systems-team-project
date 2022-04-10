@@ -23,10 +23,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         else $mail_type = trim($_POST["mailtype"]);
     }
 
-    echo"<script language='javascript'>
-        document.getElementById("nextForm").style.display = "block";
-    </script>
-    ";
+    // echo"<script language='javascript'>
+    //     document.getElementById("nextForm").style.display = "block";
+    // </script>
+    // ";
 }
 ?>
 
