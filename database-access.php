@@ -9,6 +9,7 @@ if ($_SESSION["is_employee"] == "0") {
     header("location:index.php");
     exit;
 }
+mysqli_close($conn_PostalService);
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +46,7 @@ if ($_SESSION["is_employee"] == "0") {
         <nav class="navbar navbar-expand-sm navbar-light rounded" style="background-color: #e3f2fd;">
             <div class="container-fluid">
                 <ul class="nav navbar-nav me-auto">
-                    <span class="nav-item">Logged in as: </span>
+                    <label id="name" class="nav-item" value="Logged in as: <?php echo $_SESSION["name"] ?>"></label>
                 </ul>
                 <span class="navbar-brand mx-auto">Database Access</span>
                 <ul class="nav navbar-nav ms-auto">

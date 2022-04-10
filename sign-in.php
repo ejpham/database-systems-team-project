@@ -26,6 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             session_start();
                             $_SESSION["loggedin"] = true;
                             $_SESSION["email"] = $email;
+                            $_SESSION["name"] = $name;
                             $_SESSION["is_employee"] = $is_employee;
                             $success = '<div class="alert alert-success" role="alert">Login successful.</div>';
                             header("refresh:1; url=index.php");
