@@ -144,8 +144,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="m-3" id = "packageWeight" style="display: none;">
-                        <label for="customRange2" class="form-label">Slide for weight</label>
-                        <input type="weight" class="form-range" min="0" max="100" id="customRange2">
+                        <label for="weight" class="form-label">Slide for weight</label>
+                        <input type="range" class="form-range" min="0" max="100" step = "10" id="weight">
 
                     </div>
 
@@ -179,6 +179,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
     </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 </html>
