@@ -1,16 +1,3 @@
-<?php
-session_start();
-require_once "db_conn_PostalService.php";
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    header("location:sign-in.php");
-    exit;
-}
-if ($_SESSION["is_employee"] == "0") {
-    header("location:index.php");
-    exit;
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,7 +34,7 @@ if ($_SESSION["is_employee"] == "0") {
                 <ul class="nav navbar-nav me-auto">
                     <span class="nav-item">Logged in as: </span>
                 </ul>
-                <span class="navbar-brand mx-auto">Database Access</span>
+                <span class="navbar-brand mx-auto">Postal Service Locations</span>
                 <ul class="nav navbar-nav ms-auto">
                     <a href="sign-out.php" class="nav-item nav-link">Sign Out</a>
                 </ul>
@@ -56,7 +43,7 @@ if ($_SESSION["is_employee"] == "0") {
     </div>
     <div class="m-4">
         <div class="flex-shrink-0 p-3 rounded" style="width: 14rem; background-color: #e3f2fd;">
-            <a href="database-access.php" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+            <a href="database-access.html" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
                 <span class="fs-5 fw-semibold">Databases</span>
             </a>
             <ul class="list-unstyled ps-0">
@@ -66,12 +53,12 @@ if ($_SESSION["is_employee"] == "0") {
                     </button>
                     <div class="collapse show" id="postal-service-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a href="ps-mail.php" class="nav-item nav-link rounded">Mail</a></li>
-                            <li><a href="ps-employees.php" class="nav-item nav-link rounded">Employees</a></li>
-                            <li><a href="ps-managers.php" class="nav-item nav-link rounded">Managers</a></li>
-                            <li><a href="ps-locations.php" class="nav-item nav-link rounded">Locations</a></li>
-                            <li><a href="ps-vehicles.php" class="nav-item nav-link rounded">Vehicles</a></li>
-                            <li><a href="ps-contact-logs.php" class="nav-item nav-link rounded">Contact Logs</a></li>
+                            <li><a href="ps-mail.html" class="nav-item nav-link rounded">Mail</a></li>
+                            <li><a href="ps-employees.html" class="nav-item nav-link rounded">Employees</a></li>
+                            <li><a href="ps-managers.html" class="nav-item nav-link rounded">Managers</a></li>
+                            <li><a href="ps-locations.html" class="nav-item nav-link rounded">Locations</a></li>
+                            <li><a href="ps-vehicles.html" class="nav-item nav-link rounded">Vehicles</a></li>
+                            <li><a href="ps-contact-logs.html" class="nav-item nav-link rounded">Contact Logs</a></li>
                         </ul>
                     </div>
                 </li>
@@ -81,7 +68,7 @@ if ($_SESSION["is_employee"] == "0") {
                     </button>
                     <div class="collapse show" id="web-logins-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a href="wl-users.php" class="nav-item nav-link rounded">Users</a></li>
+                            <li><a href="wl-users.html" class="nav-item nav-link rounded">Users</a></li>
                         </ul>
                     </div>
                 </li>

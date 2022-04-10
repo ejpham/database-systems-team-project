@@ -47,7 +47,7 @@ if ($_SESSION["is_employee"] == "0") {
                 <ul class="nav navbar-nav me-auto">
                     <span class="nav-item">Logged in as: </span>
                 </ul>
-                <span class="navbar-brand mx-auto">Database Access</span>
+                <span class="navbar-brand mx-auto">Postal Service Vehicles</span>
                 <ul class="nav navbar-nav ms-auto">
                     <a href="sign-out.php" class="nav-item nav-link">Sign Out</a>
                 </ul>
