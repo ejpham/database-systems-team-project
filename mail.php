@@ -19,7 +19,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         else if (strlen(trim($_POST["email"])) > 75) $email_err = "E-mail address can be no longer than 75 characters.";
         else $email = trim($_POST["email"]);
 
-        
+        if (trim($_POST["mailtype"]) == "Select Mail Type") $mail_error = "Please select mail type.";
+        else $mail_type = trim($_POST["mailtype"]);
     }
 
     
@@ -58,10 +59,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account Options</a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <?php if ($_SESSION["is_employee"] == "1") { ?>
-                                    <a href="database-access.php" class="dropdown-item">Database Access</a>
-                                <?php } ?>
                                 <a href="my-account.php" class="dropdown-item">My Account</a>
+                                <a href="database-access.php" class="dropdown-item">Database Access</a>
                                 <a href="sign-out.php" class="dropdown-item">Sign Out</a>
                             </div>
                         </li>
@@ -107,10 +106,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                     <?php } ?>
                     <div class="m-3">
-                        <select class="form-select" aria-label="Default select example">
-                            <option selected>Select Mail Type</option>
+                        <select class="form-select" aria-label="Default select example" type = "mailtype" id = "mailSelector" onchange = "MailCheck(this);">
+                            <option value = "">Select Mail Type</option>
                             <option value="Letter">Letter</option>
                             <option value="Package">Package</option>
+                        </select>
+                    </div>
+
+                    <div class="m-3" id = "ifLetter" style="display: none;">
+                        <select class="form-select" aria-label="Default select example" type = "letterSpeed" id = "letterSelector">
+                            <option value = "">Select Letter Speed</option>
+                            <option value="Express">Express</option>
+                            <option value="Fast">Fast</option>
+                        </select>
+                    </div>
+
+                    <div class="m-3" id = "ifPackage" style="display: none;">
+                        <select class="form-select" aria-label="Default select example" type = "packageSpeed" id = "packageSelector">
+                            <option value = "">Select Package Speed</option>
+                            <option value="Express">Premium</option>
+                            <option value="Fast">Regular</option>
                         </select>
                     </div>
 
@@ -122,18 +137,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 
-    <!-- <script type="text/javascript">
-        $('select').change(function() {
-            $(this).find("option:selected").each(function(){
-            var optionValue = $(this).attr("value");
-            if(optionValue){
-                $(".box").not("." + optionValue).hide();
-                $("." + optionValue).show();
-            } else{
-                $(".box").hide();
+    <script type = "text/javascript">
+        function MailCheck(that) {
+            if(that.value == "Letter"){
+                document.getElementById("ifLetter").style.display = "block";
+                document.getElementById("ifPackage").style.display = "none";
             }
-        });
-    </script> -->
+            else if (that.value == "Package") {
+                document.getElementById("ifPackage").style.display = "block";
+                document.getElementById("ifLetter").style.display = "none";
+            }
+            else {
+                document.getElementById("ifLetter").style.display = "none";
+                document.getElementById("ifPackage").style.display = "none";
+            }
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 </html>
