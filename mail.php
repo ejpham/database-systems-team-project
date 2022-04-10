@@ -172,6 +172,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <span class="invalid-feedback"><?php echo $address_err; ?></span>
                     </div>
 
+                    <br />
+
                     <div class="m-3">
                         <select class="form-select" aria-label="Default select example" type = "mailtype" id = "mailSelector" onchange = "MailCheck(this);">
                             <option value = "">Select Mail Type</option>
