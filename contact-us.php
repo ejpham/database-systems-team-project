@@ -4,12 +4,12 @@ require_once "db_conn_WebLogins.php";
 require_once "db_conn_PostalService.php";
 $name = $email = $message = "";
 $name_err = $email_err = $message_err = $success = $error = "";
-if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-    $email = $_SESSION["email"];
-    $grab_name_sql = "SELECT name FROM WebLogins.users WHERE email='$email'";
-    $result = mysqli_query($conn_WebLogins, $grab_name_sql);
-    $name = mysqli_fetch_assoc($result)["name"];
-}
+// if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+//     $email = $_SESSION["email"];
+//     $grab_name_sql = "SELECT name FROM WebLogins.users WHERE email='$email'";
+//     $result = mysqli_query($conn_WebLogins, $grab_name_sql);
+//     $name = mysqli_fetch_assoc($result)["name"];
+// }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
         if (empty(trim($_POST["name"]))) $name_err = "Please enter a name.";
@@ -33,6 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     mysqli_close($conn_WebLogins);
+    mysqli_close($conn_PostalService);
 }
 ?>
 
@@ -97,11 +98,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
                         <div class="m-3">
                             <label class="form-label">Full Name</label>
-                            <input type="text" name="name" class="form-control-plaintext" value="<?php echo $name; ?>" id="inputName" disabled>
+                            <input type="text" name="name" class="form-control-plaintext" value="<?php echo $_SESSION["name"]; ?>" id="inputName" disabled>
                         </div>
                         <div class="m-3">
                             <label class="form-label" for="inputEmail">E-mail Address</label>
-                            <input type="email" name="email" class="form-control-plaintext" value="<?php echo $email; ?>" id="inputEmail" disabled>
+                            <input type="email" name="email" class="form-control-plaintext" value="<?php echo $_SESSION["email"]; ?>" id="inputEmail" disabled>
                         </div>
                     <?php } else { ?>
                         <div class="m-3">

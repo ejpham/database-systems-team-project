@@ -5,7 +5,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     exit;
 }
 require_once "db_conn_WebLogins.php";
-$email = $password = $is_employee = "";
+$email = $password = "";
 $email_err = $password_err = $success = $error = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["email"]))) $email_err = "Please enter your e-mail address.";
@@ -13,19 +13,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["password"]))) $password_err = "Please enter your password.";
     else $password = trim($_POST["password"]);
     if (empty($email_err) && empty($password_err)) {
-        $sql = "SELECT email, pass, is_employee FROM WebLogins.users WHERE email = ?";
+        $sql = "SELECT name, email, pass, is_employee FROM WebLogins.users WHERE email = ?";
         if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
             mysqli_stmt_bind_param($stmt, "s", $param_email);
             $param_email = $email;
             if (mysqli_stmt_execute($stmt)) {
                 mysqli_stmt_store_result($stmt);
                 if (mysqli_stmt_num_rows($stmt) == 1) {
-                    mysqli_stmt_bind_result($stmt, $email, $hashed_password, $is_employee);
+                    mysqli_stmt_bind_result($stmt, $name, $email, $hashed_password, $is_employee);
                     if (mysqli_stmt_fetch($stmt)) {
                         if (password_verify($password, $hashed_password)) {
                             session_start();
                             $_SESSION["loggedin"] = true;
                             $_SESSION["email"] = $email;
+                            $_SESSION["name"] = $name;
                             $_SESSION["is_employee"] = $is_employee;
                             $success = '<div class="alert alert-success" role="alert">Login successful.</div>';
                             header("refresh:1; url=index.php");
