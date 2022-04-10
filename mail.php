@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     echo"<script language='javascript'>
-        document.getElementById("ifLetter").style.display = "block";
+        document.getElementById("nextForm").style.display = "block";
     </script>
     ";
 }
