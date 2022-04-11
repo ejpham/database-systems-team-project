@@ -140,14 +140,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <label class="form-label" for="securityQuestion">Security Question</label>
                         <select class="form-select <?php echo (!empty($security_question_err)) ? 'is-invalid' : ''; ?>" id="inputSecurityQuestion" name="security_question">
                             <option value="" selected disabled hidden>Select a security question</option>
-                            <option value="In what city were you born?" <?php if ($_GET["name"] == "In what city were you born?") { ?>selected<?php }; ?>>In what city were you born?</option>
-                            <option value="What is the name of your favorite pet?" <?php if ($_GET["name"] == "What is the name of your favorite pet?") { ?>selected<?php }; ?>>What is the name of your favorite pet?</option>
-                            <option value="What is your mother's maiden name?" <?php if ($_GET["name"] == "What is your mother's maiden name?") { ?>selected<?php }; ?>>What is your mother's maiden name?</option>
-                            <option value="What high school did you attend?" <?php if ($_GET["name"] == "What high school did you attend?") { ?>selected<?php }; ?>>What high school did you attend?</option>
-                            <option value="What is the name of your first school?" <?php if ($_GET["name"] == "What is the name of your first school?") { ?>selected<?php }; ?>>What is the name of your first school?</option>
-                            <option value="What was the make of your first car?" <?php if ($_GET["name"] == "What was the make of your first car?") { ?>selected<?php }; ?>>What was the make of your first car?</option>
-                            <option value="What was your favorite food as a child?" <?php if ($_GET["name"] == "What was your favorite food as a child?") { ?>selected<?php }; ?>>What was your favorite food as a child?</option>
-                            <option value="Where did you meet your spouse?" <?php if ($_GET["name"] == "Where did you meet your spouse?") { ?>selected<?php }; ?>>Where did you meet your spouse?</option>
+                            <option value="In what city were you born?" <?php if ($_GET["security_question"] == "In what city were you born?") { ?>selected<?php }; ?>>In what city were you born?</option>
+                            <option value="What is the name of your favorite pet?" <?php if ($_GET["security_question"] == "What is the name of your favorite pet?") { ?>selected<?php }; ?>>What is the name of your favorite pet?</option>
+                            <option value="What is your mother's maiden name?" <?php if ($_GET["security_question"] == "What is your mother's maiden name?") { ?>selected<?php }; ?>>What is your mother's maiden name?</option>
+                            <option value="What high school did you attend?" <?php if ($_GET["security_question"] == "What high school did you attend?") { ?>selected<?php }; ?>>What high school did you attend?</option>
+                            <option value="What is the name of your first school?" <?php if ($_GET["security_question"] == "What is the name of your first school?") { ?>selected<?php }; ?>>What is the name of your first school?</option>
+                            <option value="What was the make of your first car?" <?php if ($_GET["security_question"] == "What was the make of your first car?") { ?>selected<?php }; ?>>What was the make of your first car?</option>
+                            <option value="What was your favorite food as a child?" <?php if ($_GET["security_question"] == "What was your favorite food as a child?") { ?>selected<?php }; ?>>What was your favorite food as a child?</option>
+                            <option value="Where did you meet your spouse?" <?php if ($_GET["security_question"] == "Where did you meet your spouse?") { ?>selected<?php }; ?>>Where did you meet your spouse?</option>
                         </select>
                         <span class="invalid-feedback"><?php echo $security_question_err; ?></span>
                     </div>
