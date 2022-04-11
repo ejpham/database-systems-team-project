@@ -200,7 +200,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <span class="invalid-feedback d-block"><?php echo $state_err; ?></span>
 
                         <script type="text/javascript">
-                            document.getElementById('stateSelector').value = $state;
+                            document.getElementById('stateSelector').value = "<?php echo $state; ?>";
                         </script>
 
                         <input type="text" name="city" class="form-control <?php echo (!empty($city_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $city; ?>" id="inputCity" placeholder="City">
