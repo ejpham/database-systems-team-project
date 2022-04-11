@@ -199,6 +199,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </select>
                         <span class="invalid-feedback d-block"><?php echo $state_err; ?></span>
 
+                        <script type="text/javascript">
+                            document.getElementById('stateSelector').value = $state;
+                        </script>
+
                         <input type="text" name="city" class="form-control <?php echo (!empty($city_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $city; ?>" id="inputCity" placeholder="City">
                         <span class="invalid-feedback"><?php echo $city_err; ?></span>
                     </div>
@@ -306,16 +310,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 document.getElementById("packageWeight").style.display = "none";
             }
         }
-    </script>
-
-    <script>
-      document.getElementById('stateSelector').onchange = function() {
-        localStorage.setItem('selectedtem', document.getElementById('stateSelector').value);
-      };
-
-      if (localStorage.getItem('selectedtem')) {
-        document.getElementById('stateSelector').options[localStorage.getItem('selectedtem')].selected = true;
-      }
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
