@@ -2,8 +2,8 @@
 session_start();
 require_once "db_conn_WebLogins.php";
 require_once "db_conn_PostalService.php";
-$name = $email = $mail_type = $address = $state = $city = $cardnum = $ccv = $expDate = $cardnum = $recName = "";
-$name_err = $email_err = $mail_type_err = $state_err = $success = $error = $address_err = $city_err = $ccv_err = $expDate_err = $cardnum_err = $recName_err ="";
+$name = $email = $mail_type = $address = $state = $city = $cardnum = $ccv = $expDate = $cardnum = $recName = $lettSpeed = $packSize = $packSpeed = "";
+$name_err = $email_err = $mail_type_err = $state_err = $success = $error = $address_err = $city_err = $ccv_err = $expDate_err = $cardnum_err = $recName_err = $lettSpeed_err = $packSize_err = $packSpeed_err = "";
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     $email = $_SESSION["email"];
     $grab_name_sql = "SELECT name FROM WebLogins.users WHERE email='$email'";
@@ -29,6 +29,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (trim($_POST["state"]) == "State") $state_err = "Please make a state selection.";
         else $state = trim($_POST["state"]);
+
+        if (empty(trim($_POST["City"]))) $city_err = "Please enter a valid City.";
+        else if (strlen(trim($_POST["Address"])) > 75) $city_err = "City can be no longer than 75 characters.";
+        else $city = trim($_POST["Address"]);
+
+        if (empty(trim($_POST["receiveName"]))) $recName_err = "Please enter a Name.";
+        else if (strlen(trim($_POST["receiveName"])) > 75) $recName_err = "Name can be no longer than 75 characters.";
+        else $city = trim($_POST["receiveName"]);
+
+        if (trim($_POST["mailtype"]) == "Select Mail Type") $mail_type_err = "Please make a Mail Type selection.";
+        else $mail_type = trim($_POST["mailtype"]);
+
+        if (trim($_POST["packageSpeed"]) == "Select Package Speed") $packSpeed_err = "Please make a Package Speed selection.";
+        else $packSpeed = trim($_POST["packageSpeed"]);
+
+        if (trim($_POST["packageSize"]) == "Select Package Size") $packSize_err = "Please make a size selection.";
+        else $packSize = trim($_POST["packageSize"]);
     }
 }
 ?>
@@ -114,6 +131,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <?php } ?>
 
                     <div class="m-3">
+                        <label class="form-label">Receiver's Full Name</label>
+                        <input type="text" name="receiveName" class="form-control <?php echo (!empty($recName_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $recName; ?>" id="inputRecName" placeholder="Receiver's Full Name">
+                        <span class="invalid-feedback"><?php echo $recName_err; ?></span>
+                    </div>
+
+                    <div class="m-3">
                         <label class="form-label">To Address</label>
                         <input type="text" name="Address" class="form-control <?php echo (!empty($address_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $address; ?>" id="inputAddress" placeholder="To Address">
                         <span class="invalid-feedback"><?php echo $address_err; ?></span>
@@ -176,45 +199,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </select>
                         <span class="invalid-feedback d-block"><?php echo $state_err; ?></span>
 
-                        <span class="input-group-text"></span>
                         <input type="text" name="City" class="form-control <?php echo (!empty($city_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $city; ?>" id="inputCity" placeholder="city">
                         <span class="invalid-feedback"><?php echo $city_err; ?></span>
-                    </div>
-
-                    <div class="m-3">
-                        <input type="text" name="receiveName" class="form-control <?php echo (!empty($recName_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $recName; ?>" id="inputAddress" placeholder="Reciever's Full Name">
-                        <span class="invalid-feedback"><?php echo $recName_err; ?></span>
                     </div>
 
                     <br />
 
                     <div class="m-3">
                         <select class="form-select" aria-label="Default select example" type = "text" name = "mailtype" id = "mailSelector" onchange = "MailCheck(this);">
-                            <option value = "">Select Mail Type</option>
+                            <option value = "Select Mail Type">Select Mail Type</option>
                             <option value="Letter">Letter</option>
                             <option value="Package">Package</option>
                         </select>
+                        <span class="invalid-feedback d-block"><?php echo $mail_type_err; ?></span>
                     </div>
 
                     <div class="m-3" id = "ifLetter" style="display: none;">
                         <select class="form-select" aria-label="Default select example" type = "text" name = "letterSpeed" id = "letterSelector">
-                            <option value = "">Select Letter Speed</option>
+                            <option value = "Select Letter Speed">Select Letter Speed</option>
                             <option value="Express">Express</option>
                             <option value="Fast">Fast</option>
                         </select>
+                        <span class="invalid-feedback d-block"><?php echo $lettSpeed_err; ?></span>
                     </div>
 
                     <div class="m-3" id = "ifPackage" style="display: none;">
                         <select class="form-select" aria-label="Default select example" type = "text" name = "packageSpeed" id = "packageSelector">
-                            <option value = "">Select Package Speed</option>
+                            <option value = "Select Package Speed">Select Package Speed</option>
                             <option value="Express">Premium</option>
                             <option value="Fast">Regular</option>
                         </select>
+                        <span class="invalid-feedback d-block"><?php echo $packSpeed_err; ?></span>
                     </div>
 
                     <div class="m-3" id = "packageSize" style="display: none;">
                         <select class="form-select" aria-label="Default select example" type = "text" name = "packageSize" id = "sizeSelector">
-                            <option value = "">Select Package Size</option>
+                            <option value = "Select Package Size">Select Package Size</option>
                             <option value="1">8 x 8 x 6</option>
                             <option value="2">8 x 8 x 8</option>
                             <option value="3">10 x 8 x 6</option>
@@ -224,6 +244,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <option value="7">12 x 10 x 4</option>
                             <option value="8">12 x 12 x 3</option>
                         </select>
+                        <span class="invalid-feedback d-block"><?php echo $packSize_err; ?></span>
                     </div>
 
                     <div class="m-3" id = "packageWeight" style="display: none;">
@@ -239,11 +260,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <span class="invalid-feedback"><?php echo $cardnum_err; ?></span>
 
                         <span class="input-group-text"></span>
-                        <input type="text" name="expDate" class="form-control <?php echo (!empty($expDate_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $expDate; ?>" id="inputCity" placeholder="Expiration Date">
+                        <input type="text" name="expDate" class="form-control <?php echo (!empty($expDate_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $expDate; ?>" id="inputexpDate" placeholder="Expiration Date">
                         <span class="invalid-feedback"><?php echo $expDate_err; ?></span>
 
                         <span class="input-group-text"></span>
-                        <input type="text" name="ccv" class="form-control <?php echo (!empty($ccv_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $ccv; ?>" id="inputCity" placeholder="CCV">
+                        <input type="text" name="ccv" class="form-control <?php echo (!empty($ccv_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $ccv; ?>" id="inputCCV" placeholder="CCV">
                         <span class="invalid-feedback"><?php echo $ccv_err; ?></span>
                     </div>
 
