@@ -39,12 +39,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // variable containing query to search database for given email from textbox
     $check_db_email = "SELECT * FROM WebLogins.users WHERE email='$email'";
-    // run and store query result into variable
+    // stores true/false into result variable indicating if query was successful
     $result = mysqli_query($conn_WebLogins, $check_db_email);
-    // boolean (i think...not sure but it works) variable from result
-    $email_exists = mysqli_fetch_assoc($result);
-    // if true
-    if ($email_exists) $email_err = "E-mail address is already taken.";
+    // stores all tuples/records as array rows into row variable
+    $row = mysqli_fetch_assoc($result);
+    // if an email exists
+    if ($row["email"] == $email) $email_err = "E-mail address is already taken.";
     
     // if all error strings are empty meaning all info is valid
     if (empty($email_err) && empty($name_err) && empty($password_err) && empty($confirm_password_err) && empty($security_question_err) && empty($security_answer_err)) {
@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // encrypt password
             $param_pass = password_hash($password, PASSWORD_BCRYPT);
             $param_security_question = $security_question;
-            $param_security_answer = $security_answer;
+            $param_security_answer = password_hash($security_answer, PASSWORD_BCRYPT);
             // if query executed successfully
             if (mysqli_stmt_execute($stmt)) {
                 $success = '<div class="alert alert-success" role="alert">Your account has been created.</div>';
@@ -153,7 +153,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <div class="m-3">
                         <label class="form-label">Security Answer</label>
-                        <input type="text" name="security_answer" class="form-control <?php echo (!empty($security_answer_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $security_answer; ?>" id="inputSecurityAnswer" placeholder="Security Answer">
+                        <input type="password" name="security_answer" class="form-control <?php echo (!empty($security_answer_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $security_answer; ?>" id="inputSecurityAnswer" placeholder="Security Answer">
                         <span class="invalid-feedback"><?php echo $security_answer_err; ?></span>
                     </div>
                     <div class="m-3">

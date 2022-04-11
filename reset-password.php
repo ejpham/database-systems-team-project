@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         else {
             $row = mysqli_fetch_assoc($result);
             if ($row["security_question"] != $security_question) $error = '<div class="alert alert-danger" role="alert">Invalid security question or answer.</div>';
-            else if ($row["security_answer"] != $security_answer) $error = '<div class="alert alert-danger" role="alert">Invalid security question or answer.</div>';
+            else if (!password_verify($security_answer, $row["security_answer"])) $error = '<div class="alert alert-danger" role="alert">Invalid security question or answer.</div>';
             else {
                 if (empty($email_err) && empty($new_password_err) && empty($confirm_password_err) && empty($security_err)) {
                     $sql = "UPDATE WebLogins.users SET pass = ? WHERE email = ?";
@@ -116,7 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <div class="m-3">
                         <label class="form-label">Security Answer</label>
-                        <input type="text" name="security_answer" class="form-control <?php echo (!empty($security_answer_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $security_answer; ?>" id="inputSecurityAnswer" placeholder="Security Answer">
+                        <input type="password" name="security_answer" class="form-control <?php echo (!empty($security_answer_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $security_answer; ?>" id="inputSecurityAnswer" placeholder="Security Answer">
                         <span class="invalid-feedback"><?php echo $security_answer_err; ?></span>
                     </div>
                     <div class="m-3">
