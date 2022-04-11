@@ -31,12 +31,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         else $state = trim($_POST["state"]);
 
         if (empty(trim($_POST["City"]))) $city_err = "Please enter a valid City.";
-        else if (strlen(trim($_POST["Address"])) > 75) $city_err = "City can be no longer than 75 characters.";
-        else $city = trim($_POST["Address"]);
+        else if (strlen(trim($_POST["City"])) > 75) $city_err = "City can be no longer than 75 characters.";
+        else $city = trim($_POST["City"]);
 
         if (empty(trim($_POST["receiveName"]))) $recName_err = "Please enter a Name.";
         else if (strlen(trim($_POST["receiveName"])) > 75) $recName_err = "Name can be no longer than 75 characters.";
-        else $city = trim($_POST["receiveName"]);
+        else $recName = trim($_POST["receiveName"]);
 
         if (trim($_POST["mailtype"]) == "Select Mail Type") $mail_type_err = "Please make a Mail Type selection.";
         else $mail_type = trim($_POST["mailtype"]);
