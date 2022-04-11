@@ -138,7 +138,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <div class="m-3">
                         <label class="form-label" for="securityQuestion">Security Question</label>
-                        <select class="form-select" type="text" id="inputSecurityQuestion" name="security_question">
+                        <select class="form-select <?php echo (!empty($security_question_err)) ? 'is-invalid' : ''; ?>" type="text" id="inputSecurityQuestion" name="security_question">
                             <option value="">Select a security question</option>
                             <option value="In what city were you born?">In what city were you born?</option>
                             <option value="What is the name of your favorite pet?">What is the name of your favorite pet?</option>
@@ -149,6 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <option value="What was your favorite food as a child?">What was your favorite food as a child?</option>
                             <option value="Where did you meet your spouse?">Where did you meet your spouse?</option>
                         </select>
+                        <span class="invalid-feedback"><?php echo $security_question_err; ?></span>
                     </div>
                     <div class="m-3">
                         <label class="form-label">Security Answer</label>
