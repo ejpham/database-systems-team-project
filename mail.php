@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         else if (strlen(trim($_POST["Address"])) > 75) $address_err = "Address can be no longer than 75 characters.";
         else $address = trim($_POST["Address"]);
 
-        if (trim($_POST["state"]) == "State") $state_err = "Please make a state selection.";
+        if (empty(trim($_POST["state"]))) $state_err = "Please make a state selection.";
         else $state = trim($_POST["state"]);
 
         if (empty(trim($_POST["City"]))) $city_err = "Please enter a valid City.";
@@ -143,8 +143,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="input-group mb-3">
-                        <select class="form-select" aria-label="Default select example" type = "text" id = "stateSelector" name = "state">
-                            <option value = "State">State</option>
+                        <select class="form-select" aria-label="Default select example" type = "text" id = "stateSelector" name = "state" value="<?php echo $state; ?>">
+                            <option value = "">State</option>
                             <option value="AL">AL</option>
                             <option value="AK">AK</option>
                             <option value="AR">AR</option>	
