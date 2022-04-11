@@ -23,11 +23,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (trim($_POST["mailtype"]) == "Select Mail Type") $mail_error = "Please select mail type.";
         else $mail_type = trim($_POST["mailtype"]);
 
-        if (empty(trim($_POST["Address"]))) $Adress_err = "Please enter a valid Address.";
-        else if (strlen(trim($_POST["Address"])) > 75) $email_err = "Address can be no longer than 75 characters.";
+        if (empty(trim($_POST["Address"]))) $address_err = "Please enter a valid Address.";
+        else if (strlen(trim($_POST["Address"])) > 75) $address_err = "Address can be no longer than 75 characters.";
         else $address = trim($_POST["Address"]);
 
-        if (trim($_POST["state"]) == "State") $state_err = "Please make a state selection.";
+        if (trim($_POST["state"]) == State) $state_err = "Please make a state selection.";
         else $state = trim($_POST["state"]);
     }
 }
