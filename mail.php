@@ -27,8 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         else if (strlen(trim($_POST["Address"])) > 75) $address_err = "Address can be no longer than 75 characters.";
         else $address = trim($_POST["Address"]);
 
-        // if (trim($_POST["state"]) == "State") $state_err = "Please make a state selection.";
-        // else $state = trim($_POST["state"]);
+        if (trim($_POST["state"]) == "State") $state_err = "Please make a state selection.";
+        else $state = trim($_POST["state"]);
     }
 }
 ?>
