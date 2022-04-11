@@ -38,13 +38,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         else if (strlen(trim($_POST["receiveName"])) > 75) $recName_err = "Name can be no longer than 75 characters.";
         else $recName = trim($_POST["receiveName"]);
         
-        if (trim($_POST["mailtype"]) == "Select Mail Type") $mail_type_err = "Please make a mail type selection.";
+        if (empty(trim($_POST["mailtype"]))) $mail_type_err = "Please make a mail type selection.";
         else $mail_type = trim($_POST["mailtype"]);
         
-        if (trim($_POST["packageSpeed"]) == "Select Package Speed") $packSpeed_err = "Please make a package speed selection.";
+        if (empty(trim($_POST["packageSpeed"]))) $packSpeed_err = "Please make a package speed selection.";
         else $packSpeed = trim($_POST["packageSpeed"]);
         
-        if (trim($_POST["packageSize"]) == "Select Package Size") $packSize_err = "Please make a size selection.";
+        if (empty(trim($_POST["packageSize"]))) $packSize_err = "Please make a size selection.";
         else $packSize = trim($_POST["packageSize"]);
     }
 }
@@ -211,34 +211,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <div class="m-3">
                         <select class="form-select" aria-label="Default select example" type = "text" name = "mailtype" id = "mailSelector" onchange = "MailCheck(this);">
-                            <option value = "Select Mail Type">Select Mail Type</option>
+                            <option value = "">Select Mail Type</option>
                             <option value="Letter">Letter</option>
                             <option value="Package">Package</option>
                         </select>
+
+                        <script type="text/javascript">
+                            document.getElementById('mailSelector').value = "<?php echo $mail_type; ?>";
+                        </script>
+
                         <span class="invalid-feedback d-block"><?php echo $mail_type_err; ?></span>
                     </div>
 
                     <div class="m-3" id = "ifLetter" style="display: none;">
                         <select class="form-select" aria-label="Default select example" type = "text" name = "letterSpeed" id = "letterSelector">
-                            <option value = "Select Letter Speed">Select Letter Speed</option>
+                            <option value = "">Select Letter Speed</option>
                             <option value="Express">Express</option>
                             <option value="Fast">Fast</option>
                         </select>
+
+                        <script type="text/javascript">
+                            document.getElementById('letterSelector').value = "<?php echo $lettSpeed; ?>";
+                        </script>
+
                         <span class="invalid-feedback d-block"><?php echo $lettSpeed_err; ?></span>
                     </div>
 
                     <div class="m-3" id = "ifPackage" style="display: none;">
                         <select class="form-select" aria-label="Default select example" type = "text" name = "packageSpeed" id = "packageSelector">
-                            <option value = "Select Package Speed">Select Package Speed</option>
+                            <option value = "">Select Package Speed</option>
                             <option value="Express">Premium</option>
                             <option value="Fast">Regular</option>
                         </select>
+
+                        <script type="text/javascript">
+                            document.getElementById('packageSelector').value = "<?php echo $packSpeed; ?>";
+                        </script>
+
                         <span class="invalid-feedback d-block"><?php echo $packSpeed_err; ?></span>
                     </div>
 
                     <div class="m-3" id = "packageSize" style="display: none;">
                         <select class="form-select" aria-label="Default select example" type = "text" name = "packageSize" id = "sizeSelector">
-                            <option value = "Select Package Size">Select Package Size</option>
+                            <option value = "">Select Package Size</option>
                             <option value="1">8 x 8 x 6</option>
                             <option value="2">8 x 8 x 8</option>
                             <option value="3">10 x 8 x 6</option>
@@ -248,6 +263,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <option value="7">12 x 10 x 4</option>
                             <option value="8">12 x 12 x 3</option>
                         </select>
+
+                        <script type="text/javascript">
+                            document.getElementById('packageSize').value = "<?php echo $packSize; ?>";
+                        </script>
+
                         <span class="invalid-feedback d-block"><?php echo $packSize_err; ?></span>
                     </div>
 
