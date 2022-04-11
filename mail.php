@@ -15,35 +15,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty(trim($_POST["name"]))) $name_err = "Please enter a name.";
         else if (strlen(trim($_POST["name"])) > 75) $name_err = "Name can be no longer than 75 characters.";
         else $name = trim($_POST["name"]);
-
+        
         if (empty(trim($_POST["email"]))) $email_err = "Please enter a valid e-mail address.";
         else if (strlen(trim($_POST["email"])) > 75) $email_err = "E-mail address can be no longer than 75 characters.";
         else $email = trim($_POST["email"]);
-
+        
         if (trim($_POST["mailtype"]) == "Select Mail Type") $mail_error = "Please select mail type.";
         else $mail_type = trim($_POST["mailtype"]);
-
-        if (empty(trim($_POST["Address"]))) $address_err = "Please enter a valid Address.";
-        else if (strlen(trim($_POST["Address"])) > 75) $address_err = "Address can be no longer than 75 characters.";
-        else $address = trim($_POST["Address"]);
-
+        
+        if (empty(trim($_POST["address"]))) $address_err = "Please enter a valid address.";
+        else if (strlen(trim($_POST["address"])) > 75) $address_err = "Address can be no longer than 75 characters.";
+        else $address = trim($_POST["address"]);
+        
         if (empty(trim($_POST["state"]))) $state_err = "Please make a state selection.";
         else $state = trim($_POST["state"]);
-
-        if (empty(trim($_POST["City"]))) $city_err = "Please enter a valid City.";
-        else if (strlen(trim($_POST["City"])) > 75) $city_err = "City can be no longer than 75 characters.";
-        else $city = trim($_POST["City"]);
-
-        if (empty(trim($_POST["receiveName"]))) $recName_err = "Please enter a Name.";
+        
+        if (empty(trim($_POST["city"]))) $city_err = "Please enter a valid city.";
+        else if (strlen(trim($_POST["city"])) > 75) $city_err = "City can be no longer than 75 characters.";
+        else $city = trim($_POST["city"]);
+        
+        if (empty(trim($_POST["receiveName"]))) $recName_err = "Please enter a name.";
         else if (strlen(trim($_POST["receiveName"])) > 75) $recName_err = "Name can be no longer than 75 characters.";
         else $recName = trim($_POST["receiveName"]);
-
-        if (trim($_POST["mailtype"]) == "Select Mail Type") $mail_type_err = "Please make a Mail Type selection.";
+        
+        if (trim($_POST["mailtype"]) == "Select Mail Type") $mail_type_err = "Please make a mail type selection.";
         else $mail_type = trim($_POST["mailtype"]);
-
-        if (trim($_POST["packageSpeed"]) == "Select Package Speed") $packSpeed_err = "Please make a Package Speed selection.";
+        
+        if (trim($_POST["packageSpeed"]) == "Select Package Speed") $packSpeed_err = "Please make a package speed selection.";
         else $packSpeed = trim($_POST["packageSpeed"]);
-
+        
         if (trim($_POST["packageSize"]) == "Select Package Size") $packSize_err = "Please make a size selection.";
         else $packSize = trim($_POST["packageSize"]);
     }
@@ -199,7 +199,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </select>
                         <span class="invalid-feedback d-block"><?php echo $state_err; ?></span>
 
-                        <input type="text" name="City" class="form-control <?php echo (!empty($city_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $city; ?>" id="inputCity" placeholder="city">
+                        <input type="text" name="city" class="form-control <?php echo (!empty($city_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $city; ?>" id="inputCity" placeholder="City">
                         <span class="invalid-feedback"><?php echo $city_err; ?></span>
                     </div>
 

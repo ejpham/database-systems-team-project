@@ -126,12 +126,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <span class="invalid-feedback"><?php echo $password_err; ?></span>
                     </div>
                     <div class="m-3">
-                        <label class="form-label">Confirm Password</label>
+                        <label class="form-label" for="confirmPassword">Confirm Password</label>
                         <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $confirm_password; ?>" id="inputPassword" placeholder="Confirm Password">
                         <span class="invalid-feedback"><?php echo $confirm_password_err; ?></span>
                     </div>
                     <div class="m-3">
-                        <input type="submit" name="submit" class="btn btn-outline-secondary" value="Submit">
+                        <label class="form-label" for="securityQuestion">Security Question</label>
+                        <div class="input-group mb-3">
+                            <select class="form-select" type="text" id="security_question">
+                                <option value="In what city were you born?">In what city were you born?</option>
+                                <option value="What is the name of your favorite pet?">What is the name of your favorite pet?</option>
+                                <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+                                <option value="What high school did you attend?">What high school did you attend?</option>
+                                <option value="What is the name of your first school?">What is the name of your first school?</option>
+                                <option value="What was the make of your first car?">What was the make of your first car?</option>
+                                <option value="What was your favorite food as a child?">What was your favorite food as a child?</option>
+                                <option value="Where did you meet your spouse?">Where did you meet your spouse?</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="m-3">
+                        <label class="form-label">Security Question Answer</label>
+                        <input type="text" name="security_answer">
+                    </div>
+                    <div class="m-3">
+                        <input type="submit" name="submit" class="btn btn-outline-secondary" value="Sign Up">
                     </div>
                 </form>
                 <p>Already registered? <a href="sign-in.php">Sign in</a> here.</p>
