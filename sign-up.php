@@ -132,7 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <div class="m-3">
                         <label class="form-label" for="securityQuestion">Security Question</label>
-                        <div class="input-group mb-3">
+                        <!-- <div class="input-group mb-3"> -->
                             <select class="form-select" type="text" id="security_question">
                                 <option value="In what city were you born?">In what city were you born?</option>
                                 <option value="What is the name of your favorite pet?">What is the name of your favorite pet?</option>
@@ -143,11 +143,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <option value="What was your favorite food as a child?">What was your favorite food as a child?</option>
                                 <option value="Where did you meet your spouse?">Where did you meet your spouse?</option>
                             </select>
-                        </div>
+                        <!-- </div> -->
                     </div>
                     <div class="m-3">
                         <label class="form-label">Security Question Answer</label>
-                        <input type="text" name="security_answer">
+                        <input type="text" name="security_answer" class="form-control <?php echo (!empty($security_answer_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $security_answer; ?>" id="inputSecurityAnswer" placeholder="Security Answer">
+                        <span class="invalid-feedback"><?php echo $security_answer_err; ?></span>
                     </div>
                     <div class="m-3">
                         <input type="submit" name="submit" class="btn btn-outline-secondary" value="Sign Up">
