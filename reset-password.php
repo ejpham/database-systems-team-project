@@ -101,8 +101,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <div class="m-3">
                         <label class="form-label" for="securityQuestion">Security Question</label>
-                        <select class="form-select <?php echo (!empty($security_question_err)) ? 'is-invalid' : ''; ?>" type="text" value="<?php echo $security_question; ?>" id="inputSecurityQuestion" name="security_question">
-                            <option value="">Select a security question</option>
+                        <select class="form-select <?php echo (!empty($security_question_err)) ? 'is-invalid' : ''; ?>" id="inputSecurityQuestion" name="security_question">
+                            <option value="" selected disabled hidden>Select a security question</option>
                             <option value="In what city were you born?">In what city were you born?</option>
                             <option value="What is the name of your favorite pet?">What is the name of your favorite pet?</option>
                             <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
