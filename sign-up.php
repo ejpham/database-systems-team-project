@@ -139,7 +139,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="m-3">
                         <label class="form-label" for="securityQuestion">Security Question</label>
                         <select class="form-select <?php echo (!empty($security_question_err)) ? 'is-invalid' : ''; ?>" id="inputSecurityQuestion" name="security_question">
-                            <option value="" disabled hidden>Select a security question</option>
+                            <option value="" <?php if ($_GET["security_question"] == "") { ?>selected=true<?php }; ?> disabled hidden>Select a security question</option>
                             <option value="In what city were you born?" <?php if ($_GET["security_question"] == "In what city were you born?") { ?>selected=true<?php }; ?>>In what city were you born?</option>
                             <option value="What is the name of your favorite pet?" <?php if ($_GET["security_question"] == "What is the name of your favorite pet?") { ?>selected=true<?php }; ?>>What is the name of your favorite pet?</option>
                             <option value="What is your mother's maiden name?" <?php if ($_GET["security_question"] == "What is your mother's maiden name?") { ?>selected=true<?php }; ?>>What is your mother's maiden name?</option>
