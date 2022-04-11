@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = mysqli_query($conn_WebLogins, $check_db);
     if (!$result) $error = '<div class="alert alert-danger" role="alert">Oops! Something went wrong. Please try again later.</div>';
     else {
-        if (mysql_num_rows($result) == 0) $email_err = "Invalid e-mail address.";
+        if (mysqli_num_rows($result) == 0) $email_err = "Invalid e-mail address.";
         else {
             $row = mysqli_fetch_assoc($result);
             if ($row["security_question"] != $security_question) $error = '<div class="alert alert-danger" role="alert">Invalid security question or answer.</div>';
