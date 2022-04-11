@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         else $address = trim($_POST["Address"]);
 
         if (trim($_POST["state"]) == "State") $state_err = "Please make a state selection.";
-        else {$state = trim($_POST["state"]); $state_err = "it sedcond thing";}
+        else $state = trim($_POST["state"]);
     }
 }
 ?>
@@ -123,7 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <div class="input-group mb-3">
                         <select class="form-select" aria-label="Default select example" type = "text" id = "stateSelector" name = "state">
-                            <option value = "">State</option>
+                            <option value = "State">State</option>
                             <option value="AL">AL</option>
                             <option value="AK">AK</option>
                             <option value="AR">AR</option>	
