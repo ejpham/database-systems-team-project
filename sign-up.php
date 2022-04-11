@@ -8,8 +8,8 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 // run script to connect to WebLogins schema in database
 require_once "db_conn_WebLogins.php";
 // declare variables
-$email = $name = $password = $confirm_password = "";
-$email_err = $name_err = $password_err = $confirm_password_err = $success = $error = "";
+$email = $name = $password = $confirm_password = $security_question = $security_answer = "";
+$email_err = $name_err = $password_err = $confirm_password_err = $security_question_err = $security_answer_err = $success = $error = "";
 // if "post" was called from submit button in form below
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // validate email from textbox
@@ -32,6 +32,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // make sure password === confirm password
         if (empty($password_err) && ($password != $confirm_password)) $confirm_password_err = "Password did not match.";
     }
+    if (empty(trim($_POST["security_question"]))) $security_question_err = "Please select a security question.";
+    else $security_question = trim($_POST["security_question"]);
+    if (empty(trim($_POST["security_answer"]))) $security_answer_err = "Please enter a security answer.";
+    else $security_answer = trim($_POST["security_answer"]);
     
     // variable containing query to search database for given email from textbox
     $check_db_email = "SELECT * FROM WebLogins.users WHERE email='$email'";
@@ -43,17 +47,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($email_exists) $email_err = "E-mail address is already taken.";
     
     // if all error strings are empty meaning all info is valid
-    if (empty($email_err) && empty($name_err) && empty($password_err) && empty($confirm_password_err)) {
+    if (empty($email_err) && empty($name_err) && empty($password_err) && empty($confirm_password_err) && empty($security_question_err) && empty($security_answer_err)) {
         // variable containing query to insert info into database
-        $sql = "INSERT INTO WebLogins.users (email, name, pass, is_employee) VALUES (?, ?, ?, 0)";
+        $sql = "INSERT INTO WebLogins.users (email, name, pass, is_employee, security_question, security_answer) VALUES (?, ?, ?, 0, ?, ?)";
         // prepare query statement
         if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
             // bind parameters into query statement
-            mysqli_stmt_bind_param($stmt, "sss", $param_email, $param_name, $param_pass);
+            mysqli_stmt_bind_param($stmt, "sssss", $param_email, $param_name, $param_pass, $param_security_question, $param_security_answer);
             $param_email = $email;
             $param_name = $name;
             // encrypt password
             $param_pass = password_hash($password, PASSWORD_BCRYPT);
+            $param_security_question = $security_question;
+            $param_security_answer = $security_answer;
             // if query executed successfully
             if (mysqli_stmt_execute($stmt)) {
                 $success = '<div class="alert alert-success" role="alert">Your account has been created.</div>';
@@ -132,21 +138,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <div class="m-3">
                         <label class="form-label" for="securityQuestion">Security Question</label>
-                        <!-- <div class="input-group mb-3"> -->
-                            <select class="form-select" type="text" id="security_question">
-                                <option value="In what city were you born?">In what city were you born?</option>
-                                <option value="What is the name of your favorite pet?">What is the name of your favorite pet?</option>
-                                <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
-                                <option value="What high school did you attend?">What high school did you attend?</option>
-                                <option value="What is the name of your first school?">What is the name of your first school?</option>
-                                <option value="What was the make of your first car?">What was the make of your first car?</option>
-                                <option value="What was your favorite food as a child?">What was your favorite food as a child?</option>
-                                <option value="Where did you meet your spouse?">Where did you meet your spouse?</option>
-                            </select>
-                        <!-- </div> -->
+                        <select class="form-select" type="text" id="inputSecurityQuestion" name="security_question">
+                            <option value="">Select a security question</option>
+                            <option value="In what city were you born?">In what city were you born?</option>
+                            <option value="What is the name of your favorite pet?">What is the name of your favorite pet?</option>
+                            <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+                            <option value="What high school did you attend?">What high school did you attend?</option>
+                            <option value="What is the name of your first school?">What is the name of your first school?</option>
+                            <option value="What was the make of your first car?">What was the make of your first car?</option>
+                            <option value="What was your favorite food as a child?">What was your favorite food as a child?</option>
+                            <option value="Where did you meet your spouse?">Where did you meet your spouse?</option>
+                        </select>
                     </div>
                     <div class="m-3">
-                        <label class="form-label">Security Question Answer</label>
+                        <label class="form-label">Security Answer</label>
                         <input type="text" name="security_answer" class="form-control <?php echo (!empty($security_answer_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $security_answer; ?>" id="inputSecurityAnswer" placeholder="Security Answer">
                         <span class="invalid-feedback"><?php echo $security_answer_err; ?></span>
                     </div>
