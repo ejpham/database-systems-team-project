@@ -2,8 +2,8 @@
 session_start();
 require_once "db_conn_WebLogins.php";
 require_once "db_conn_PostalService.php";
-$name = $email = $message = $mail_type = $address = $city = $cardnum = "";
-$name_err = $email_err = $mail_type_err = $success = $error = $address_err = $city_err = $cardnum_err = "";
+$name = $email = $mail_type = $address = $state = $city = $cardnum = $ccv = $expDate = $cardnum = $recName = "";
+$name_err = $email_err = $mail_type_err = $state_err = $success = $error = $address_err = $city_err = $ccv_err = $expDate_err = $cardnum_err = $recName_err ="";
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     $email = $_SESSION["email"];
     $grab_name_sql = "SELECT name FROM WebLogins.users WHERE email='$email'";
@@ -15,12 +15,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty(trim($_POST["name"]))) $name_err = "Please enter a name.";
         else if (strlen(trim($_POST["name"])) > 75) $name_err = "Name can be no longer than 75 characters.";
         else $name = trim($_POST["name"]);
+
         if (empty(trim($_POST["email"]))) $email_err = "Please enter a valid e-mail address.";
         else if (strlen(trim($_POST["email"])) > 75) $email_err = "E-mail address can be no longer than 75 characters.";
         else $email = trim($_POST["email"]);
 
         if (trim($_POST["mailtype"]) == "Select Mail Type") $mail_error = "Please select mail type.";
         else $mail_type = trim($_POST["mailtype"]);
+
+        if (empty(trim($_POST["Address"]))) $Adress_err = "Please enter a valid Address.";
+        else if (strlen(trim($_POST["Address"])) > 75) $email_err = "Address can be no longer than 75 characters.";
+        else $address = trim($_POST["Address"]);
+
+        if (trim($_POST["state"]) == "State") $state_err = "Please make a state selection.";
+        else $state = trim($_POST["state"]);
     }
 }
 ?>
@@ -70,6 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </nav>
     </div>
+    <!-- NAVIGATION END -->
 
     <div class="container-fluid col-sm-6">
         <div class="row">
@@ -111,7 +120,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="input-group mb-3">
-                        <select class="form-select" aria-label="Default select example" type = "state" id = "stateSelector">
+                        <select class="form-select" aria-label="Default select example" type = "text" id = "stateSelector" name = "state">
                             <option value = "">State</option>
                             <option value="AL">AL</option>
                             <option value="AK">AK</option>
@@ -165,15 +174,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <option value="WV">WV</option>
                             <option value="WY">WY</option>
                         </select>
+                        <span class="invalid-feedback d-block"><?php echo $state_err; ?></span>
+
                         <span class="input-group-text"></span>
                         <input type="text" name="City" class="form-control <?php echo (!empty($city_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $city; ?>" id="inputCity" placeholder="city">
-                        <span class="invalid-feedback"><?php echo $address_err; ?></span>
+                        <span class="invalid-feedback"><?php echo $city_err; ?></span>
+                    </div>
+
+                    <div class="m-3">
+                        <input type="text" name="receiveName" class="form-control <?php echo (!empty($recName_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $recName; ?>" id="inputAddress" placeholder="Reciever's Full Name">
+                        <span class="invalid-feedback"><?php echo $recName_err; ?></span>
                     </div>
 
                     <br />
 
                     <div class="m-3">
-                        <select class="form-select" aria-label="Default select example" type = "mailtype" id = "mailSelector" onchange = "MailCheck(this);">
+                        <select class="form-select" aria-label="Default select example" type = "text" name = "mailtype" id = "mailSelector" onchange = "MailCheck(this);">
                             <option value = "">Select Mail Type</option>
                             <option value="Letter">Letter</option>
                             <option value="Package">Package</option>
@@ -181,7 +197,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="m-3" id = "ifLetter" style="display: none;">
-                        <select class="form-select" aria-label="Default select example" type = "letterSpeed" id = "letterSelector">
+                        <select class="form-select" aria-label="Default select example" type = "text" name = "letterSpeed" id = "letterSelector">
                             <option value = "">Select Letter Speed</option>
                             <option value="Express">Express</option>
                             <option value="Fast">Fast</option>
@@ -189,7 +205,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="m-3" id = "ifPackage" style="display: none;">
-                        <select class="form-select" aria-label="Default select example" type = "packageSpeed" id = "packageSelector">
+                        <select class="form-select" aria-label="Default select example" type = "text" name = "packageSpeed" id = "packageSelector">
                             <option value = "">Select Package Speed</option>
                             <option value="Express">Premium</option>
                             <option value="Fast">Regular</option>
@@ -197,7 +213,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="m-3" id = "packageSize" style="display: none;">
-                        <select class="form-select" aria-label="Default select example" type = "packageSize" id = "sizeSelector">
+                        <select class="form-select" aria-label="Default select example" type = "text" name = "packageSize" id = "sizeSelector">
                             <option value = "">Select Package Size</option>
                             <option value="1">8 x 8 x 6</option>
                             <option value="2">8 x 8 x 8</option>
@@ -223,11 +239,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <span class="invalid-feedback"><?php echo $cardnum_err; ?></span>
 
                         <span class="input-group-text"></span>
-                        <input type="text" name="expDate" class="form-control <?php echo (!empty($expDate_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $city; ?>" id="inputCity" placeholder="Expiration Date">
+                        <input type="text" name="expDate" class="form-control <?php echo (!empty($expDate_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $expDate; ?>" id="inputCity" placeholder="Expiration Date">
                         <span class="invalid-feedback"><?php echo $expDate_err; ?></span>
 
                         <span class="input-group-text"></span>
-                        <input type="text" name="ccv" class="form-control <?php echo (!empty($ccv_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $city; ?>" id="inputCity" placeholder="CCV">
+                        <input type="text" name="ccv" class="form-control <?php echo (!empty($ccv_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $ccv; ?>" id="inputCity" placeholder="CCV">
                         <span class="invalid-feedback"><?php echo $ccv_err; ?></span>
                     </div>
 
