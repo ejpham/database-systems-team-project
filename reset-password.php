@@ -6,7 +6,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 }
 require_once "db_conn_WebLogins.php";
 $email = $new_password = $confirm_password = $security_question = $security_answer = "";
-$email_err = $new_password_err = $confirm_password_err = $security_err = $success = $error = "";
+$email_err = $new_password_err = $confirm_password_err = $security_question_err = $security_answer_err = $success = $error = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["email"]))) $email_err = "Please enter your e-mail address.";
     else $email = trim($_POST['email']);
@@ -15,31 +15,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     else if (strlen(trim($_POST["new_password"])) > 16) $new_password_err = "Password can be no longer than 16 characters.";
     else $new_password = trim($_POST["new_password"]);
     if (empty(trim($_POST["confirm_password"]))) $confirm_password_err = "Please confirm the password.";
-    else {
-        $confirm_password = trim($_POST["confirm_password"]);
-        if (empty($new_password_err) && ($new_password != $confirm_password)) $confirm_password_err = "Password did not match.";
-    }
-    if (empty(trim($_POST["security_question"]))) $security_err = "Please select a security question.";
+    else $confirm_password = trim($_POST["confirm_password"]);
+    if (empty($new_password_err) && ($new_password != $confirm_password)) $confirm_password_err = "Password did not match.";
+    if (empty(trim($_POST["security_question"]))) $security_question_err = "Please select a security question.";
     else $security_question = trim($_POST["security_question"]);
+    if (empty(trim($_POST["security_answer"]))) $security_answer_err = "Please enter the security answer.";
+    else $security_answer = trim($_POST["security_answer"]);
     $check_db = "SELECT email, security_question, security_answer FROM WebLogins.users WHERE email='$email'";
     $result = mysqli_query($conn_WebLogins, $check_db);
-    $exists = mysqli_fetch_assoc($result);
-    if (!$exists) $email_err = "Invalid e-mail address.";
-    if ($exists["security_question"] != $security_question) $security_err = "Invalid security question or answer.";
-    if (!password_verify($security_answer, $exists["security_answer"])) $security_err = "Invalid security question or answer.";
-    if (empty($email_err) && empty($new_password_err) && empty($confirm_password_err) && empty($security_err)) {
-        $sql = "UPDATE WebLogins.users SET pass = ? WHERE email = ?";
-        if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
-            mysqli_stmt_bind_param($stmt, "si", $param_password, $param_email);
-            $param_password = password_hash($new_password, PASSWORD_BCRYPT);
-            $param_email = $email;
-            if (mysqli_stmt_execute($stmt)) {
-                session_destroy();
-                $success = '<div class="alert alert-success" role="alert">Successfully changed password.</div>';
-                header("refresh:1; url=sign-in.php");
+    if (!$result) $error = '<div class="alert alert-danger" role="alert">Oops! Something went wrong. Please try again later.</div>';
+    else {
+        if (mysql_num_rows($result) == 0) $email_err = "Invalid e-mail address.";
+        else {
+            $row = mysqli_fetch_assoc($result);
+            if ($row["security_question"] != $security_question) $error = '<div class="alert alert-danger" role="alert">Invalid security question or answer.</div>';
+            if (!password_verify($security_answer, $row["security_answer"])) $error = '<div class="alert alert-danger" role="alert">Invalid security question or answer.</div>';
+        }
+        if (empty($email_err) && empty($new_password_err) && empty($confirm_password_err) && empty($security_err)) {
+            $sql = "UPDATE WebLogins.users SET pass = ? WHERE email = ?";
+            if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
+                mysqli_stmt_bind_param($stmt, "si", $param_password, $param_email);
+                $param_password = password_hash($new_password, PASSWORD_BCRYPT);
+                $param_email = $email;
+                if (mysqli_stmt_execute($stmt)) {
+                    session_destroy();
+                    $success = '<div class="alert alert-success" role="alert">Successfully changed password.</div>';
+                    header("refresh:1; url=sign-in.php");
+                }
+                else $error = '<div class="alert alert-danger" role="alert">Oops! Something went wrong. Please try again later.</div>';
+                mysqli_stmt_close($stmt);
             }
-            else $error = '<div class="alert alert-danger" role="alert">Oops! Something went wrong. Please try again later.</div>';
-            mysqli_stmt_close($stmt);
         }
     }
     mysqli_close($conn_WebLogins);
@@ -94,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <div class="m-3">
                         <label class="form-label" for="securityQuestion">Security Question</label>
-                        <select class="form-select <?php echo (!empty($security_err)) ? 'is-invalid' : ''; ?>" type="text" value="<?php echo $security_question; ?>" id="inputSecurityQuestion" name="security_question">
+                        <select class="form-select <?php echo (!empty($security_question_err)) ? 'is-invalid' : ''; ?>" type="text" value="<?php echo $security_question; ?>" id="inputSecurityQuestion" name="security_question">
                             <option value="">Select a security question</option>
                             <option value="In what city were you born?">In what city were you born?</option>
                             <option value="What is the name of your favorite pet?">What is the name of your favorite pet?</option>
@@ -105,12 +110,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <option value="What was your favorite food as a child?">What was your favorite food as a child?</option>
                             <option value="Where did you meet your spouse?">Where did you meet your spouse?</option>
                         </select>
-                        <span class="invalid-feedback"><?php echo $security_err; ?></span>
+                        <span class="invalid-feedback"><?php echo $security_question_err; ?></span>
                     </div>
                     <div class="m-3">
                         <label class="form-label">Security Answer</label>
-                        <input type="password" name="security_answer" class="form-control <?php echo (!empty($security_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $security_answer; ?>" id="inputSecurityAnswer" placeholder="Security Answer">
-                        <span class="invalid-feedback"><?php echo $security_err; ?></span>
+                        <input type="password" name="security_answer" class="form-control <?php echo (!empty($security_answer_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $security_answer; ?>" id="inputSecurityAnswer" placeholder="Security Answer">
+                        <span class="invalid-feedback"><?php echo $security_answer_err; ?></span>
                     </div>
                     <div class="m-3">
                         <label class="form-label" for="inputNewPassword">New Password</label>
