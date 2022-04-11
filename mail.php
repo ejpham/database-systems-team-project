@@ -157,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <option value="FL">FL</option>
                             <option value="GA">GA</option>
                             <option value="HI">HI</option>
-                            <option value="IA">IA</option>	
+                            <option value="IA">IA</option>
                             <option value="ID">ID</option>
                             <option value="IL">IL</option>
                             <option value="IN">IN</option>
@@ -306,6 +306,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 document.getElementById("packageWeight").style.display = "none";
             }
         }
+    </script>
+
+    <script>
+      document.getElementById('stateSelector').onchange = function() {
+        localStorage.setItem('selectedtem', document.getElementById('stateSelector').value);
+      };
+
+      if (localStorage.getItem('selectedtem')) {
+        document.getElementById('stateSelector').options[localStorage.getItem('selectedtem')].selected = true;
+      }
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
