@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         else $address = trim($_POST["Address"]);
 
         if (trim($_POST["state"]) == "State") $state_err = "Please make a state selection.";
-        else $state = trim($_POST["state"]);
+        else {$state = trim($_POST["state"]); $state_err = "it sedcond thing";}
     }
 }
 ?>
@@ -89,6 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <?php
                         echo $success;
                         echo $error;
+                        echo $state_err;
                         if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
                         <div class="m-3">
                             <label class="form-label">Full Name</label>
