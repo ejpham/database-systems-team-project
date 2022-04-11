@@ -63,8 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // if query executed successfully
             if (mysqli_stmt_execute($stmt)) {
                 $success = '<div class="alert alert-success" role="alert">Your account has been created.</div>';
-                // wait 2 seconds then redirect to sign-in page
-                header('refresh:1; url=sign-in.php');
+                header("refresh:1; url=sign-in.php");
             }
             else $error = '<div class="alert alert-danger" role="alert">Oops, something went wrong. Please try again later.</div>';
         }

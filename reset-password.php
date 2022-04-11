@@ -38,7 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $param_password = password_hash($new_password, PASSWORD_BCRYPT);
                         $param_email = $email;
                         if (mysqli_stmt_execute($stmt)) {
-                            session_destroy();
                             $success = '<div class="alert alert-success" role="alert">Successfully changed password.</div>';
                             header("refresh:1; url=sign-in.php");
                         }
