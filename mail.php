@@ -143,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="input-group mb-3">
-                        <select class="form-select" aria-label="Default select example" type = "text" id = "stateSelector" name = "state" value="<?php echo $state; ?>">
+                        <select class="form-select" aria-label="Default select example" type = "text" id = "stateSelector" name = "state">
                             <option value = "">State</option>
                             <option value="AL">AL</option>
                             <option value="AK">AK</option>
