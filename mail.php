@@ -2,8 +2,8 @@
 session_start();
 require_once "db_conn_WebLogins.php";
 require_once "db_conn_PostalService.php";
-$name = $email = $message = $mail_type = $address = $city = "";
-$name_err = $email_err = $mail_type_err = $success = $error = $address_err = $city_err = "";
+$name = $email = $message = $mail_type = $address = $city = $cardnum = "";
+$name_err = $email_err = $mail_type_err = $success = $error = $address_err = $city_err = $cardnum_err = "";
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     $email = $_SESSION["email"];
     $grab_name_sql = "SELECT name FROM WebLogins.users WHERE email='$email'";
@@ -218,7 +218,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <br />
 
                     <div class="m-3" id = "cardInfo" style="display: none;">
-                        
+                        <label class="form-label">Card Information</label>
+                        <input type="text" name="cardNumbers" class="form-control <?php echo (!empty($cardnum_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $cardnum; ?>" id="cardnum" placeholder="0000 0000 0000 0000">
+                        <span class="invalid-feedback"><?php echo $cardnum_err; ?></span>
+
+                        <span class="input-group-text"></span>
+                        <input type="text" name="expDate" class="form-control <?php echo (!empty($expDate_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $city; ?>" id="inputCity" placeholder="Expiration Date">
+                        <span class="invalid-feedback"><?php echo $expDate_err; ?></span>
+
+                        <span class="input-group-text"></span>
+                        <input type="text" name="ccv" class="form-control <?php echo (!empty($ccv_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $city; ?>" id="inputCity" placeholder="CCV">
+                        <span class="invalid-feedback"><?php echo $ccv_err; ?></span>
                     </div>
 
                     <div class="m-3">
