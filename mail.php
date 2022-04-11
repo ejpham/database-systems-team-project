@@ -217,7 +217,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <br />
 
-                    <div class="m-3" id = "cardInfo" style="display: none;">
+                    <div class="m-3" id = "cardInfo" style="display: block;">
                         <label class="form-label">Card Information</label>
                         <input type="text" name="cardNumbers" class="form-control <?php echo (!empty($cardnum_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $cardnum; ?>" id="cardnum" placeholder="0000 0000 0000 0000">
                         <span class="invalid-feedback"><?php echo $cardnum_err; ?></span>
