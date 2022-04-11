@@ -29,21 +29,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         else {
             $row = mysqli_fetch_assoc($result);
             if ($row["security_question"] != $security_question) $error = '<div class="alert alert-danger" role="alert">Invalid security question or answer.</div>';
-            if (!password_verify($security_answer, $row["security_answer"])) $error = '<div class="alert alert-danger" role="alert">Invalid security question or answer.</div>';
-        }
-        if (empty($email_err) && empty($new_password_err) && empty($confirm_password_err) && empty($security_err)) {
-            $sql = "UPDATE WebLogins.users SET pass = ? WHERE email = ?";
-            if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
-                mysqli_stmt_bind_param($stmt, "si", $param_password, $param_email);
-                $param_password = password_hash($new_password, PASSWORD_BCRYPT);
-                $param_email = $email;
-                if (mysqli_stmt_execute($stmt)) {
-                    session_destroy();
-                    $success = '<div class="alert alert-success" role="alert">Successfully changed password.</div>';
-                    header("refresh:1; url=sign-in.php");
+            else if ($row["security_answer"] != $security_answer) $error = '<div class="alert alert-danger" role="alert">Invalid security question or answer.</div>';
+            else {
+                if (empty($email_err) && empty($new_password_err) && empty($confirm_password_err) && empty($security_err)) {
+                    $sql = "UPDATE WebLogins.users SET pass = ? WHERE email = ?";
+                    if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
+                        mysqli_stmt_bind_param($stmt, "ss", $param_password, $param_email);
+                        $param_password = password_hash($new_password, PASSWORD_BCRYPT);
+                        $param_email = $email;
+                        if (mysqli_stmt_execute($stmt)) {
+                            session_destroy();
+                            $success = '<div class="alert alert-success" role="alert">Successfully changed password.</div>';
+                            header("refresh:1; url=sign-in.php");
+                        }
+                        else $error = '<div class="alert alert-danger" role="alert">Oops! Something went wrong. Please try again later.</div>';
+                        mysqli_stmt_close($stmt);
+                    }
                 }
-                else $error = '<div class="alert alert-danger" role="alert">Oops! Something went wrong. Please try again later.</div>';
-                mysqli_stmt_close($stmt);
             }
         }
     }
@@ -114,7 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <div class="m-3">
                         <label class="form-label">Security Answer</label>
-                        <input type="password" name="security_answer" class="form-control <?php echo (!empty($security_answer_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $security_answer; ?>" id="inputSecurityAnswer" placeholder="Security Answer">
+                        <input type="hidden" name="security_answer" class="form-control <?php echo (!empty($security_answer_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $security_answer; ?>" id="inputSecurityAnswer" placeholder="Security Answer">
                         <span class="invalid-feedback"><?php echo $security_answer_err; ?></span>
                     </div>
                     <div class="m-3">

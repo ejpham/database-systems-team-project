@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // encrypt password
             $param_pass = password_hash($password, PASSWORD_BCRYPT);
             $param_security_question = $security_question;
-            $param_security_answer = password_hash($security_answer, PASSWORD_BCRYPT);
+            $param_security_answer = $security_answer;
             // if query executed successfully
             if (mysqli_stmt_execute($stmt)) {
                 $success = '<div class="alert alert-success" role="alert">Your account has been created.</div>';
@@ -153,7 +153,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <div class="m-3">
                         <label class="form-label">Security Answer</label>
-                        <input type="password" name="security_answer" class="form-control <?php echo (!empty($security_answer_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $security_answer; ?>" id="inputSecurityAnswer" placeholder="Security Answer">
+                        <input type="hidden" name="security_answer" class="form-control <?php echo (!empty($security_answer_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $security_answer; ?>" id="inputSecurityAnswer" placeholder="Security Answer">
                         <span class="invalid-feedback"><?php echo $security_answer_err; ?></span>
                     </div>
                     <div class="m-3">
