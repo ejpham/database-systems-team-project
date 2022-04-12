@@ -44,13 +44,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty(trim($_POST["packageSpeed"]))) $packSpeed_err = "Please make a package speed selection.";
         else $packSpeed = trim($_POST["packageSpeed"]);
         
-        
         if (trim($_POST["packageSize"]) == 0) $packSize_err = "Please make a size selection.";
-        else{
-            $parts = $_POST["packageSize"];
-            $arr = explode(':', $parts)
-            $packSize = $arr[0];
-        }
+        else $packSize = trim($_POST["packageSize"]);
 
         if (trim($_POST["weightSelector"]) == 0) $weight_err = "Please make a weight selection.";
         else $weight = trim($_POST["weightSelector"]);
