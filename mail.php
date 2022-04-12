@@ -3,7 +3,7 @@ session_start();
 require_once "db_conn_WebLogins.php";
 require_once "db_conn_PostalService.php";
 $weight = 0;
-$packSizeSelected = $packSpeedSelected = "0:0"
+$packSizeSelected = $packSpeedSelected = "0:0";
 $name = $email = $mail_type = $address = $state = $city = $cardnum = $ccv = $expDate = $cardnum = $recName = $lettSpeed = $packSize = $packSpeed = "";
 $name_err = $email_err = $mail_type_err = $state_err = $success = $error = $address_err = $city_err = $ccv_err = $expDate_err = $cardnum_err = $recName_err = $lettSpeed_err = $packSize_err = $packSpeed_err = $weight_err = "";
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
