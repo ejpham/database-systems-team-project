@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty(trim($_POST["packageSpeed"]))) $packSpeed_err = "Please make a package speed selection.";
         else $packSpeed = trim($_POST["packageSpeed"]);
         
-        if (empty(trim($_POST["packageSize"]))) $packSize_err = "Please make a size selection.";
+        if (trim($_POST["packageSize"]) == 0) $packSize_err = "Please make a size selection.";
         else $packSize = trim($_POST["packageSize"]);
 
         if (trim($_POST["weightSelector"]) == 0) $weight_err = "Please make a weight selection.";
@@ -255,8 +255,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="m-3" id = "packageSize" style="display: none;">
-                        <select class="form-select" aria-label="Default select example" type = "text" name = "packageSize" id = "sizeSelector">
-                            <option value = "">Select Package Size</option>
+                        <select class="form-select" aria-label="Default select example" type="text" name="packageSize" id="sizeSelector" onChange="updatePrice(this)">
+                            <option value = "0">Select Package Size</option>
                             <option value="1">8 x 8 x 6</option>
                             <option value="2">8 x 8 x 8</option>
                             <option value="3">10 x 8 x 6</option>
@@ -278,6 +278,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <label for="weight" class="form-label">Slide for weight (lb): <span id="changeRange1Value">0</span></label>
                         <input type="range" class="form-range" id="weight" name = "weightSelector" min="0" max="100" step="1" value="<?php echo $weight; ?>">
                         <span class="invalid-feedback d-block"><?php echo $weight_err; ?></span>
+                    </div>
+
+                    <div class="m-3" id="priceShow">
+                        <label class = "form-label">Price: <span id = "priceChanging">0</span><label>
                     </div>
 
                     <br />
@@ -336,6 +340,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         window.onload = MailCheck(document.getElementById("mailSelector"));
+    </script>
+
+    <script type = "text/javascript">
+        function updatePrice(input){
+            var adding = input.value;;
+            changePriceValue = $('#priceChanging');
+            changePriceValue.text(adding + changePriceValue.textContent);
+        }
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
