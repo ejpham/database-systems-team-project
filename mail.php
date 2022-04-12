@@ -3,6 +3,7 @@ session_start();
 require_once "db_conn_WebLogins.php";
 require_once "db_conn_PostalService.php";
 $weight = 0;
+$packSizeSelected = $packSpeedSelected = "0:0"
 $name = $email = $mail_type = $address = $state = $city = $cardnum = $ccv = $expDate = $cardnum = $recName = $lettSpeed = $packSize = $packSpeed = "";
 $name_err = $email_err = $mail_type_err = $state_err = $success = $error = $address_err = $city_err = $ccv_err = $expDate_err = $cardnum_err = $recName_err = $lettSpeed_err = $packSize_err = $packSpeed_err = $weight_err = "";
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
@@ -44,6 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
 
         $parts = trim($_POST['packageSpeed']);
+        $packSpeedSelected = $parts;
         $arr = explode(":", $parts);
 
         if ($arr[1] == 0) $packSpeed_err = "Please make a package speed selection.";
@@ -51,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
 
         $parts = trim($_POST['packageSize']);
+        $packSizeSelected = $parts;
         $arr = explode(":", $parts);
 
         if ($arr[1] == 0) $packSize_err = "Please make a size selection.";
@@ -257,7 +260,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </select>
 
                         <script type="text/javascript">
-                            document.getElementById('packageSelector').value = "<?php echo $packSpeed; ?>";
+                            document.getElementById('packageSelector').value = "<?php echo $packSpeedSelected; ?>";
                         </script>
 
                         <span class="invalid-feedback d-block"><?php echo $packSpeed_err; ?></span>
@@ -277,7 +280,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </select>
 
                         <script type="text/javascript">
-                            document.getElementById('packageSize').value = "<?php echo $packSize; ?>";
+                            document.getElementById('packageSize').value = "<?php echo $packSizeSelected; ?>";
                         </script>
 
                         <span class="invalid-feedback d-block"><?php echo $packSize_err; ?></span>
