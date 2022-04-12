@@ -259,7 +259,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="m-3" id = "packageSize" style="display: none;">
-                        <select class="form-select" aria-label="Default select example" type="text" name="packageSize" id="sizeSelector" onChange="updatePrice()">
+                        <select class="form-select" aria-label="Default select example" type="text" name="packageSize" id="sizeSelector" onChange="updatePrice();">
                             <option value = "0:0">Select Package Size</option>
                             <option value="8 x 8 x 6:6">8 x 8 x 6</option>
                             <option value="8 x 8 x 8:7">8 x 8 x 8</option>
@@ -343,10 +343,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
-        window.onload = MailCheck(document.getElementById("mailSelector"));
-    </script>
-
-    <script type = "text/javascript">
         function updatePrice(){
             var adding = 0;
             const array = document.getElementById("packageSize").value.split(":");
@@ -354,6 +350,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             priceChanging = $('#priceChanging');
             priceChanging.text(adding));
         }
+
+        window.onload = MailCheck(document.getElementById("mailSelector"));
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
