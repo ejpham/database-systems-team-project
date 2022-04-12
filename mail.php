@@ -347,7 +347,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             var adding = input.value;
             priceChanging = $('#priceChanging');
             console.log(parseInt(document.getElementById("priceChanging").textContent));
-            priceChanging.text(adding + parseInt(document.getElementById("priceChanging").textContent));
+            priceChanging.text(parseInt(adding) + parseInt(document.getElementById("priceChanging").textContent));
         }
     </script>
 
