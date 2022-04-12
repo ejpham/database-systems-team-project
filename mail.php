@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (trim($_POST["packageSize"]) == 0) $packSize_err = "Please make a size selection.";
         else{
             $arr = explode(':', $_POST["packageSize"])
-            $packSize = $arr[0];
+            //$packSize = $arr[0];
         }
 
         if (trim($_POST["weightSelector"]) == 0) $weight_err = "Please make a weight selection.";
