@@ -44,6 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty(trim($_POST["packageSpeed"]))) $packSpeed_err = "Please make a package speed selection.";
         else $packSpeed = trim($_POST["packageSpeed"]);
         
+
         $parts = trim($_POST['packageSize']);
         $arr = explode(":", $parts);
 
@@ -271,7 +272,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </select>
 
                         <script type="text/javascript">
-                            document.getElementById('packageSize').value = "<?php echo $packSize; ?>";
+                            document.getElementById('packageSizeSelector').value = "<?php echo $packSize; ?>";
                         </script>
 
                         <span class="invalid-feedback d-block"><?php echo $packSize_err; ?></span>
@@ -325,19 +326,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if(that.value == "Letter"){
                 document.getElementById("ifLetter").style.display = "block";
                 document.getElementById("ifPackage").style.display = "none";
-                document.getElementById("packageSize").style.display = "none";
+                document.getElementById("packageSizeSelector").style.display = "none";
                 document.getElementById("packageWeight").style.display = "none";
             }
             else if (that.value == "Package") {
                 document.getElementById("ifPackage").style.display = "block";
-                document.getElementById("packageSize").style.display = "block";
+                document.getElementById("packageSizeSelector").style.display = "block";
                 document.getElementById("packageWeight").style.display = "block";
                 document.getElementById("ifLetter").style.display = "none";
             }
             else {
                 document.getElementById("ifLetter").style.display = "none";
                 document.getElementById("ifPackage").style.display = "none";
-                document.getElementById("packageSize").style.display = "none";
+                document.getElementById("packageSizeSelector").style.display = "none";
                 document.getElementById("packageWeight").style.display = "none";
             }
         }
