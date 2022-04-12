@@ -44,8 +44,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty(trim($_POST["packageSpeed"]))) $packSpeed_err = "Please make a package speed selection.";
         else $packSpeed = trim($_POST["packageSpeed"]);
         
-        if (trim($_POST["packageSize"]) == 0) $packSize_err = "Please make a size selection.";
-        else $packSize = trim($_POST["packageSize"]);
+        $parts = trim($_POST['packageSize']);
+        $arr = explode(":", $parts);
+
+        //if (trim($_POST["packageSize"]) == 0) $packSize_err = "Please make a size selection.";
+        //else $packSize = trim($_POST["packageSize"]);
 
         if (trim($_POST["weightSelector"]) == 0) $weight_err = "Please make a weight selection.";
         else $weight = trim($_POST["weightSelector"]);
@@ -256,7 +259,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <div class="m-3" id = "packageSize" style="display: none;">
                         <select class="form-select" aria-label="Default select example" type="text" name="packageSize" id="sizeSelector" onChange="updatePrice(this)">
-                            <option value = "0">Select Package Size</option>
+                            <option value = "0:0">Select Package Size</option>
                             <option value="8 x 8 x 6:6">8 x 8 x 6</option>
                             <option value="8 x 8 x 8:7">8 x 8 x 8</option>
                             <option value="10 x 8 x 6:8">10 x 8 x 6</option>
