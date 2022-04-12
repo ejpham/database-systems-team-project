@@ -357,8 +357,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             const array = document.getElementById("sizeSelector").value.split(":");
             adding = adding + parseInt(array[1]);
 
-            array = document.getElementById("packageSelector").value.split(":");
-            adding = adding + parseInt(array[1]);
+            const array2 = document.getElementById("packageSelector").value.split(":");
+            adding = adding + parseInt(array2[1]);
 
             adding = adding + parseInt(document.getElementById("changeRange1Value").textContent);
 
