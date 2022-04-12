@@ -2,8 +2,8 @@
 session_start();
 require_once "db_conn_WebLogins.php";
 require_once "db_conn_PostalService.php";
-$name = $email = $mail_type = $address = $state = $city = $cardnum = $ccv = $expDate = $cardnum = $recName = $lettSpeed = $packSize = $packSpeed = "";
-$name_err = $email_err = $mail_type_err = $state_err = $success = $error = $address_err = $city_err = $ccv_err = $expDate_err = $cardnum_err = $recName_err = $lettSpeed_err = $packSize_err = $packSpeed_err = "";
+$name = $email = $mail_type = $address = $state = $city = $cardnum = $ccv = $expDate = $cardnum = $recName = $lettSpeed = $packSize = $packSpeed = $weight = "";
+$name_err = $email_err = $mail_type_err = $state_err = $success = $error = $address_err = $city_err = $ccv_err = $expDate_err = $cardnum_err = $recName_err = $lettSpeed_err = $packSize_err = $packSpeed_err = $weight_err = "";
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     $email = $_SESSION["email"];
     $grab_name_sql = "SELECT name FROM WebLogins.users WHERE email='$email'";
@@ -46,6 +46,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         if (empty(trim($_POST["packageSize"]))) $packSize_err = "Please make a size selection.";
         else $packSize = trim($_POST["packageSize"]);
+
+        if (trim($_POST["weightSelector"]) == 0) $weight_err = "Please make a weight selection.";
+        else $weight = trim($_POST["weightSelector"]);
     }
 }
 ?>
@@ -272,8 +275,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="m-3" id = "packageWeight" style="display: none;">
-                        <label for="weight" class="form-label">Slide for weight: <span id="changeRange1Value">0</span></label>
-                        <input type="range" class="form-range" id="weight" min="0" max="100" step="1" value="0">
+                        <label for="weight" class="form-label">Slide for weight (lb): <span id="changeRange1Value">0</span></label>
+                        <input type="range" class="form-range" id="weight" name = "weightSelector" min="0" max="100" step="1" value="0">
+                        <span class="invalid-feedback d-block"><?php echo $weight_err; ?></span>
                     </div>
 
                     <br />
@@ -330,7 +334,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 document.getElementById("packageWeight").style.display = "none";
             }
         }
-        
+
         window.onload = MailCheck(document.getElementById("mailSelector"));
     </script>
 
