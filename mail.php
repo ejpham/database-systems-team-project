@@ -44,8 +44,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty(trim($_POST["packageSpeed"]))) $packSpeed_err = "Please make a package speed selection.";
         else $packSpeed = trim($_POST["packageSpeed"]);
         
+        
         if (trim($_POST["packageSize"]) == 0) $packSize_err = "Please make a size selection.";
-        else $packSize = trim($_POST["packageSize"]);
+        else{
+            $arr = explode(':', $_POST["packageSize"])
+            $packSize = $arr[0];
+        }
 
         if (trim($_POST["weightSelector"]) == 0) $weight_err = "Please make a weight selection.";
         else $weight = trim($_POST["weightSelector"]);
@@ -229,8 +233,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="m-3" id = "ifLetter" style="display: none;">
                         <select class="form-select" aria-label="Default select example" type = "text" name = "letterSpeed" id = "letterSelector">
                             <option value = "">Select Letter Speed</option>
-                            <option value="Express">Express</option>
-                            <option value="Fast">Fast</option>
+                            <option value="Express">Premium</option>
+                            <option value="Fast">Regular</option>
                         </select>
 
                         <script type="text/javascript">
@@ -257,14 +261,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="m-3" id = "packageSize" style="display: none;">
                         <select class="form-select" aria-label="Default select example" type="text" name="packageSize" id="sizeSelector" onChange="updatePrice(this)">
                             <option value = "0">Select Package Size</option>
-                            <option value="1">8 x 8 x 6</option>
-                            <option value="2">8 x 8 x 8</option>
-                            <option value="3">10 x 8 x 6</option>
-                            <option value="4">12 x 6 x 6</option>
-                            <option value="5">12 x 9 x 3</option>
-                            <option value="6">12 x 9 x 4</option>
-                            <option value="7">12 x 10 x 4</option>
-                            <option value="8">12 x 12 x 3</option>
+                            <option value="8 x 8 x 6:6">8 x 8 x 6</option>
+                            <option value="8 x 8 x 8:7">8 x 8 x 8</option>
+                            <option value="10 x 8 x 6:8">10 x 8 x 6</option>
+                            <option value="12 x 6 x 6:9">12 x 6 x 6</option>
+                            <option value="12 x 9 x 3:10">12 x 9 x 3</option>
+                            <option value="12 x 9 x 4:11">12 x 9 x 4</option>
+                            <option value="12 x 10 x 4:12">12 x 10 x 4</option>
+                            <option value="12 x 12 x 3:13">12 x 12 x 3</option>
                         </select>
 
                         <script type="text/javascript">
@@ -344,9 +348,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <script type = "text/javascript">
         function updatePrice(input){
-            var adding = input.value;
+            const array = input.value.split(":")
+            var adding = array[1];
             priceChanging = $('#priceChanging');
-            console.log(parseInt(document.getElementById("priceChanging").textContent));
             priceChanging.text(parseInt(adding) + parseInt(document.getElementById("priceChanging").textContent));
         }
     </script>
