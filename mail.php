@@ -354,6 +354,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             adding = adding + parseInt(array[1]);
             console.log(adding);
             console.log(array[1]);
+            console.log(array[0]);
+            console.log(array);
             priceChanging = $('#priceChanging');
             priceChanging.text(adding);
         }
