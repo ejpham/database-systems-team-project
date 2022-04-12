@@ -41,8 +41,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty(trim($_POST["mailtype"]))) $mail_type_err = "Please make a mail type selection.";
         else $mail_type = trim($_POST["mailtype"]);
         
-        if (empty(trim($_POST["packageSpeed"]))) $packSpeed_err = "Please make a package speed selection.";
-        else $packSpeed = trim($_POST["packageSpeed"]);
+
+        $parts = trim($_POST['packageSpeed']);
+        $arr = explode(":", $parts);
+
+        if ($arr[1] == 0) $packSpeed_err = "Please make a package speed selection.";
+        else $packSpeed = $arr[0];
         
 
         $parts = trim($_POST['packageSize']);
@@ -246,9 +250,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <div class="m-3" id = "ifPackage" style="display: none;">
                         <select class="form-select" aria-label="Default select example" type = "text" name = "packageSpeed" id = "packageSelector">
-                            <option value = "">Select Package Speed</option>
-                            <option value="Express">Premium</option>
-                            <option value="Fast">Regular</option>
+                            <option value = "0:0">Select Package Speed</option>
+                            <option value="Express:6">Premium</option>
+                            <option value="Fast:3">Regular</option>
                         </select>
 
                         <script type="text/javascript">
@@ -349,8 +353,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script type = "text/javascript">
         function updatePrice(){
             var adding = 0;
+
             const array = document.getElementById("sizeSelector").value.split(":");
             adding = adding + parseInt(array[1]);
+
+            array = document.getElementById("packageSelector").value.split(":");
+            adding = adding + parseInt(array[1]);
+
+            adding = adding + parseInt(document.getElementById("changeRange1Value").textContent);
+
             priceChanging = $('#priceChanging');
             priceChanging.text(adding);
         }
