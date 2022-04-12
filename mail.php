@@ -351,7 +351,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             var adding = 0;
             const array = document.getElementById("packageSize").value.split(":");
             adding = adding + parseInt(array[1]);
-            // priceChanging = $('#priceChanging');
+            priceChanging = $('#priceChanging');
             // priceChanging.text(adding));
         }
     </script>
