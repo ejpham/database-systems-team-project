@@ -2,7 +2,8 @@
 session_start();
 require_once "db_conn_WebLogins.php";
 require_once "db_conn_PostalService.php";
-$name = $email = $mail_type = $address = $state = $city = $cardnum = $ccv = $expDate = $cardnum = $recName = $lettSpeed = $packSize = $packSpeed = $weight = "";
+$weight = 0;
+$name = $email = $mail_type = $address = $state = $city = $cardnum = $ccv = $expDate = $cardnum = $recName = $lettSpeed = $packSize = $packSpeed = "";
 $name_err = $email_err = $mail_type_err = $state_err = $success = $error = $address_err = $city_err = $ccv_err = $expDate_err = $cardnum_err = $recName_err = $lettSpeed_err = $packSize_err = $packSpeed_err = $weight_err = "";
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     $email = $_SESSION["email"];
@@ -249,7 +250,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="m-3" id = "ifPackage" style="display: none;">
-                        <select class="form-select" aria-label="Default select example" type = "text" name = "packageSpeed" id = "packageSelector">
+                        <select class="form-select" aria-label="Default select example" type = "text" name = "packageSpeed" id = "packageSelector" onChange="updatePricePackage();">
                             <option value = "0:0">Select Package Speed</option>
                             <option value="Express:6">Premium</option>
                             <option value="Fast:3">Regular</option>
@@ -263,7 +264,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="m-3" id = "packageSize" style="display: none;">
-                        <select class="form-select" aria-label="Default select example" type="text" name="packageSize" id="sizeSelector" onChange="updatePrice();">
+                        <select class="form-select" aria-label="Default select example" type="text" name="packageSize" id="sizeSelector" onChange="updatePricePackage();">
                             <option value = "0:0">Select Package Size</option>
                             <option value="8 x 8 x 6:6">8 x 8 x 6</option>
                             <option value="8 x 8 x 8:7">8 x 8 x 8</option>
@@ -322,6 +323,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         var customRange1_VAL = document.getElementById("weight").value;
         changeRange1Value = $('#changeRange1Value');
         changeRange1Value.text(customRange1_VAL);
+        updatePricePackage();
     });
     </script>
 
@@ -351,7 +353,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </script>
 
     <script type = "text/javascript">
-        function updatePrice(){
+        function updatePricePackage(){
             var adding = 0;
 
             const array = document.getElementById("sizeSelector").value.split(":");
