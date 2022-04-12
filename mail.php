@@ -350,7 +350,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         function updatePrice(){
             var adding = 0;
             const array = document.getElementById("packageSize").value.split(":");
+            console.log(adding);
             adding = adding + parseInt(array[1]);
+            console.log(adding);
+            console.log(array[1]);
             priceChanging = $('#priceChanging');
             priceChanging.text(adding);
         }
