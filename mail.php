@@ -352,7 +352,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             const array = document.getElementById("packageSize").value.split(":");
             adding = adding + parseInt(array[1]);
             priceChanging = $('#priceChanging');
-            // priceChanging.text(adding));
+            priceChanging.text(adding);
         }
     </script>
 
