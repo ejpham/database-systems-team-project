@@ -349,13 +349,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script type = "text/javascript">
         function updatePrice(){
             var adding = 0;
-            const array = document.getElementById("packageSize").value.split(":");
-            console.log(adding);
+            const array = document.getElementById("sizeSelector").value.split(":");
             adding = adding + parseInt(array[1]);
-            console.log(adding);
-            console.log(array[1]);
-            console.log(array[0]);
-            console.log(array);
             priceChanging = $('#priceChanging');
             priceChanging.text(adding);
         }
