@@ -47,8 +47,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $parts = trim($_POST['packageSize']);
         $arr = explode(":", $parts);
 
-        //if (trim($_POST["packageSize"]) == 0) $packSize_err = "Please make a size selection.";
-        //else $packSize = trim($_POST["packageSize"]);
+        if ($arr[1] == 0) $packSize_err = "Please make a size selection.";
+        else $packSize = $arr[0];
 
         if (trim($_POST["weightSelector"]) == 0) $weight_err = "Please make a weight selection.";
         else $weight = trim($_POST["weightSelector"]);
@@ -257,7 +257,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <span class="invalid-feedback d-block"><?php echo $packSpeed_err; ?></span>
                     </div>
 
-                    <div class="m-3" id = "packageSize" style="display: none;">
+                    <div class="m-3" id = "packageSizeSelector" style="display: none;">
                         <select class="form-select" aria-label="Default select example" type="text" name="packageSize" id="sizeSelector" onChange="updatePrice(this)">
                             <option value = "0:0">Select Package Size</option>
                             <option value="8 x 8 x 6:6">8 x 8 x 6</option>
@@ -347,10 +347,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <script type = "text/javascript">
         function updatePrice(input){
-            const array = input.value.split(":")
-            var adding = array[1];
+            var adding = 0;
+            const array = document.getElementById("packageSize").value.split(":")
+            adding = adding + parseInt(array[1]);
             priceChanging = $('#priceChanging');
-            priceChanging.text(parseInt(adding) + parseInt(document.getElementById("priceChanging").textContent));
+            priceChanging.text(adding));
         }
     </script>
 
