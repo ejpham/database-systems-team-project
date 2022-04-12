@@ -259,7 +259,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="m-3" id = "packageSize" style="display: none;">
-                        <select class="form-select" aria-label="Default select example" type="text" name="packageSize" id="sizeSelector" onChange="updatePrice(this)">
+                        <select class="form-select" aria-label="Default select example" type="text" name="packageSize" id="sizeSelector" onChange="updatePrice()">
                             <option value = "0:0">Select Package Size</option>
                             <option value="8 x 8 x 6:6">8 x 8 x 6</option>
                             <option value="8 x 8 x 8:7">8 x 8 x 8</option>
@@ -347,7 +347,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </script>
 
     <script type = "text/javascript">
-        function updatePrice(input){
+        function updatePrice(){
             let adding = 0;
             const array = document.getElementById("packageSize").value.split(":")
             console.log(adding);
