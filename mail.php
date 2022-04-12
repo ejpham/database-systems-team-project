@@ -346,8 +346,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         function updatePrice(input){
             var adding = input.value;
             priceChanging = $('#priceChanging');
-            console.log(priceChanging.textContent);
-            priceChanging.text(adding + priceChanging.textContent);
+            console.log(priceChanging);
+            priceChanging.text(adding + priceChanging);
         }
     </script>
 
