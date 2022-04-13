@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         else if (strlen(trim($_POST["cvv"])) > 4 || strlen(trim($_POST["cvv"])) < 3) $cvv_err = "Please enter a valid CVV";
         else $cvv = trim($_POST["cvv"]);
 
-        $price = intval(trim($_POST["finalPrice"]));
+        $price = trim($_POST["finalPrice"]);
     }
 }
 ?>
@@ -162,7 +162,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         echo $success;
                         echo $error;
                         echo $price;
-                        echo $weight;
                         if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
                         <div class="m-3">
                             <label class="form-label">Full Name</label>
@@ -406,7 +405,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="m-3" id="priceShow">
-                        <label class = "form-label">Price: <span id = "priceChanging" name = "finalPrice">0</span><label>
+                        <label>Price:</label>
+                        <input class = "form-label" id = "priceChanging" name = "finalPrice" value = "<?php echo $price; ?>" readonly>
                     </div>
 
                     <br />
@@ -439,10 +439,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         var customRange1_VAL = document.getElementById("weight").value;
         changeRange1Value = $('#changeRange1Value');
         changeRange1Value.text(customRange1_VAL);
-        if(document.getElementById("mailSelector").value == "Letter")
-            updatePriceLetter();
-        else(document.getElementById("mailSelector").value == "Package")
-            updatePricePackage();
     });
     </script>
 
@@ -505,8 +501,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 hideCardInfo();
             }
 
-            priceChanging = $('#priceChanging');
-            priceChanging.text(adding);
+            document.getElementById("priceChanging").value = adding;
         }
 
         function updatePriceLetter(){
@@ -522,8 +517,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 hideCardInfo();
             }
 
-            priceChanging = $('#priceChanging');
-            priceChanging.text(adding);
+            document.getElementById("priceChanging").value = adding;
         }
 
         function clearPrice(){
