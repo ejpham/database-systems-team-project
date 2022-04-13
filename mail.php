@@ -162,6 +162,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         echo $success;
                         echo $error;
                         echo $price;
+                        echo $weight;
                         if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
                         <div class="m-3">
                             <label class="form-label">Full Name</label>
