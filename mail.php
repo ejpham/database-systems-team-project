@@ -2,7 +2,7 @@
 session_start();
 require_once "db_conn_WebLogins.php";
 require_once "db_conn_PostalService.php";
-$weight = 0;
+$weight = $price = 0;
 $packSizeSelected = $packSpeedSelected = $lettSpeedSelected = "0:0";
 $name = $email = $mail_type = $address = $fromaddress = $state = $fromstate = $city = $fromcity = $cvv = $expDate = $cardnum = $recName = $lettSpeed = $packSize = $packSpeed = "";
 $name_err = $email_err = $mail_type_err = $state_err = $fromstate_err = $success = $error = $address_err = $fromaddress_err = $city_err = $fromcity_err = $cvv_err = $expDate_err = $cardnum_err = $recName_err = $lettSpeed_err = $packSize_err = $packSpeed_err = $weight_err = "";
@@ -99,6 +99,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty(trim($_POST["cvv"]))) $cvv_err = "Please enter a CVV";
         else if (strlen(trim($_POST["cvv"])) > 4 || strlen(trim($_POST["cvv"])) < 3) $cvv_err = "Please enter a valid CVV";
         else $cvv = trim($_POST["cvv"]);
+
+        $price = intval(trim($_POST["finalPrice"]));
     }
 }
 ?>
@@ -159,6 +161,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <?php
                         echo $success;
                         echo $error;
+                        echo $price;
                         if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
                         <div class="m-3">
                             <label class="form-label">Full Name</label>
@@ -333,8 +336,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <span class="invalid-feedback"><?php echo $city_err; ?></span>
                     </div>
 
-                    <br />
-
                     <div class="m-3">
                         <select class="form-select" type = "text" name = "mailtype" id = "mailSelector" onchange = "MailCheck(this);">
                             <option value = "">Select Mail Type</option>
@@ -404,7 +405,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="m-3" id="priceShow">
-                        <label class = "form-label">Price: <span id = "priceChanging">0</span><label>
+                        <label class = "form-label">Price: <span id = "priceChanging" name = "finalPrice">0</span><label>
                     </div>
 
                     <br />
