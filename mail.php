@@ -399,7 +399,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             const array2 = document.getElementById("packageSelector").value.split(":");
             adding = adding + parseInt(array2[1]);
 
-            adding = adding + parseInt(document.getElementById("changeRange1Value").textContent);
+            adding = adding + (parseInt(document.getElementById("changeRange1Value").textContent) / 10);
 
             if(parseInt(array[1]) > 0 && parseInt(array2[1]) > 0 && parseInt(document.getElementById("changeRange1Value").textContent) > 0){
                 showCardInfo();
