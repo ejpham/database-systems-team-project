@@ -401,9 +401,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             adding = adding + parseInt(document.getElementById("changeRange1Value").textContent);
 
-            console.log(array[1]);
-            console.log(array2[1]);
-            console.log(document.getElementById("changeRange1Value").textContent);
+            console.log(parseInt(array[1]));
+            console.log(parseInt(array2[1]));
+            console.log(parseInt(document.getElementById("changeRange1Value").textContent));
             if(parseInt(array[1]) > 0 && parseInt(array[2]) > 0 && parseInt(document.getElementById("changeRange1Value").textContent) > 0){
                 showCardInfo();
             }
