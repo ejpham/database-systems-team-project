@@ -405,7 +405,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="m-3" id="priceShow">
-                        <label class = "form-label">Price: <span id = "priceChanging" name = "finalPrice" value = "<?php echo $price; ?>">0</span><label>
+                        <label class = "form-label">Price: <span id = "priceChanging" name = "finalPrice">0</span><label>
                     </div>
 
                     <br />
@@ -438,6 +438,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         var customRange1_VAL = document.getElementById("weight").value;
         changeRange1Value = $('#changeRange1Value');
         changeRange1Value.text(customRange1_VAL);
+        updatePriceLetter();
     });
     </script>
 
