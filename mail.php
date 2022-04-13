@@ -374,6 +374,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 document.getElementById("ifPackage").style.display = "none";
                 document.getElementById("packageSize").style.display = "none";
                 document.getElementById("packageWeight").style.display = "none";
+                hideCardInfo();
                 clearPrice();
             }
         }
@@ -391,7 +392,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <script type = "text/javascript">
         function updatePricePackage(){
-            var adding = 0;
+            let adding = 0;
 
             const array = document.getElementById("sizeSelector").value.split(":");
             adding = adding + parseInt(array[1]);
@@ -413,7 +414,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         function updatePriceLetter(){
-            var adding = 0;
+            let adding = 0;
 
             const array = document.getElementById("letterSelector").value.split(":");
             adding = adding + parseInt(array[1]);
@@ -430,7 +431,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         function clearPrice(){
             priceChanging = $('#priceChanging');
-            priceChanging.text(0);
+            priceChanging.text("0");
         }
     </script>
 
