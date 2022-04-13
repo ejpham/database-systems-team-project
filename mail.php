@@ -3,7 +3,7 @@ session_start();
 require_once "db_conn_WebLogins.php";
 require_once "db_conn_PostalService.php";
 $weight = 0;
-$packSizeSelected = $packSpeedSelected = "0:0";
+$packSizeSelected = $packSpeedSelected = $lettSpeedSelected = "0:0";
 $name = $email = $mail_type = $address = $state = $city = $cardnum = $ccv = $expDate = $cardnum = $recName = $lettSpeed = $packSize = $packSpeed = "";
 $name_err = $email_err = $mail_type_err = $state_err = $success = $error = $address_err = $city_err = $ccv_err = $expDate_err = $cardnum_err = $recName_err = $lettSpeed_err = $packSize_err = $packSpeed_err = $weight_err = "";
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
@@ -43,6 +43,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty(trim($_POST["mailtype"]))) $mail_type_err = "Please make a mail type selection.";
         else $mail_type = trim($_POST["mailtype"]);
         
+
+        $parts = trim($_POST['letterSpeed']);
+        $lettSpeedSelected = $parts;
+        $arr = explode(":", $parts);
+
+        if ($arr[1] == 0) $lettSpeed_err = "Please make a letter speed selection.";
+        else $lettSpeed = $arr[0];
 
         $parts = trim($_POST['packageSpeed']);
         $packSpeedSelected = $parts;
@@ -158,7 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="input-group mb-3">
-                        <select class="form-select" aria-label="Default select example" type = "text" id = "stateSelector" name = "state">
+                        <select class="form-select" type = "text" id = "stateSelector" name = "state">
                             <option value = "">State</option>
                             <option value="AL">AL</option>
                             <option value="AK">AK</option>
@@ -225,7 +232,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <br />
 
                     <div class="m-3">
-                        <select class="form-select" aria-label="Default select example" type = "text" name = "mailtype" id = "mailSelector" onchange = "MailCheck(this);">
+                        <select class="form-select" type = "text" name = "mailtype" id = "mailSelector" onchange = "MailCheck(this);">
                             <option value = "">Select Mail Type</option>
                             <option value="Letter">Letter</option>
                             <option value="Package">Package</option>
@@ -239,21 +246,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="m-3" id = "ifLetter" style="display: none;">
-                        <select class="form-select" aria-label="Default select example" type = "text" name = "letterSpeed" id = "letterSelector">
-                            <option value = "">Select Letter Speed</option>
-                            <option value="Express">Premium</option>
-                            <option value="Fast">Regular</option>
+                        <select class="form-select" type = "text" name = "letterSpeed" id = "letterSelector" onChange="updatePriceLetter();">
+                            <option value = "0:0">Select Letter Speed</option>
+                            <option value="Express:6">Premium</option>
+                            <option value="Fast:3">Regular</option>
                         </select>
 
                         <script type="text/javascript">
-                            document.getElementById('letterSelector').value = "<?php echo $lettSpeed; ?>";
+                            document.getElementById('letterSelector').value = "<?php echo $lettSpeedSelected; ?>";
                         </script>
 
                         <span class="invalid-feedback d-block"><?php echo $lettSpeed_err; ?></span>
                     </div>
 
                     <div class="m-3" id = "ifPackage" style="display: none;">
-                        <select class="form-select" aria-label="Default select example" type = "text" name = "packageSpeed" id = "packageSelector" onChange="updatePricePackage();">
+                        <select class="form-select" type = "text" name = "packageSpeed" id = "packageSelector" onChange="updatePricePackage();">
                             <option value = "0:0">Select Package Speed</option>
                             <option value="Express:6">Premium</option>
                             <option value="Fast:3">Regular</option>
@@ -267,7 +274,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="m-3" id = "packageSize" style="display: none;">
-                        <select class="form-select" aria-label="Default select example" type="text" name="packageSize" id="sizeSelector" onChange="updatePricePackage();">
+                        <select class="form-select" type="text" name="packageSize" id="sizeSelector" onChange="updatePricePackage();">
                             <option value = "0:0">Select Package Size</option>
                             <option value="8 x 8 x 6:6">8 x 8 x 6</option>
                             <option value="8 x 8 x 8:7">8 x 8 x 8</option>
@@ -337,12 +344,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 document.getElementById("ifPackage").style.display = "none";
                 document.getElementById("packageSize").style.display = "none";
                 document.getElementById("packageWeight").style.display = "none";
+                updatePriceLetter();
             }
             else if (that.value == "Package") {
                 document.getElementById("ifPackage").style.display = "block";
                 document.getElementById("packageSize").style.display = "block";
                 document.getElementById("packageWeight").style.display = "block";
                 document.getElementById("ifLetter").style.display = "none";
+                updatePricePackage();
             }
             else {
                 document.getElementById("ifLetter").style.display = "none";
@@ -366,6 +375,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             adding = adding + parseInt(array2[1]);
 
             adding = adding + parseInt(document.getElementById("changeRange1Value").textContent);
+
+            priceChanging = $('#priceChanging');
+            priceChanging.text(adding);
+        }
+
+        function updatePriceLetter(){
+            var adding = 0;
+
+            const array = document.getElementById("letterSelector").value.split(":");
+            adding = adding + parseInt(array[1]);
 
             priceChanging = $('#priceChanging');
             priceChanging.text(adding);
