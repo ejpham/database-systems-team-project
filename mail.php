@@ -194,7 +194,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <div class="m-3">
                         <label class="form-label">From Address</label>
-                        <input type="text" name="FromAddress" class="form-control <?php echo (!empty($fromaddress_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $fromaddress; ?>" id="inputFromAddress" placeholder="From Address">
+                        <input type="text" name="fromAddress" class="form-control <?php echo (!empty($fromaddress_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $fromaddress; ?>" id="inputFromAddress" placeholder="From Address">
                         <span class="invalid-feedback"><?php echo $fromaddress_err; ?></span>
                     </div>
 
