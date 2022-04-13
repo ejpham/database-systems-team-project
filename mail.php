@@ -77,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty(trim($_POST["expDate"]))) $expDate_err = "Please enter a valid Expiration Date.";
         else if (strlen(trim($_POST["expDate"])) != 5) $expDate_err = "Please enter a valid Expiration Date.";
         else{
-            if(intval(substr($_POST["expDate"])), 0, 2) > 12)
+            if(intval(substr($_POST["expDate"])), 0, 1) > 12)
                 $expDate_err = "Please enter a valid month";/*
             else if(intval(substr($_POST["expDate"]), 3, 2) < 22)
                 $expDate_err = "Please enter a valid year";*/
