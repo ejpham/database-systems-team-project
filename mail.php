@@ -438,7 +438,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         var customRange1_VAL = document.getElementById("weight").value;
         changeRange1Value = $('#changeRange1Value');
         changeRange1Value.text(customRange1_VAL);
-        updatePriceLetter();
+        if(document.getElementById("mailSelector").value == "Letter")
+            updatePriceLetter();
+        else(document.getElementById("mailSelector").value == "Package")
+            updatePricePackage();
     });
     </script>
 
