@@ -450,6 +450,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 document.getElementById("ifPackage").style.display = "none";
                 document.getElementById("packageSizeSelector").style.display = "none";
                 document.getElementById("packageWeight").style.display = "none";
+                console.log("HERE");
                 updatePriceLetter();
             }
             else if (that.value == "Package") {
