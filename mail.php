@@ -451,6 +451,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 document.getElementById("packageSizeSelector").style.display = "none";
                 document.getElementById("packageWeight").style.display = "none";
                 console.log("HERE");
+                document.getElementById('letterSelector').value = "<?php echo $lettSpeedSelected; ?>";
                 updatePriceLetter();
             }
             else if (that.value == "Package") {
@@ -458,6 +459,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 document.getElementById("packageSizeSelector").style.display = "block";
                 document.getElementById("packageWeight").style.display = "block";
                 document.getElementById("ifLetter").style.display = "none";
+                document.getElementById('packageSelector').value = "<?php echo $packSpeedSelected; ?>";
+                document.getElementById('sizeSelector').value = "<?php echo $packSizeSelected; ?>";
                 updatePricePackage();
             }
             else {
