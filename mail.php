@@ -79,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         else{
             if(intval(substr($_POST["expDate"])), 0, 2) > 12)
                 $expDate_err = "Please enter a valid month";
-            else if(intval(substr($_POST["expDate"])) < 22)
+            else if(intval(substr($_POST["expDate"]), 3, 2) < 22)
                 $expDate_err = "Please enter a valid year";
             else
                 $expDate = trim($_POST["expDate"]);
