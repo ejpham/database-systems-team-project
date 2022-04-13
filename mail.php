@@ -71,8 +71,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
         $cardnum = str_replace(' ','',$cardnum);
-        if (empty(trim($_POST["cardNumbers"]))) $recName_err = "Please enter a valid Card Number.";
-        else if (strlen(trim($_POST["cardNumbers"])) != 16) $recName_err = "Please enter a valid Card Number.";
+        if (empty(trim($_POST["cardNumbers"]))) $cardnum_err = "Please enter a valid Card Number.";
+        else if (strlen(trim($_POST["cardNumbers"])) != 16) $cardnum_err = "Please enter a valid Card Number.";
         else $cardnum = trim($_POST["cardNumbers"]);
 
         if (empty(trim($_POST["expDate"]))) $expDate_err = "Please enter a valid Expiration Date.";
