@@ -352,6 +352,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </script>
 
     <script type = "text/javascript">
+
+
         function MailCheck(that) {
             if(that.value == "Letter"){
                 document.getElementById("ifLetter").style.display = "block";
@@ -373,7 +375,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 document.getElementById("packageSize").style.display = "none";
                 document.getElementById("packageWeight").style.display = "none";
                 clearPrice();
-                hideCardInfo();
             }
         }
 
