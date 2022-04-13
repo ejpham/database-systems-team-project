@@ -420,7 +420,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             const array = document.getElementById("letterSelector").value.split(":");
             adding = adding + parseInt(array[1]);
             console.log(adding);
-            consoloe.log(array[1]);
             if(adding > 0){
                 showCardInfo();
             }
@@ -428,14 +427,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 hideCardInfo();
             }
 
+            console.log(adding);
+
             priceChanging = $('#priceChanging');
             priceChanging.text(adding);
         }
 
         function clearPrice(){
-            let number = 0;
             priceChanging = $('#priceChanging');
-            priceChanging.text(number);
+            priceChanging.text(0);
         }
     </script>
 
