@@ -69,7 +69,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (trim($_POST["weightSelector"]) == 0) $weight_err = "Please make a weight selection.";
         else $weight = trim($_POST["weightSelector"]);
 
-        $cardnum = preg_replace('/\s+/', '', $cardnum);
         if (empty(trim($_POST["cardNumbers"]))) $cardnum_err = "Please enter a valid Card Number.";
         else if (strlen(trim($_POST["cardNumbers"])) != 16) $cardnum_err = "Please enter a valid Card Number.";
         else $cardnum = trim($_POST["cardNumbers"]);
@@ -320,7 +319,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <div class="m-3" id = "cardInfo" style="display: block;">
                         <label class="form-label">Card Information</label>
-                        <input type="text" name="cardNumbers" class="form-control <?php echo (!empty($cardnum_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $cardnum; ?>" id="cardnum" placeholder="0000 0000 0000 0000">
+                        <input type="text" name="cardNumbers" class="form-control <?php echo (!empty($cardnum_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $cardnum; ?>" id="cardnum" placeholder="0000000000000000" maxlength="16">
                         <span class="invalid-feedback"><?php echo $cardnum_err; ?></span>
 
                         <span class="input-group-text"></span>
