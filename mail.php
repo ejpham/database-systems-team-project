@@ -401,13 +401,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             adding = adding + parseInt(document.getElementById("changeRange1Value").textContent);
 
-            console.log(array[1]);
-            console.log(array2[1]);
-            console.log(document.getElementById("changeRange1Value").textContent);
-            if(parseInt(array[1]) > 0 && parseInt(array[2]) > 0 && parseInt(document.getElementById("changeRange1Value").textContent) > 0)
+            if(parseInt(array[1]) > 0 && parseInt(array[2]) > 0 && parseInt(document.getElementById("changeRange1Value").textContent) > 0){
                 showCardInfo();
-            else
+            }
+            else{
                 hideCardInfo();
+            }
 
             priceChanging = $('#priceChanging');
             priceChanging.text(adding);
@@ -418,11 +417,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             const array = document.getElementById("letterSelector").value.split(":");
             adding = adding + parseInt(array[1]);
-            console.log(adding);
-            if(adding > 0)
+            if(adding > 0){
                 showCardInfo();
-            else
+            }
+            else{
                 hideCardInfo();
+            }
 
             priceChanging = $('#priceChanging');
             priceChanging.text(adding);
