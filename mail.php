@@ -69,8 +69,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (trim($_POST["weightSelector"]) == 0) $weight_err = "Please make a weight selection.";
         else $weight = trim($_POST["weightSelector"]);
 
-
+        console.log($cardnum);
         $cardnum = str_replace(' ','',$cardnum);
+        console.log($cardnum);
         if (empty(trim($_POST["cardNumbers"]))) $cardnum_err = "Please enter a valid Card Number.";
         else if (strlen(trim($_POST["cardNumbers"])) != 16) $cardnum_err = "Please enter a valid Card Number.";
         else $cardnum = trim($_POST["cardNumbers"]);
