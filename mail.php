@@ -373,6 +373,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 document.getElementById("packageSize").style.display = "none";
                 document.getElementById("packageWeight").style.display = "none";
                 clearPrice();
+                hideCardInfo();
             }
         }
 
