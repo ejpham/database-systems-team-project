@@ -374,6 +374,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 document.getElementById("ifPackage").style.display = "none";
                 document.getElementById("packageSize").style.display = "none";
                 document.getElementById("packageWeight").style.display = "none";
+                console.log("main hide");
                 hideCardInfo();
                 clearPrice();
             }
@@ -406,6 +407,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 showCardInfo();
             }
             else{
+                console.log("package hide");
                 hideCardInfo();
             }
 
@@ -419,15 +421,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             const array = document.getElementById("letterSelector").value.split(":");
             adding = adding + parseInt(array[1]);
-            console.log(adding);
             if(adding > 0){
                 showCardInfo();
             }
             else{
+                console.log("letter hide");
                 hideCardInfo();
             }
-
-            console.log(adding);
 
             priceChanging = $('#priceChanging');
             priceChanging.text(adding);
