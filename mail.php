@@ -25,9 +25,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (trim($_POST["mailtype"]) == "Select Mail Type") $mail_error = "Please select mail type.";
         else $mail_type = trim($_POST["mailtype"]);
         
-        if (empty(trim($_POST["address"]))) $address_err = "Please enter a valid address.";
-        else if (strlen(trim($_POST["address"])) > 75) $address_err = "Address can be no longer than 75 characters.";
-        else $address = trim($_POST["address"]);
+        if (empty(trim($_POST["Address"]))) $address_err = "Please enter a valid address.";
+        else if (strlen(trim($_POST["Address"])) > 75) $address_err = "Address can be no longer than 75 characters.";
+        else $address = trim($_POST["Address"]);
         
         if (empty(trim($_POST["state"]))) $state_err = "Please make a state selection.";
         else $state = trim($_POST["state"]);
@@ -287,7 +287,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <span class="invalid-feedback d-block"><?php echo $packSpeed_err; ?></span>
                     </div>
 
-                    <div class="m-3" id = "packageSize" style="display: none;">
+                    <div class="m-3" id = "packageSizeSelector" style="display: none;">
                         <select class="form-select" type="text" name="packageSize" id="sizeSelector" onChange="updatePricePackage();">
                             <option value = "0:0">Select Package Size</option>
                             <option value="8 x 8 x 6:6">8 x 8 x 6</option>
@@ -357,13 +357,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if(that.value == "Letter"){
                 document.getElementById("ifLetter").style.display = "block";
                 document.getElementById("ifPackage").style.display = "none";
-                document.getElementById("packageSize").style.display = "none";
+                document.getElementById("packageSizeSelector").style.display = "none";
                 document.getElementById("packageWeight").style.display = "none";
                 updatePriceLetter();
             }
             else if (that.value == "Package") {
                 document.getElementById("ifPackage").style.display = "block";
-                document.getElementById("packageSize").style.display = "block";
+                document.getElementById("packageSizeSelector").style.display = "block";
                 document.getElementById("packageWeight").style.display = "block";
                 document.getElementById("ifLetter").style.display = "none";
                 updatePricePackage();
@@ -371,7 +371,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             else {
                 document.getElementById("ifLetter").style.display = "none";
                 document.getElementById("ifPackage").style.display = "none";
-                document.getElementById("packageSize").style.display = "none";
+                document.getElementById("packageSizeSelector").style.display = "none";
                 document.getElementById("packageWeight").style.display = "none";
                 hideCardInfo();
                 clearPrice();
