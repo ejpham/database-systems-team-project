@@ -4,8 +4,8 @@ require_once "db_conn_WebLogins.php";
 require_once "db_conn_PostalService.php";
 $weight = 0;
 $packSizeSelected = $packSpeedSelected = $lettSpeedSelected = "0:0";
-$name = $email = $mail_type = $address = $state = $city = $cardnum = $ccv = $expDate = $cardnum = $recName = $lettSpeed = $packSize = $packSpeed = "";
-$name_err = $email_err = $mail_type_err = $state_err = $success = $error = $address_err = $city_err = $ccv_err = $expDate_err = $cardnum_err = $recName_err = $lettSpeed_err = $packSize_err = $packSpeed_err = $weight_err = "";
+$name = $email = $mail_type = $address = $state = $city = $cardnum = $cvv = $expDate = $cardnum = $recName = $lettSpeed = $packSize = $packSpeed = "";
+$name_err = $email_err = $mail_type_err = $state_err = $success = $error = $address_err = $city_err = $cvv_err = $expDate_err = $cardnum_err = $recName_err = $lettSpeed_err = $packSize_err = $packSpeed_err = $weight_err = "";
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     $email = $_SESSION["email"];
     $grab_name_sql = "SELECT name FROM WebLogins.users WHERE email='$email'";
@@ -68,6 +68,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (trim($_POST["weightSelector"]) == 0) $weight_err = "Please make a weight selection.";
         else $weight = trim($_POST["weightSelector"]);
+
+
+        $cardnum = str_replace(' ','',$cardnum);
+        if (empty(trim($_POST["cardNumbers"]))) $recName_err = "Please enter a valid Card Number.";
+        else if (strlen(trim($_POST["cardNumbers"])) != 16) $recName_err = "Please enter a valid Card Number.";
+        else $cardnum = trim($_POST["cardNumbers"]);
+
+        if (empty(trim($_POST["expDate"]))) $expDate_err = "Please enter a valid Expiration Date.";
+        else if (strlen(trim($_POST["expDate"])) != 5) $expDate_err = "Please enter a valid Expiration Date.";
+        else $expDate = trim($_POST["expDate"]);
+
+        if (empty(trim($_POST["cvv"]))) $cvv_err = "Please enter a valid Expiration Date.";
+        else if (strlen(trim($_POST["cvv"])) != 5) $cvv_err = "Please enter a valid Expiration Date.";
+        else $cvv = trim($_POST["cvv"]);
     }
 }
 ?>
@@ -311,12 +325,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <span class="invalid-feedback"><?php echo $cardnum_err; ?></span>
 
                         <span class="input-group-text"></span>
-                        <input type="text" name="expDate" class="form-control <?php echo (!empty($expDate_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $expDate; ?>" id="inputexpDate" placeholder="Expiration Date">
+                        <input type="text" name="expDate" class="form-control <?php echo (!empty($expDate_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $expDate; ?>" maxlength="5" id="inputexpDate" placeholder="Expiration Date: 00/00">
                         <span class="invalid-feedback"><?php echo $expDate_err; ?></span>
 
                         <span class="input-group-text"></span>
-                        <input type="text" name="ccv" class="form-control <?php echo (!empty($ccv_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $ccv; ?>" id="inputCCV" placeholder="CCV">
-                        <span class="invalid-feedback"><?php echo $ccv_err; ?></span>
+                        <input type="text" name="cvv" class="form-control <?php echo (!empty($ccv_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $cvv; ?>" id="inputCCV" placeholder="CVV: 000">
+                        <span class="invalid-feedback"><?php echo $cvv_err; ?></span>
                     </div>
 
                     <div class="m-3">
@@ -358,7 +372,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 document.getElementById("ifPackage").style.display = "none";
                 document.getElementById("packageSize").style.display = "none";
                 document.getElementById("packageWeight").style.display = "none";
+                clearPrice();
             }
+        }
+
+        function showCardInfo(){
+            document.getElementById("cardInfo").style.display = "block";
+        }
+
+        function hideCardInfo(){
+            document.getElementById("cardInfo").style.display = "none";
         }
 
         window.onload = MailCheck(document.getElementById("mailSelector"));
@@ -376,6 +399,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             adding = adding + parseInt(document.getElementById("changeRange1Value").textContent);
 
+            if(parseInt(array[1]) > 0 && parseInt(array[2]) > 0 && parseInt(document.getElementById("changeRange1Value").textContent) > 0)
+                showCardInfo();
+            else
+                hideCardInfo();
+
             priceChanging = $('#priceChanging');
             priceChanging.text(adding);
         }
@@ -386,8 +414,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             const array = document.getElementById("letterSelector").value.split(":");
             adding = adding + parseInt(array[1]);
 
+            if(adding > 0)
+                showCardInfo();
+            else
+                hideCardInfo();
+
             priceChanging = $('#priceChanging');
             priceChanging.text(adding);
+        }
+
+        function clearPrice(){
+            priceChanging = $('#priceChanging');
+            priceChanging.text(0);
         }
     </script>
 
