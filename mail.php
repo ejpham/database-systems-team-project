@@ -21,87 +21,86 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty(trim($_POST["email"]))) $email_err = "Please enter a valid e-mail address.";
         else if (strlen(trim($_POST["email"])) > 75) $email_err = "E-mail address can be no longer than 75 characters.";
         else $email = trim($_POST["email"]);
-        
-        if (trim($_POST["mailtype"]) == "Select Mail Type") $mail_error = "Please select mail type.";
-        else $mail_type = trim($_POST["mailtype"]);
-        
-        if (empty(trim($_POST["Address"]))) $address_err = "Please enter a valid address.";
-        else if (strlen(trim($_POST["Address"])) > 75) $address_err = "Address can be no longer than 75 characters.";
-        else $address = trim($_POST["Address"]);
-
-        if (empty(trim($_POST["fromAddress"]))) $fromaddress_err = "Please enter a valid address.";
-        else if (strlen(trim($_POST["fromAddress"])) > 75) $fromaddress_err = "Address can be no longer than 75 characters.";
-        else $fromaddress = trim($_POST["fromAddress"]);
-        
-        if (empty(trim($_POST["state"]))) $state_err = "Please make a state selection.";
-        else $state = trim($_POST["state"]);
-
-        if (empty(trim($_POST["fromstate"]))) $fromstate_err = "Please make a state selection.";
-        else $fromstate = trim($_POST["fromstate"]);
-        
-        if (empty(trim($_POST["city"]))) $city_err = "Please enter a valid city.";
-        else if (strlen(trim($_POST["city"])) > 75) $city_err = "City can be no longer than 75 characters.";
-        else $city = trim($_POST["city"]);
-
-        if (empty(trim($_POST["fromcity"]))) $fromcity_err = "Please enter a valid city.";
-        else if (strlen(trim($_POST["fromcity"])) > 75) $fromcity_err = "City can be no longer than 75 characters.";
-        else $fromcity = trim($_POST["fromcity"]);
-        
-        if (empty(trim($_POST["receiveName"]))) $recName_err = "Please enter a name.";
-        else if (strlen(trim($_POST["receiveName"])) > 75) $recName_err = "Name can be no longer than 75 characters.";
-        else $recName = trim($_POST["receiveName"]);
-        
-        if (empty(trim($_POST["mailtype"]))) $mail_type_err = "Please make a mail type selection.";
-        else $mail_type = trim($_POST["mailtype"]);
-        
-
-        $parts = trim($_POST['letterSpeed']);
-        $lettSpeedSelected = $parts;
-        $arr = explode(":", $parts);
-
-        if ($arr[1] == 0) $lettSpeed_err = "Please make a letter speed selection.";
-        else $lettSpeed = $arr[0];
-
-        $parts = trim($_POST['packageSpeed']);
-        $packSpeedSelected = $parts;
-        $arr = explode(":", $parts);
-
-        if ($arr[1] == 0) $packSpeed_err = "Please make a package speed selection.";
-        else $packSpeed = $arr[0];
-        
-
-        $parts = trim($_POST['packageSize']);
-        $packSizeSelected = $parts;
-        $arr = explode(":", $parts);
-
-        if ($arr[1] == 0) $packSize_err = "Please make a size selection.";
-        else $packSize = $arr[0];
-
-        if (trim($_POST["weightSelector"]) == 0) $weight_err = "Please make a weight selection.";
-        else $weight = trim($_POST["weightSelector"]);
-
-        if (empty(trim($_POST["cardNumbers"]))) $cardnum_err = "Please enter a valid Card Number.";
-        else if (strlen(trim($_POST["cardNumbers"])) != 16) $cardnum_err = "Please enter a valid Card Number.";
-        else $cardnum = trim($_POST["cardNumbers"]);
-
-
-        if (empty(trim($_POST["expDate"]))) $expDate_err = "Please enter a valid Expiration Date.";
-        else if (strlen(trim($_POST["expDate"])) != 5) $expDate_err = "Please enter a valid Expiration Date.";
-        else{
-            if(intval(substr($_POST["expDate"], 0, 2)) > 12)
-                $expDate_err = "Please enter a valid month";
-            else if(intval(substr($_POST["expDate"], 3, 2)) < 22)
-                $expDate_err = "Please enter a valid year";
-            else
-                $expDate = trim($_POST["expDate"]);
-        }
-
-        if (empty(trim($_POST["cvv"]))) $cvv_err = "Please enter a CVV";
-        else if (strlen(trim($_POST["cvv"])) > 4 || strlen(trim($_POST["cvv"])) < 3) $cvv_err = "Please enter a valid CVV";
-        else $cvv = trim($_POST["cvv"]);
-
-        $price = trim($_POST["finalPrice"]);
     }
+
+    if (trim($_POST["mailtype"]) == "Select Mail Type") $mail_error = "Please select mail type.";
+    else $mail_type = trim($_POST["mailtype"]);
+        
+    if (empty(trim($_POST["Address"]))) $address_err = "Please enter a valid address.";
+    else if (strlen(trim($_POST["Address"])) > 75) $address_err = "Address can be no longer than 75 characters.";
+    else $address = trim($_POST["Address"]);
+
+    if (empty(trim($_POST["fromAddress"]))) $fromaddress_err = "Please enter a valid address.";
+    else if (strlen(trim($_POST["fromAddress"])) > 75) $fromaddress_err = "Address can be no longer than 75 characters.";
+    else $fromaddress = trim($_POST["fromAddress"]);
+        
+    if (empty(trim($_POST["state"]))) $state_err = "Please make a state selection.";
+    else $state = trim($_POST["state"]);
+
+    if (empty(trim($_POST["fromstate"]))) $fromstate_err = "Please make a state selection.";
+    else $fromstate = trim($_POST["fromstate"]);
+        
+    if (empty(trim($_POST["city"]))) $city_err = "Please enter a valid city.";
+    else if (strlen(trim($_POST["city"])) > 75) $city_err = "City can be no longer than 75 characters.";
+    else $city = trim($_POST["city"]);
+
+    if (empty(trim($_POST["fromcity"]))) $fromcity_err = "Please enter a valid city.";
+    else if (strlen(trim($_POST["fromcity"])) > 75) $fromcity_err = "City can be no longer than 75 characters.";
+    else $fromcity = trim($_POST["fromcity"]);
+        
+    if (empty(trim($_POST["receiveName"]))) $recName_err = "Please enter a name.";
+    else if (strlen(trim($_POST["receiveName"])) > 75) $recName_err = "Name can be no longer than 75 characters.";
+    else $recName = trim($_POST["receiveName"]);
+        
+    if (empty(trim($_POST["mailtype"]))) $mail_type_err = "Please make a mail type selection.";
+    else $mail_type = trim($_POST["mailtype"]);
+        
+
+    $parts = trim($_POST['letterSpeed']);
+    $lettSpeedSelected = $parts;
+    $arr = explode(":", $parts);
+
+    if ($arr[1] == 0) $lettSpeed_err = "Please make a letter speed selection.";
+    else $lettSpeed = $arr[0];
+
+    $parts = trim($_POST['packageSpeed']);
+    $packSpeedSelected = $parts;
+    $arr = explode(":", $parts);
+
+    if ($arr[1] == 0) $packSpeed_err = "Please make a package speed selection.";
+    else $packSpeed = $arr[0];
+        
+
+    $parts = trim($_POST['packageSize']);
+    $packSizeSelected = $parts;
+    $arr = explode(":", $parts);
+
+    if ($arr[1] == 0) $packSize_err = "Please make a size selection.";
+    else $packSize = $arr[0];
+
+    if (trim($_POST["weightSelector"]) == 0) $weight_err = "Please make a weight selection.";
+    else $weight = trim($_POST["weightSelector"]);
+
+    if (empty(trim($_POST["cardNumbers"]))) $cardnum_err = "Please enter a valid Card Number.";
+    else if (strlen(trim($_POST["cardNumbers"])) != 16) $cardnum_err = "Please enter a valid Card Number.";
+    else $cardnum = trim($_POST["cardNumbers"]);
+
+    if (empty(trim($_POST["expDate"]))) $expDate_err = "Please enter a valid Expiration Date.";
+    else if (strlen(trim($_POST["expDate"])) != 5) $expDate_err = "Please enter a valid Expiration Date.";
+    else{
+        if(intval(substr($_POST["expDate"], 0, 2)) > 12)
+            $expDate_err = "Please enter a valid month";
+        else if(intval(substr($_POST["expDate"], 3, 2)) < 22)
+            $expDate_err = "Please enter a valid year";
+         else
+            $expDate = trim($_POST["expDate"]);
+    }
+
+    if (empty(trim($_POST["cvv"]))) $cvv_err = "Please enter a CVV";
+    else if (strlen(trim($_POST["cvv"])) > 4 || strlen(trim($_POST["cvv"])) < 3) $cvv_err = "Please enter a valid CVV";
+    else $cvv = trim($_POST["cvv"]);
+
+    $price = trim($_POST["finalPrice"]);
 }
 ?>
 
@@ -406,7 +405,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <div class="m-3" id="priceShow">
                         <label>Price:</label>
-                        <input class = "form-label" id = "priceChanging" name = "finalPrice" value = "<?php echo $price; ?>" readonly>
+                        <input class = "form-label" id = "priceChanging" name = "finalPrice" value = "<?php echo $price; ?>" disabled>
                     </div>
 
                     <br />
