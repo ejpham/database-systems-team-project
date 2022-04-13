@@ -4,7 +4,7 @@ require_once "db_conn_WebLogins.php";
 require_once "db_conn_PostalService.php";
 $weight = 0;
 $packSizeSelected = $packSpeedSelected = $lettSpeedSelected = "0:0";
-$name = $email = $mail_type = $address = $state = $city = $cardnum = $cvv = $expDate = $cardnum = $recName = $lettSpeed = $packSize = $packSpeed = "";
+$name = $email = $mail_type = $address = $state = $city = $cvv = $expDate = $cardnum = $recName = $lettSpeed = $packSize = $packSpeed = "";
 $name_err = $email_err = $mail_type_err = $state_err = $success = $error = $address_err = $city_err = $cvv_err = $expDate_err = $cardnum_err = $recName_err = $lettSpeed_err = $packSize_err = $packSpeed_err = $weight_err = "";
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     $email = $_SESSION["email"];
@@ -69,9 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (trim($_POST["weightSelector"]) == 0) $weight_err = "Please make a weight selection.";
         else $weight = trim($_POST["weightSelector"]);
 
-        console.log($cardnum);
-        $cardnum = str_replace(' ','',$cardnum);
-        console.log($cardnum);
+        $cardnum = preg_replace('/\s+/', '', $cardnum);
         if (empty(trim($_POST["cardNumbers"]))) $cardnum_err = "Please enter a valid Card Number.";
         else if (strlen(trim($_POST["cardNumbers"])) != 16) $cardnum_err = "Please enter a valid Card Number.";
         else $cardnum = trim($_POST["cardNumbers"]);
