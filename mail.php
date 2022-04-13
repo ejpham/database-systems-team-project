@@ -4,8 +4,8 @@ require_once "db_conn_WebLogins.php";
 require_once "db_conn_PostalService.php";
 $weight = 0;
 $packSizeSelected = $packSpeedSelected = $lettSpeedSelected = "0:0";
-$name = $email = $mail_type = $address = $state = $city = $cvv = $expDate = $cardnum = $recName = $lettSpeed = $packSize = $packSpeed = "";
-$name_err = $email_err = $mail_type_err = $state_err = $success = $error = $address_err = $city_err = $cvv_err = $expDate_err = $cardnum_err = $recName_err = $lettSpeed_err = $packSize_err = $packSpeed_err = $weight_err = "";
+$name = $email = $mail_type = $address = $fromaddress = $state = $fromstate = $city = $fromcity = $cvv = $expDate = $cardnum = $recName = $lettSpeed = $packSize = $packSpeed = "";
+$name_err = $email_err = $mail_type_err = $state_err = $fromstate_err = $success = $error = $address_err = $fromaddress_err = $city_err = $fromcity_err = $cvv_err = $expDate_err = $cardnum_err = $recName_err = $lettSpeed_err = $packSize_err = $packSpeed_err = $weight_err = "";
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     $email = $_SESSION["email"];
     $grab_name_sql = "SELECT name FROM WebLogins.users WHERE email='$email'";
@@ -28,13 +28,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty(trim($_POST["Address"]))) $address_err = "Please enter a valid address.";
         else if (strlen(trim($_POST["Address"])) > 75) $address_err = "Address can be no longer than 75 characters.";
         else $address = trim($_POST["Address"]);
+
+        if (empty(trim($_POST["fromAddress"]))) $fromaddress_err = "Please enter a valid address.";
+        else if (strlen(trim($_POST["fromAddress"])) > 75) $fromaddress_err = "Address can be no longer than 75 characters.";
+        else $fromaddress = trim($_POST["fromAddress"]);
         
         if (empty(trim($_POST["state"]))) $state_err = "Please make a state selection.";
         else $state = trim($_POST["state"]);
+
+        if (empty(trim($_POST["fromstate"]))) $fromstate_err = "Please make a state selection.";
+        else $fromstate = trim($_POST["fromstate"]);
         
         if (empty(trim($_POST["city"]))) $city_err = "Please enter a valid city.";
         else if (strlen(trim($_POST["city"])) > 75) $city_err = "City can be no longer than 75 characters.";
         else $city = trim($_POST["city"]);
+
+        if (empty(trim($_POST["fromcity"]))) $fromcity_err = "Please enter a valid city.";
+        else if (strlen(trim($_POST["fromcity"])) > 75) $fromcity_err = "City can be no longer than 75 characters.";
+        else $fromcity = trim($_POST["fromcity"]);
         
         if (empty(trim($_POST["receiveName"]))) $recName_err = "Please enter a name.";
         else if (strlen(trim($_POST["receiveName"])) > 75) $recName_err = "Name can be no longer than 75 characters.";
@@ -177,6 +188,79 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <input type="text" name="receiveName" class="form-control <?php echo (!empty($recName_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $recName; ?>" id="inputRecName" placeholder="Receiver's Full Name">
                         <span class="invalid-feedback"><?php echo $recName_err; ?></span>
                     </div>
+
+                    <div class="m-3">
+                        <label class="form-label">From Address</label>
+                        <input type="text" name="FromAddress" class="form-control <?php echo (!empty($fromaddress_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $fromaddress; ?>" id="inputFromAddress" placeholder="From Address">
+                        <span class="invalid-feedback"><?php echo $fromaddress_err; ?></span>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <select class="form-select" type = "text" id = "fromstateSelector" name = "fromstate">
+                            <option value = "">State</option>
+                            <option value="AL">AL</option>
+                            <option value="AK">AK</option>
+                            <option value="AR">AR</option>	
+                            <option value="AZ">AZ</option>
+                            <option value="CA">CA</option>
+                            <option value="CO">CO</option>
+                            <option value="CT">CT</option>
+                            <option value="DC">DC</option>
+                            <option value="DE">DE</option>
+                            <option value="FL">FL</option>
+                            <option value="GA">GA</option>
+                            <option value="HI">HI</option>
+                            <option value="IA">IA</option>
+                            <option value="ID">ID</option>
+                            <option value="IL">IL</option>
+                            <option value="IN">IN</option>
+                            <option value="KS">KS</option>
+                            <option value="KY">KY</option>
+                            <option value="LA">LA</option>
+                            <option value="MA">MA</option>
+                            <option value="MD">MD</option>
+                            <option value="ME">ME</option>
+                            <option value="MI">MI</option>
+                            <option value="MN">MN</option>
+                            <option value="MO">MO</option>	
+                            <option value="MS">MS</option>
+                            <option value="MT">MT</option>
+                            <option value="NC">NC</option>	
+                            <option value="NE">NE</option>
+                            <option value="NH">NH</option>
+                            <option value="NJ">NJ</option>
+                            <option value="NM">NM</option>			
+                            <option value="NV">NV</option>
+                            <option value="NY">NY</option>
+                            <option value="ND">ND</option>
+                            <option value="OH">OH</option>
+                            <option value="OK">OK</option>
+                            <option value="OR">OR</option>
+                            <option value="PA">PA</option>
+                            <option value="RI">RI</option>
+                            <option value="SC">SC</option>
+                            <option value="SD">SD</option>
+                            <option value="TN">TN</option>
+                            <option value="TX">TX</option>
+                            <option value="UT">UT</option>
+                            <option value="VT">VT</option>
+                            <option value="VA">VA</option>
+                            <option value="WA">WA</option>
+                            <option value="WI">WI</option>	
+                            <option value="WV">WV</option>
+                            <option value="WY">WY</option>
+                        </select>
+                        <span class="invalid-feedback d-block"><?php echo $fromstate_err; ?></span>
+
+                        <script type="text/javascript">
+                            document.getElementById('fromstateSelector').value = "<?php echo $fromstate; ?>";
+                        </script>
+
+                        <input type="text" name="fromcity" class="form-control <?php echo (!empty($fromcity_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $fromcity; ?>" id="inputfromCity" placeholder="City">
+                        <span class="invalid-feedback"><?php echo $fromcity_err; ?></span>
+                    </div>
+                    
+                    <br />
 
                     <div class="m-3">
                         <label class="form-label">To Address</label>
