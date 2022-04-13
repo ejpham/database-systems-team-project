@@ -160,7 +160,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <?php
                         echo $success;
                         echo $error;
-                        echo $price;
                         if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
                         <div class="m-3">
                             <label class="form-label">Full Name</label>
@@ -405,7 +404,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <div class="m-3" id="priceShow">
                         <label>Price:</label>
-                        <input class = "form-label" id = "priceChanging" name = "finalPrice" value = "<?php echo $price; ?>" disabled>
+                        <input class = "form-label" id = "priceChanging" name = "finalPrice" value = "<?php echo $price; ?>" readonly>
                     </div>
 
                     <br />
