@@ -416,8 +416,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         function updatePriceLetter(){
             let adding = 0;
 
+
             const array = document.getElementById("letterSelector").value.split(":");
             adding = adding + parseInt(array[1]);
+            console.log(adding);
+            consoloe.log(array[1]);
             if(adding > 0){
                 showCardInfo();
             }
@@ -430,8 +433,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         function clearPrice(){
+            let number = 0;
             priceChanging = $('#priceChanging');
-            priceChanging.text("0");
+            priceChanging.text(number);
         }
     </script>
 
