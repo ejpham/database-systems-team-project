@@ -73,12 +73,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         else if (strlen(trim($_POST["cardNumbers"])) != 16) $cardnum_err = "Please enter a valid Card Number.";
         else $cardnum = trim($_POST["cardNumbers"]);
 
+
         if (empty(trim($_POST["expDate"]))) $expDate_err = "Please enter a valid Expiration Date.";
         else if (strlen(trim($_POST["expDate"])) != 5) $expDate_err = "Please enter a valid Expiration Date.";
-        else $expDate = trim($_POST["expDate"]);
+        else{
+            if(intval(substr($_POST["expDate"]), 0, 2) > 12)
+                $expDate_err = "Please enter a valid month";
+            else if(intval(substr($_POST["expDate"])) < 22)
+                $expDate_err = "Please enter a valid year";
+            else
+                $expDate = trim($_POST["expDate"]);
+        }
 
-        if (empty(trim($_POST["cvv"]))) $cvv_err = "Please enter a valid Expiration Date.";
-        else if (strlen(trim($_POST["cvv"])) != 5) $cvv_err = "Please enter a valid Expiration Date.";
+        if (empty(trim($_POST["cvv"]))) $cvv_err = "Please enter a CVV";
+        else if (strlen(trim($_POST["cvv"])) > 4 || strlen(trim($_POST["cvv"])) < 3) $cvv_err = "Please enter a valid CVV";
         else $cvv = trim($_POST["cvv"]);
     }
 }
@@ -323,7 +331,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <span class="invalid-feedback"><?php echo $cardnum_err; ?></span>
 
                         <span class="input-group-text"></span>
-                        <input type="text" name="expDate" class="form-control <?php echo (!empty($expDate_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $expDate; ?>" maxlength="5" id="inputexpDate" placeholder="Expiration Date: 00/00">
+                        <input type="text" name="expDate" class="form-control <?php echo (!empty($expDate_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $expDate; ?>" maxlength="5" id="inputexpDate" placeholder="Expiration Date: MM/YY">
                         <span class="invalid-feedback"><?php echo $expDate_err; ?></span>
 
                         <span class="input-group-text"></span>
