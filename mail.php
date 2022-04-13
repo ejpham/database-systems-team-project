@@ -309,7 +309,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <div class="m-3" id = "packageWeight" style="display: none;">
                         <label for="weight" class="form-label">Slide for weight (lb): <span id="changeRange1Value">0</span></label>
-                        <input type="range" class="form-range" id="weight" name = "weightSelector" min="0" max="100" step="1" value="<?php echo $weight; ?>">
+                        <input type="range" class="form-range" id="weight" name = "weightSelector" min="0" max="100" step="1" value="<?php echo $weight; ?>" onchange="updatePricePackage();">
                         <span class="invalid-feedback d-block"><?php echo $weight_err; ?></span>
                     </div>
 
@@ -347,7 +347,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         var customRange1_VAL = document.getElementById("weight").value;
         changeRange1Value = $('#changeRange1Value');
         changeRange1Value.text(customRange1_VAL);
-        //updatePricePackage();
     });
     </script>
 
@@ -374,7 +373,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 document.getElementById("ifPackage").style.display = "none";
                 document.getElementById("packageSize").style.display = "none";
                 document.getElementById("packageWeight").style.display = "none";
-                console.log("main hide");
                 hideCardInfo();
                 clearPrice();
             }
@@ -407,7 +405,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 showCardInfo();
             }
             else{
-                console.log("package hide");
                 hideCardInfo();
             }
 
@@ -425,7 +422,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 showCardInfo();
             }
             else{
-                console.log("letter hide");
                 hideCardInfo();
             }
 
