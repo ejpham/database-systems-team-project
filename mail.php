@@ -4,8 +4,8 @@ require_once "db_conn_WebLogins.php";
 require_once "db_conn_PostalService.php";
 $weight = $price = 0;
 $packSizeSelected = $packSpeedSelected = $lettSpeedSelected = "0:0";
-$name = $email = $mail_type = $address = $fromaddress = $state = $fromstate = $city = $fromcity = $cvv = $expDate = $cardnum = $recName = $lettSpeed = $packSize = $packSpeed = "";
-$name_err = $email_err = $mail_type_err = $state_err = $fromstate_err = $success = $error = $address_err = $fromaddress_err = $city_err = $fromcity_err = $cvv_err = $expDate_err = $cardnum_err = $recName_err = $lettSpeed_err = $packSize_err = $packSpeed_err = $weight_err = "";
+$name = $email = $mail_type = $address = $fromaddress = $state = $fromstate = $city = $fromcity = $cvv = $expDate = $cardnum = $recName = $lettSpeed = $packSize = $packSpeed = $toZip = $fromZip ="";
+$name_err = $email_err = $mail_type_err = $state_err = $fromstate_err = $success = $error = $address_err = $fromaddress_err = $city_err = $fromcity_err = $cvv_err = $expDate_err = $cardnum_err = $recName_err = $lettSpeed_err = $packSize_err = $packSpeed_err = $weight_err = $toZip_err= $fromZip_err = "";
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     $email = $_SESSION["email"];
     $grab_name_sql = "SELECT name FROM WebLogins.users WHERE email='$email'";
@@ -47,6 +47,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["fromcity"]))) $fromcity_err = "Please enter a valid city.";
     else if (strlen(trim($_POST["fromcity"])) > 75) $fromcity_err = "City can be no longer than 75 characters.";
     else $fromcity = trim($_POST["fromcity"]);
+
+    if (empty(trim($_POST["tozipCode"]))) $toZip_err = "Please enter a zip code.";
+    else if (strlen(trim($_POST["tozipCode"])) != 5) $toZip_err = "zip code must be 5 characters.";
+    else $toZip = trim($_POST["tozipCode"]);
+
+    if (empty(trim($_POST["fromzipCode"]))) $fromZip_err = "Please enter a zip code.";
+    else if (strlen(trim($_POST["fromzipCode"])) != 5) $fromZip_err = "zip code must be 5 characters.";
+    else $fromZip = trim($_POST["fromzipCode"]);
         
     if (empty(trim($_POST["receiveName"]))) $recName_err = "Please enter a name.";
     else if (strlen(trim($_POST["receiveName"])) > 75) $recName_err = "Name can be no longer than 75 characters.";
@@ -101,6 +109,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     else $cvv = trim($_POST["cvv"]);
 
     $price = trim($_POST["finalPrice"]);
+
+    mysqli_close($conn_WebLogins);
+    mysqli_close($conn_PostalService);
 }
 ?>
 
@@ -259,6 +270,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         <input type="text" name="fromcity" class="form-control <?php echo (!empty($fromcity_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $fromcity; ?>" id="inputfromCity" placeholder="City">
                         <span class="invalid-feedback"><?php echo $fromcity_err; ?></span>
+
+                        <input type="text" name="fromzipCode" class="form-control <?php echo (!empty($fromZip_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $fromZip; ?>" id="inputfromZip" placeholder="Zip Code">
+                        <span class="invalid-feedback"><?php echo $fromZip_err; ?></span>
                     </div>
                     
                     <br />
@@ -332,6 +346,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         <input type="text" name="city" class="form-control <?php echo (!empty($city_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $city; ?>" id="inputCity" placeholder="City">
                         <span class="invalid-feedback"><?php echo $city_err; ?></span>
+
+                        <input type="text" name="tozipCode" class="form-control <?php echo (!empty($toZip_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $toZip; ?>" id="inputtoZip" placeholder="Zip Code">
+                        <span class="invalid-feedback"><?php echo $toZip_err; ?></span>
                     </div>
 
                     <div class="m-3">
