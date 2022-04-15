@@ -4,7 +4,7 @@ require_once "db_conn_WebLogins.php";
 require_once "db_conn_PostalService.php";
 $weight = $price = 0;
 $packSizeSelected = $packSpeedSelected = $lettSpeedSelected = "0:0";
-$name = $email = $mail_type = $address = $fromaddress = $state = $fromstate = $city = $fromcity = $cvv = $expDate = $cardnum = $recName = $lettSpeed = $packSize = $packSpeed = $toZip = $fromZip ="";
+$name = $email = $mail_type = $address = $fromaddress = $state = $fromstate = $city = $fromcity = $cvv = $expDate = $cardnum = $recName = $lettSpeed = $packSize = $packSpeed = $toZip = $fromZip = $tracking = "";
 $name_err = $email_err = $mail_type_err = $state_err = $fromstate_err = $success = $error = $address_err = $fromaddress_err = $city_err = $fromcity_err = $cvv_err = $expDate_err = $cardnum_err = $recName_err = $lettSpeed_err = $packSize_err = $packSpeed_err = $weight_err = $toZip_err= $fromZip_err = "";
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     $email = $_SESSION["email"];
@@ -111,9 +111,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $price = trim($_POST["finalPrice"]);
 
     if (empty($email_err) && empty($name_err) && empty($message_err) && $price != 0 && empty($fromaddress_err) && empty($fromcity_err) && empty($fromstate_err) && empty($fromZip_err) && empty($toZip_err) && empty($address_err) && empty($city_err) && empty($state_err) && empty($mail_type_err) && empty($recName_err) && (empty($packSpeed_err) || empty($lettSpeed_err))) {
-        $sql = "INSERT INTO PostalService.Mail (mail_type, to_name, from_name, to_address, from_address, to_city, from_city, to_state, from_state, to_zipcode, from_zipcode, shipping_class, shipping_cost) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO PostalService.Mail (mail_type, to_name, from_name, to_address, from_address, to_city, from_city, to_state, from_state, to_zipcode, from_zipcode, shipping_class, shipping_cost, tracking_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-            mysqli_stmt_bind_param($stmt, "ssssssssssssd", $param_mail_type, $param_to_name, $param_from_name, $param_to_address, $param_from_address, $param_to_city, $param_from_city, $param_to_state, $param_from_state, $param_to_zipcode, $param_from_zipcode, $param_shipping_class, $param_shipping_cost);
+            mysqli_stmt_bind_param($stmt, "ssssssssssssd", $param_mail_type, $param_to_name, $param_from_name, $param_to_address, $param_from_address, $param_to_city, $param_from_city, $param_to_state, $param_from_state, $param_to_zipcode, $param_from_zipcode, $param_shipping_class, $param_shipping_cost, $param_tracking);
+            $tracking = strval(rand(40,40));
             $param_mail_type = $mail_type;
             $param_to_name = $recName;
             $param_from_name = $name;
@@ -132,6 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $param_shipping_class = $packSpeed;
 
             $param_shipping_cost = $price;
+            $param_tracking = $tracking;
             
             if (mysqli_stmt_execute($stmt)) $success = '<div class="alert alert-success" role="alert">Your order has been processed successfully.</div>';
             else $error = '<div class="alert alert-danger" role="alert">Your order could not be accommodated.</div>';
@@ -200,7 +202,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <?php
                         echo $success;
                         echo $error;
-                        if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
+                        if(!empty($success)) {?>
+                        <div class = "m-3">
+                            <p> Tracking Number: <span>$tracking</span></p>
+                        </div>
+
+                        <?php } ?>
+                        
+                        <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
                         <div class="m-3">
                             <label class="form-label">Full Name</label>
                             <input type="text" name="name" class="form-control-plaintext <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>" id="inputName" value="<?php echo $name ?>" disabled>
@@ -443,7 +452,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="m-3" id = "packageWeight" style="display: none;">
-                        <label for="weight" class="form-label">Slide for weight (lb): <span id="changeRange1Value">0</span></label>
+                        <label for="weight" class="form-label">Slide for weight (lb): </label>
                         <input type="range" class="form-range" id="weight" name = "weightSelector" min="0" max="100" step="1" value="<?php echo $weight; ?>" onchange="updatePricePackage();">
                         <span class="invalid-feedback d-block"><?php echo $weight_err; ?></span>
                     </div>
