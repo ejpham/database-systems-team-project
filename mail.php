@@ -154,9 +154,9 @@ function checkErrors(){
     echo $toZip_err;
     echo $address_err;
     echo $city_err;
-    // echo $state_err
-    // echo $mail_type_err;
-    // echo $recName_err;
+    echo $state_err
+    echo $mail_type_err;
+    echo $recName_err;
     // echo $packSpeed_err;
     // echo $lettSpeed_err;
     
