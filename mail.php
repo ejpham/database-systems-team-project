@@ -111,7 +111,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $price = trim($_POST["finalPrice"]);
 
     if (empty($email_err) && empty($name_err) && empty($message_err) && $price != 0 && empty($fromaddress_err) && empty($fromcity_err) && empty($fromstate_err) && empty($fromZip_err) && empty($toZip_err) && empty($address_err) && empty($city_err) && empty($state_err) && empty($mail_type_err) && empty($recName_err) && (empty($packSpeed_err) || empty($lettSpeed_err))) {
-        echo "it work";
         $sql = "INSERT INTO PostalService.Mail (mail_type, to_name, from_name, to_address, from_address, to_city, from_city, to_state, from_state, to_zipcode, from_zipcode, shipping_class, shipping_cost) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
             mysqli_stmt_bind_param($stmt, "ssssssssssssd", $param_mail_type, $param_to_name, $param_from_name, $param_to_address, $param_from_address, $param_to_city, $param_from_city, $param_to_state, $param_from_state, $param_to_zipcode, $param_from_zipcode, $param_shipping_class, $param_shipping_cost);
@@ -141,35 +140,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     mysqli_close($conn_WebLogins);
     mysqli_close($conn_PostalService);
-}
-
-function checkErrors(){
-    // echo $email_err;
-    // echo $name_err;
-    // echo $message_err;
-    
-    // echo $fromaddress_err;
-    // echo $fromcity_err;
-    // echo $fromstate_err;
-    // echo $fromZip_err;
-    // echo $toZip_err;
-    // echo $address_err;
-    // echo $city_err;
-    // echo $state_err;
-    // echo $mail_type_err;
-    // echo $recName_err;
-    // echo $packSpeed_err;
-    // echo $lettSpeed_err;
-    
-    if(empty($email_err) && empty($name_err) && empty($message_err) && $price != 0 && empty($fromaddress_err) && empty($fromcity_err) && empty($fromstate_err) && empty($fromZip_err) && empty($toZip_err) && empty($address_err) && empty($city_err) && empty($state_err) && empty($mail_type_err) && empty($recName_err) && (empty($packSpeed_err) || empty($lettSpeed_err))){
-        echo "work";
-        return true;
-    }
-    else{
-        echo $price;
-        echo "no work";
-        return false;
-    }
 }
 ?>
 
@@ -225,6 +195,7 @@ function checkErrors(){
             <div class="m-4">
                 <h6 class="display-6">Sending Mail</h6>
                 <p>Fill out the form below to send mail.</p>
+                <a href="https://cosc-3380-team-3.herokuapp.com/tracking.php">Or track your mail here.</a>
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                     <?php
                         echo $success;
