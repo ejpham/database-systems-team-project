@@ -143,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 function checkErrors(){
-    // echo $email_err;
+    echo $email_err;
     // echo $name_err;
     // echo $message_err;
     // echo $price;
