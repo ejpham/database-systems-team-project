@@ -141,15 +141,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if(empty($error)){
                 if($stmt2 = mysqli_prepare($conn_PostalService, $sql2)) {
-                    mysqli_stmt_bind_param($stmt2, "sssiss", $param_tracking, $param_status, $param_packageSize, $param_packageWeight, $param_billingAdd, $param_sendersEmail);
-                    $param_status = "On The Way";
-                    $param_packageSize = $packSize;
-                    $param_packageWeight = $weight;
-                    $param_billingAdd = $fromaddress;
-                    $param_sendersEmail = $email;
+                    // mysqli_stmt_bind_param($stmt2, "sssiss", $param_tracking, $param_status, $param_packageSize, $param_packageWeight, $param_billingAdd, $param_sendersEmail);
+                    // $param_status = "On The Way";
+                    // $param_packageSize = $packSize;
+                    // $param_packageWeight = $weight;
+                    // $param_billingAdd = $fromaddress;
+                    // $param_sendersEmail = $email;
 
-                    if (mysqli_stmt_execute($stmt2)) $success = '<div class="alert alert-success" role="alert">Your order has been processed successfully.</div>';
-                    else $error = '<div class="alert alert-danger" role="alert">Your order could not be accommodated.</div>';
+                    // if (mysqli_stmt_execute($stmt2)) $success = '<div class="alert alert-success" role="alert">Your order has been processed successfully.</div>';
+                    // else $error = '<div class="alert alert-danger" role="alert">Your order could not be accommodated.</div>';
                 }
             }
         }
