@@ -114,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql = "INSERT INTO PostalService.Mail (mail_type, to_name, from_name, to_address, from_address, to_city, from_city, to_state, from_state, to_zipcode, from_zipcode, shipping_class, shipping_cost, tracking_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
             mysqli_stmt_bind_param($stmt, "ssssssssssssds", $param_mail_type, $param_to_name, $param_from_name, $param_to_address, $param_from_address, $param_to_city, $param_from_city, $param_to_state, $param_from_state, $param_to_zipcode, $param_from_zipcode, $param_shipping_class, $param_shipping_cost, $param_tracking);
-            $tracking = strval(rand(40,40));
+            $tracking = strval(rand(0,9999999999));
             $param_mail_type = $mail_type;
             $param_to_name = $recName;
             $param_from_name = $name;
