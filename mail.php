@@ -145,11 +145,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 function checkErrors(){
     echo $email_err;
     echo $name_err;
-    // echo $message_err;
-    // echo $price;
-    // echo $fromaddress_err;
-    // echo $fromcity_err;
-    // echo $fromstate_err;
+    echo $message_err;
+    echo $price;
+    echo $fromaddress_err;
+    echo $fromcity_err;
+    echo $fromstate_err;
     // echo $fromZip_err;
     // echo $toZip_err;
     // echo $address_err;
