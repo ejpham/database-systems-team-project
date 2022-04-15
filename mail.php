@@ -125,11 +125,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_from_state = $fromstate;
             $param_to_zipcode = $toZip;
             $param_from_zipcode = $fromZip;
-            $param_shipping_cost = $price;
+
             if($mail_type == "Letter")
                 $param_shipping_class = $lettSpeed;
             else
                 $param_shipping_class = $packSpeed;
+
+            $param_shipping_cost = $price;
             
             if (mysqli_stmt_execute($stmt)) $success = '<div class="alert alert-success" role="alert">Your order has been processed successfully.</div>';
             else $error = '<div class="alert alert-danger" role="alert">Your order could not be accommodated.</div>';
@@ -141,6 +143,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 function checkErrors(){
+    echo $email_err;
+    echo $name_err;
+    echo $message_err;
+    echo $price;
+    echo $fromaddress_err;
+    echo $fromcity_err;
+    echo $fromstate_err;
+    echo $fromZip_err;
+    echo $toZip_err;
+    echo $address_err;
+    echo $city_err;
+    echo $state_err
+    echo $mail_type_err;
+    echo $recName_err;
+    echo $packSpeed_err;
+    echo $lettSpeed_err;
     
     if(empty($email_err) && empty($name_err) && empty($message_err) && $price != 0 && empty($fromaddress_err) && empty($fromcity_err) && empty($fromstate_err) && empty($fromZip_err) && empty($toZip_err) && empty($address_err) && empty($city_err) && empty($state_err) && empty($mail_type_err) && empty($recName_err) && (empty($packSpeed_err) || empty($lettSpeed_err))){
         echo "work";
