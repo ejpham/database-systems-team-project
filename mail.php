@@ -142,10 +142,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 function checkErrors(){
     
-    if(empty($email_err) && empty($name_err) && empty($message_err) && $price != 0 && empty($fromaddress_err) && empty($fromcity_err) && empty($fromstate_err) && empty($fromZip_err) && empty($toZip_err) && empty($address_err) && empty($city_err) && empty($state_err) && empty($mail_type_err) && empty($recName_err) && (empty($packSpeed_err) || empty($lettSpeed_err)))
+    if(empty($email_err) && empty($name_err) && empty($message_err) && $price != 0 && empty($fromaddress_err) && empty($fromcity_err) && empty($fromstate_err) && empty($fromZip_err) && empty($toZip_err) && empty($address_err) && empty($city_err) && empty($state_err) && empty($mail_type_err) && empty($recName_err) && (empty($packSpeed_err) || empty($lettSpeed_err))){
+        echo "work";
         return true;
-    else
+    }
+    else{
+        echo "no work";
         return false;
+    }
 }
 ?>
 
@@ -305,7 +309,7 @@ function checkErrors(){
                         <input type="text" name="fromcity" class="form-control <?php echo (!empty($fromcity_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $fromcity; ?>" id="inputfromCity" placeholder="City">
                         <span class="invalid-feedback"><?php echo $fromcity_err; ?></span>
 
-                        <input type="text" name="fromzipCode" class="form-control <?php echo (!empty($fromZip_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $fromZip; ?>" id="inputfromZip" placeholder="Zip Code">
+                        <input type="text" name="fromzipCode" class="form-control <?php echo (!empty($fromZip_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $fromZip; ?>" id="inputfromZip" placeholder="Zip Code" maxlength = "5">
                         <span class="invalid-feedback"><?php echo $fromZip_err; ?></span>
                     </div>
                     
@@ -381,7 +385,7 @@ function checkErrors(){
                         <input type="text" name="city" class="form-control <?php echo (!empty($city_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $city; ?>" id="inputCity" placeholder="City">
                         <span class="invalid-feedback"><?php echo $city_err; ?></span>
 
-                        <input type="text" name="tozipCode" class="form-control <?php echo (!empty($toZip_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $toZip; ?>" id="inputtoZip" placeholder="Zip Code">
+                        <input type="text" name="tozipCode" class="form-control <?php echo (!empty($toZip_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $toZip; ?>" id="inputtoZip" placeholder="Zip Code" maxlength = "5">
                         <span class="invalid-feedback"><?php echo $toZip_err; ?></span>
                     </div>
 
