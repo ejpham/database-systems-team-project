@@ -204,7 +204,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         echo $error;
                         if(!empty($success)) {?>
                         <div class = "m-3">
-                            <p> Tracking Number: <span>$tracking</span></p>
+                            <p> Tracking Number: </p>
+                            <?php echo $tracking?>
                         </div>
 
                         <?php } ?>
