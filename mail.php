@@ -150,10 +150,10 @@ function checkErrors(){
     echo $fromaddress_err;
     echo $fromcity_err;
     echo $fromstate_err;
-    // echo $fromZip_err;
-    // echo $toZip_err;
-    // echo $address_err;
-    // echo $city_err;
+    echo $fromZip_err;
+    echo $toZip_err;
+    echo $address_err;
+    echo $city_err;
     // echo $state_err
     // echo $mail_type_err;
     // echo $recName_err;
