@@ -154,11 +154,11 @@ function checkErrors(){
     echo $toZip_err;
     echo $address_err;
     echo $city_err;
-    echo $state_err
+    echo $state_err;
     echo $mail_type_err;
     echo $recName_err;
-    // echo $packSpeed_err;
-    // echo $lettSpeed_err;
+    echo $packSpeed_err;
+    echo $lettSpeed_err;
     
     if(empty($email_err) && empty($name_err) && empty($message_err) && $price != 0 && empty($fromaddress_err) && empty($fromcity_err) && empty($fromstate_err) && empty($fromZip_err) && empty($toZip_err) && empty($address_err) && empty($city_err) && empty($state_err) && empty($mail_type_err) && empty($recName_err) && (empty($packSpeed_err) || empty($lettSpeed_err))){
         echo "work";
