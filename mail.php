@@ -110,8 +110,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $price = trim($_POST["finalPrice"]);
 
-    if (empty($email_err) && empty($name_err) && empty($message_err) && $price != 0 && empty($fromaddress_err) && empty($fromcity_err) && empty($fromstate_err) && empty($fromZip_err) && empty($toZip_err) && empty($address_err) && empty($city_err) && empty($state_err) && empty($mail_type_err) && empty($recName_err) && (empty($packSpeed_err) || empty($lettSpeed_err))) {
+    if (empty($cardnum_err) && empty($expDate_err) && empty($cvv_err) && empty($email_err) && empty($name_err) && empty($message_err) && $price != 0 && empty($fromaddress_err) && empty($fromcity_err) && empty($fromstate_err) && empty($fromZip_err) && empty($toZip_err) && empty($address_err) && empty($city_err) && empty($state_err) && empty($mail_type_err) && empty($recName_err) && (empty($packSpeed_err) || empty($lettSpeed_err))) {
         $sql = "INSERT INTO PostalService.Mail (mail_type, to_name, from_name, to_address, from_address, to_city, from_city, to_state, from_state, to_zipcode, from_zipcode, shipping_class, shipping_cost, tracking_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql2 = "INSERT INTO PostalService.MailOrders (trackingNumber, status, packageSize, packageWeight, billingAddress, senders_email) VALUES (?, ?, ?)";
         if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
             mysqli_stmt_bind_param($stmt, "ssssssssssssds", $param_mail_type, $param_to_name, $param_from_name, $param_to_address, $param_from_address, $param_to_city, $param_from_city, $param_to_state, $param_from_state, $param_to_zipcode, $param_from_zipcode, $param_shipping_class, $param_shipping_cost, $param_tracking);
             $tracking = strval(rand(0,9999999999));
@@ -137,8 +138,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             if (mysqli_stmt_execute($stmt)) $success = '<div class="alert alert-success" role="alert">Your order has been processed successfully.</div>';
             else $error = '<div class="alert alert-danger" role="alert">Your order could not be accommodated.</div>';
+
+            if(empty($error)){
+                if($stmt2 = mysqli_prepare($conn_PostalService, $sql2)) {
+                    mysqli_stmt_bind_param($stmt2, "sssiss", $param_tracking, $param_status, $param_packageSize, $param_packageWeight, $param_billingAdd, $param_sendersEmail);
+                    $param_status = "On The Way";
+                    $param_packageSize = $packSize;
+                    $param_packageWeight = $weight;
+                    $param_billingAdd = $fromaddress;
+                    $param_sendersEmail = $email;
+
+                    if (mysqli_stmt_execute($stmt2)) $success = '<div class="alert alert-success" role="alert">Your order has been processed successfully.</div>';
+                    else $error = '<div class="alert alert-danger" role="alert">Your order could not be accommodated.</div>';
+                }
+            }
         }
     }
+    
+
 
     mysqli_close($conn_WebLogins);
     mysqli_close($conn_PostalService);

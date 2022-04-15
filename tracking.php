@@ -90,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     ?>
                     <div class="m-3">
                         <label class="form-label">Tracking Number</label>
-                        <input type="text" name="trackingNum" class="form-control <?php echo (!empty($tracking_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $tracking; ?>" id="inputTracking" maxlength = "40" placeholder="tracking number">
+                        <input type="text" name="trackingNum" class="form-control <?php echo (!empty($tracking_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $tracking; ?>" id="inputTracking" maxlength = "10" placeholder="tracking number">
                         <span class="invalid-feedback"><?php echo $tracking_err; ?></span>
                     </div>
                     <div class="m-3">
