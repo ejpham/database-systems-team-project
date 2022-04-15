@@ -110,8 +110,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $price = trim($_POST["finalPrice"]);
 
+    if (checkErrors()) {
+        $sql = "INSERT INTO PostalService.Mail (mail_type, to_name, from_name, to_address, from_address, to_city, from_city, to_state, from_state, to_zipcode, from_zipcode, shipping_class, shipping_cost) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
+            mysqli_stmt_bind_param($stmt, "ssssssssssssd", $param_mail_type, $param_to_name, $param_from_name, $param_to_address, $param_from_address, $param_to_city, $param_from_city, $param_to_state, $param_from_state, $param_to_zipcode, $param_from_zipcode, $param_shipping_class, $param_shipping_cost);
+            $param_mail_type = $mail_type;
+            $param_to_name = $recName;
+            $param_from_name = $name;
+            $param_to_address = $address;
+            $param_from_address = $fromaddress;
+            $param_to_city = $city;
+            $param_from_city = $fromcity;
+            $param_to_state = $state;
+            $param_from_state = $fromstate;
+            $param_to_zipcode = $toZip;
+            $param_from_zipcode = $fromZip;
+            $param_shipping_cost = $price;
+            if($mail_type == "Letter")
+                $param_shipping_class = $lettSpeed;
+            else
+                $param_shipping_class = $packSpeed;
+            
+            if (mysqli_stmt_execute($stmt)) $success = '<div class="alert alert-success" role="alert">Your order has been processed successfully.</div>';
+            else $error = '<div class="alert alert-danger" role="alert">Your order could not be accommodated.</div>';
+        }
+    }
+
     mysqli_close($conn_WebLogins);
     mysqli_close($conn_PostalService);
+}
+
+function checkErrors(){
+    return empty($email_err) && empty($name_err) && empty($message_err) && $price != 0 && empty($fromaddress_err) && empty($fromcity_err) && empty($fromstate_err) && empty($fromZip_err) && empty($toZip_err) && empty($address_err) && empty($city_err) && empty($state_err) && empty($mail_type_err) && empty($recName_err) && (empty($packSpeed_err) || empty($lettSpeed_err))
 }
 ?>
 
