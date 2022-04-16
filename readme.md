@@ -1,7 +1,7 @@
 is_employee {
-    0 = customer
-    1 = employee
-    2 = manager
+    1 = customer
+    2 = employee
+    3 = manager
 }
 
 location_dept {
