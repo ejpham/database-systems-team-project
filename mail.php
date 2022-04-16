@@ -577,8 +577,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 hideCardInfo();
             }
 
-            console.log(adding);
-
             document.getElementById("priceChanging").value = adding;
         }
 
