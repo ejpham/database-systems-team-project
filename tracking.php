@@ -12,19 +12,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($tracking_err)) {
         $sql = "SELECT status FROM PostalService.MailOrders WHERE trackingNumber = $tracking";
-        //if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-            $resultingStatus = $conn_PostalService->query($sql);
+        $resultingStatus = $conn_PostalService->query($sql);
             
-            if($resultingStatus->num_rows > 0){
-                $row = $resultingStatus->fetch_assoc();
-                $stat = $row["status"];
-            }
+        if($resultingStatus->num_rows > 0){
+            $row = $resultingStatus->fetch_assoc();
+            $stat = $row["status"];
+        }
 
-            if (!empty($row)){ 
-                $success = '<div class="alert alert-success" role="alert">Successfully Retrieved your mail status.</div>';
-            }
-            else $error = '<div class="alert alert-danger" role="alert">Could not find your package based on this tracking number.</div>';
-        //}
+        if (!empty($row)){ 
+            $success = '<div class="alert alert-success" role="alert">Successfully Retrieved your mail status.</div>';
+        }
+        else $error = '<div class="alert alert-danger" role="alert">Could not find your package based on this tracking number.</div>';
     }
 
     mysqli_close($conn_PostalService);
@@ -89,7 +87,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <?php
                         echo $success;
                         echo $error;
-                        echo $stat;
+                        if(!empty($stat))
+                            echo "Mail Status:" . $stat;
                     ?>
                     <div class="m-3">
                         <label class="form-label">Tracking Number</label>
