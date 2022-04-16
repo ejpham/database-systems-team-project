@@ -16,17 +16,17 @@ if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
 }
 $input_id = $input_access_level = "";
 $input_id_err = $input_access_level_err = $success = $error = "";
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (empty(trim($_POST["input_id"])) || trim($_POST["input_id"]) < 1) $input_id_err = '<div class="alert alert-danger" role="alert">Please enter a valid User ID.</div>';
-    else $input_id = $_POST["input_id"];
-    if (empty(trim($_POST["input_access_level"])) || trim($_POST["input_access_level"]) < 0 || trim($_POST["input_access_level"]) > 3) $input_access_level_err = '<div class="alert alert-danger" role="alert">Please enter a valid access level.</div>';
-    else $input_access_level = $_POST["input_access_level"];
-    if (empty($input_id_err) && empty($input_access_level_err)) {
-        mysqli_stmt_close($stmt);
-        mysqli_query($conn_WebLogins, "UPDATE WebLogins.users SET is_employee = '".$input_access_level."' WHERE id = '".$input_id."'");
-        header("refresh:0;");
-    }
-}
+// if ($_SERVER["REQUEST_METHOD"] == "POST") {
+//     if (empty(trim($_POST["input_id"])) || trim($_POST["input_id"]) < 1) $input_id_err = '<div class="alert alert-danger" role="alert">Please enter a valid User ID.</div>';
+//     else $input_id = $_POST["input_id"];
+//     if (empty(trim($_POST["input_access_level"])) || trim($_POST["input_access_level"]) < 0 || trim($_POST["input_access_level"]) > 3) $input_access_level_err = '<div class="alert alert-danger" role="alert">Please enter a valid access level.</div>';
+//     else $input_access_level = $_POST["input_access_level"];
+//     if (empty($input_id_err) && empty($input_access_level_err)) {
+//         mysqli_stmt_close($stmt);
+//         mysqli_query($conn_WebLogins, "UPDATE WebLogins.users SET is_employee = '".$input_access_level."' WHERE id = '".$input_id."'");
+//         header("refresh:0;");
+//     }
+// }
 ?>
 
 <!DOCTYPE html>
