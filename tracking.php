@@ -3,7 +3,7 @@ session_start();
 
 require_once "db_conn_PostalService.php";
 $tracking = "";
-$tracking_err = $success = $error = "";
+$tracking_err = $success = $error = $resultingStatus = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
@@ -13,15 +13,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($tracking_err)) {
         $sql = "SELECT status FROM PostalService.MailOrders WHERE trackingNumber = $tracking";
         if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-            $resultingStatus = "";
             $resultingStatus = mysqli_stmt_execute($stmt);
 
 
 
             if (!empty($resultingStatus)){ 
                 $success = '<div class="alert alert-success" role="alert">Successfully Retrieved your mail status.</div>';
-                echo "Mail Status: ";
-                echo $resultingStatus;
             }
             else $error = '<div class="alert alert-danger" role="alert">Could not find your package based on this tracking number.</div>';
         }
@@ -89,6 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <?php
                         echo $success;
                         echo $error;
+                        echo $resultingStatus;
                     ?>
                     <div class="m-3">
                         <label class="form-label">Tracking Number</label>
