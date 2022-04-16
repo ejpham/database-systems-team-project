@@ -7,22 +7,24 @@ $tracking_err = $success = $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
-
-
     if (empty(trim($_POST["trackingNum"]))) $tracking_err = "Please enter a tracking number.";
-    else if (strlen(trim($_POST["trackingNum"])) != 40) $cardnum_err = "Please enter a valid Tracking Number.";
     else $tracking = trim($_POST["trackingNum"]);
 
     if (empty($tracking_err)) {
-        // $sql = "INSERT INTO PostalService.Contact_Logs (full_name, email, message) VALUES (?, ?, ?)";
-        // if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-        //     mysqli_stmt_bind_param($stmt, "sss", $param_name, $param_email, $param_message);
-        //     $param_name = $name;
-        //     $param_email = $email;
-        //     $param_message = $message;
-        //     if (mysqli_stmt_execute($stmt)) $success = '<div class="alert alert-success" role="alert">Your message has been sent.</div>';
-        //     else $error = '<div class="alert alert-danger" role="alert">Your message could not be sent.</div>';
-        // }
+        $sql = "SELECT FROM PostalService.MailOrders status WHERE trackingNumber = $tracking";
+        if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
+            $resultingStatus = "";
+            $resultingStatus = mysqli_stmt_execute($stmt);
+
+
+
+            if (!empty($resultingStatus)){ 
+                $success = '<div class="alert alert-success" role="alert">Successfully Retrieved your mail status.</div>';
+                echo "Mail Status: ";
+                echo $resultingStatus;
+            }
+            else $error = '<div class="alert alert-danger" role="alert">Could not find your package based on this tracking number.</div>';
+        }
     }
 
     mysqli_close($conn_PostalService);

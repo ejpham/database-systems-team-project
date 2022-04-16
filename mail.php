@@ -147,9 +147,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 mysqli_stmt_bind_param($stmt2, "sssiss", $param_tracking, $param_status, $param_packageSize, $param_packageWeight, $param_billingAdd, $param_sendersEmail);
                 $param_status = "On The Way";
                 $param_packageSize = $packSize;
-                $param_packageWeight = $weight;
+                if($weight > 0)
+                    $param_packageWeight = $weight;
+                else
+                    $param_packageWeight = NULL;
                 $param_billingAdd = $fromaddress;
-               $param_sendersEmail = $email;
+                $param_sendersEmail = $email;
 
                 if (mysqli_stmt_execute($stmt2)) $success = '<div class="alert alert-success" role="alert">Your order has been processed successfully.</div>';
                 else $error = '<div class="alert alert-danger" role="alert">Your order could not be accommodated.</div>';
