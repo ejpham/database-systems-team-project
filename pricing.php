@@ -34,7 +34,7 @@ session_start();
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account Options</a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <?php if ($_SESSION["is_employee"] == "1") { ?>
+                                <?php if ($_SESSION["is_employee"] >= "1") { ?>
                                     <a href="database-access.php" class="dropdown-item">Database Access</a>
                                 <?php } ?>
                                 <a href="my-account.php" class="dropdown-item">My Account</a>

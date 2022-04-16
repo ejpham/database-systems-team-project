@@ -89,6 +89,17 @@ if ($_SESSION["is_employee"] == "0") {
         </div>
     </div>
     <main>
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <div class="m-3">
+                <label class="form-label" for="inputFromDate">From Date</label>
+                <input type="date" name="from_date" id="inputFromDate">
+                <label class="form-label" for="inputToDate">To Date</label>
+                <input type="date" name="to_date" id="inputToDate">
+            </div>
+            <div class="m-3">
+                <label class="form-label" for="input"></label>
+            </div>
+        </form>
     </main>
 </body>
 </html>
