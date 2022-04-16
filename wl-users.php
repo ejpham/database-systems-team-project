@@ -17,20 +17,14 @@ if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
 $input_id = $input_access_level = "";
 $input_id_err = $input_access_level_err = $success = $error = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (empty(trim($_POST["input_id"]))) $input_id_err = '<div class="alert alert-danger" role="alert">Please enter a User ID.</div>';
-    else $input_id = trim($_POST["input_id"]);
-    if (empty(trim($_POST["input_access_level"]))) $input_access_level_err = '<div class="alert alert-danger" role="alert">Please enter an access level.</div>';
-    else $input_access_level = trim($_POST["input_access_level"]);
+    if (empty(trim($_POST["input_id"])) || trim($_POST["input_id"]) < 1) $input_id_err = '<div class="alert alert-danger" role="alert">Please enter a valid User ID.</div>';
+    else $input_id = $_POST["input_id"];
+    if (empty(trim($_POST["input_access_level"])) || trim($_POST["input_access_level"]) < 0 || trim($_POST["input_access_level"]) > 3) $input_access_level_err = '<div class="alert alert-danger" role="alert">Please enter a valid access level.</div>';
+    else $input_access_level = $_POST["input_access_level"];
     if (empty($input_id_err) && empty($input_access_level_err)) {
-        $sel = "UPDATE WebLogins.users SET is_employee = ? WHERE (SELECT id FROM WebLogins.users WHERE id = ?)";
-        if ($stmt = mysqli_prepare($conn_WebLogins, $sel)) {
-            mysqli_stmt_bind_param($stmt, "ii", $param_access_level, $param_id);
-            $param_access_level = $input_access_level;
-            $param_id = $input_id;
-            if (mysqli_stmt_execute($stmt)) {
-                $success = '<div class="alert alert-success" role="alert">User access level has been updated.</div>';
-            }
-        }
+        mysqli_stmt_close($stmt);
+        mysqli_query($conn_WebLogins, "UPDATE WebLogins.users SET is_employee = '".$input_access_level."' WHERE id = '".$input_id."'");
+        header("refresh:0;");
     }
 }
 ?>
@@ -117,21 +111,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="col">
                 <h6 class="display-6">Users</h6>
                 <table class="table table-bordered table-primary table-hover">
-                    <thead>
-                        <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">E-mail Address</th>
-                        <th scope="col">Access Level</th>
-                    </thead>
-                    <tbody>
-                        <?php while (mysqli_stmt_fetch($stmt)) { ?>
+                <thead>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">E-mail Address</th>
+                    <th scope="col">Access Level</th>
+                </thead>
+                <tbody>
+                    <?php while (mysqli_stmt_fetch($stmt)) { ?>
                         <tr>
                             <td><?php echo $id; ?></td>
                             <td><?php echo $name; ?></td>
                             <td><?php echo $email; ?></td>
                             <td><?php echo $is_employee; ?></td>
                         </tr>
-                        <?php } ?>
+                    <?php } ?>
                     </tbody>
                 </table>
             </div>
@@ -140,19 +134,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="col-5">
                 <h6 class="display-6">Adjust Access Level</h6>
                 <ul class="list">
-                    <li>0 = Customer</li>
-                    <li>1 = Employee</li>
-                    <li>2 = Manager</li>
+                    <li>1 = Customer</li>
+                    <li>2 = Employee</li>
+                    <li>3 = Manager</li>
                 </ul>
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                     <?php
-                        echo $success;
-                        echo $error;
-                        echo $input_id_err;
-                        echo $input_access_level_err;
+                    echo $input_id_err;
+                    echo $input_access_level_err;
                     ?>
                     <div class="m-3 input-group">
-                        <input type="number" name="input_id" class="form-control" value="<?php echo $input_id; ?>" id="inputUserID" placeholder="User ID" min="1">
+                        <input type="number" name="input_id" class="form-control" value="<?php echo $input_id; ?>" id="inputID" placeholder="User ID" min="1">
                         <input type="number" name="input_access_level" class="form-control" value="<?php echo $input_access_level; ?>" id="inputAccessLevel" placeholder="New Access Level" min="1" max="3">
                         <input type="submit" name="submit" class="btn btn-primary" value="Query">
                     </div>
