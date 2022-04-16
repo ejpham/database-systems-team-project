@@ -15,11 +15,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
             $resultingStatus = $conn_PostalService->query($sql);
             
-            if($resultingStatus->num_rows > 0)
-                $stat = $resultingStatus->fetch_assoc();
+            if($resultingStatus->num_rows > 0){
+                $row = $resultingStatus->fetch_assoc();
+                $stat = $row["status"];
+            }
 
-            if (!empty($stat)){ 
-                echo $stat;
+            if (!empty($row)){ 
                 $success = '<div class="alert alert-success" role="alert">Successfully Retrieved your mail status.</div>';
             }
             else $error = '<div class="alert alert-danger" role="alert">Could not find your package based on this tracking number.</div>';
