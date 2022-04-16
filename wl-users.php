@@ -140,8 +140,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </ul>
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                     <?php
-                    echo $input_id_err;
-                    echo $input_access_level_err;
+                        echo $input_id_err;
+                        echo $input_access_level_err;
                     ?>
                     <div class="m-3 input-group">
                         <input type="number" name="input_id" class="form-control" value="<?php echo $input_id; ?>" id="inputID" placeholder="User ID" min="1">
