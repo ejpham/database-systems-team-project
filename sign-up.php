@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // if all error strings are empty meaning all info is valid
     if (empty($email_err) && empty($name_err) && empty($password_err) && empty($confirm_password_err) && empty($security_question_err) && empty($security_answer_err)) {
         // variable containing query to insert info into database
-        $sql = "INSERT INTO WebLogins.users (email, name, pass, is_employee, security_question, security_answer) VALUES (?, ?, ?, 0, ?, ?)";
+        $sql = "INSERT INTO WebLogins.users (email, name, pass, is_employee, security_question, security_answer) VALUES (?, ?, ?, 1, ?, ?)";
         // prepare query statement
         if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
             // bind parameters into query statement
