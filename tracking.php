@@ -12,16 +12,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($tracking_err)) {
         $sql = "SELECT status FROM PostalService.MailOrders WHERE trackingNumber = $tracking";
-        //if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
+        if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
             $resultingStatus = $conn_PostalService->query($sql);
 
 
             if (!empty($resultingStatus)){ 
-                echo $resultingStatus;
                 $success = '<div class="alert alert-success" role="alert">Successfully Retrieved your mail status.</div>';
             }
             else $error = '<div class="alert alert-danger" role="alert">Could not find your package based on this tracking number.</div>';
-        //}
+        }
     }
 
     mysqli_close($conn_PostalService);
