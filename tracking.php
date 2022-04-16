@@ -17,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
             if (!empty($resultingStatus)){ 
+                echo $resultingStatus;
                 $success = '<div class="alert alert-success" role="alert">Successfully Retrieved your mail status.</div>';
             }
             else $error = '<div class="alert alert-danger" role="alert">Could not find your package based on this tracking number.</div>';
