@@ -475,8 +475,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="m-3" id = "packageWeight" style="display: none;">
-                        <label for="weight" class="form-label">Slide for weight (lb): </label>
-                        <input type="range" class="form-range" id="weight" name = "weightSelector" min="0" max="100" step="1" value="<?php echo strval($weight); ?>" onchange="updatePricePackage();">
+                        <label for="weight" class="form-label">Slide for weight (lb): <span id = "changeRange1Value"> 0 </span> </label>
+                        <input type="range" class="form-range" id="weight" name = "weightSelector" min="0" max="100" step="1" value="<?php echo $weight; ?>" onchange="updatePricePackage();">
                         <span class="invalid-feedback d-block"><?php echo $weight_err; ?></span>
                     </div>
 
