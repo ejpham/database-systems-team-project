@@ -9,46 +9,30 @@ if ($_SESSION["is_employee"] == "1") {
     header("location:index.php");
     exit;
 } else {}
-$sql = "SELECT * FROM PostalService.Employee";
+$sql = "SELECT * FROM PostalService.Vehicle_Use";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
     mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $emp_id, $fname, $minit, $lname, $dob, $addr, $city, $zip, $email, $pnum, $ssn, $m_id);
+    mysqli_stmt_bind_result($stmt, $log_id, $veh_id, $emp_id, $date_dep, $date_ret, $start_id, $end_id, $miles_drive);
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
-    if ($_POST["action"] == "add") {
-        if(!empty(trim($_POST["fname"])))
-            $fname = trim($_POST["fname"]);
-        $minit = trim($_POST["minit"]);
-        if(!empty(trim($_POST["lname"])))
-            $lname = trim($_POST["lname"]);
-        if(!empty(trim($_POST["dob"])))
-            $dob = trim($_POST["dob"]);
-        if(!empty(trim($_POST["address"])))
-            $addr = trim($_POST["address"]);
-        if(!empty(trim($_POST["city"])))
-            $city = trim($_POST["city"]);
-        if(!empty(trim($_POST["zip"])))
-            $zip = trim($_POST["zip"]);
-        if(!empty(trim($_POST["email"])))
-            $email = trim($_POST["email"]);
-        if(!empty(trim($_POST["phone_num"])) && strlen(trim($_POST["phone_num"])) == 10)
-            $pnum = trim($_POST["phone_num"]);
-        if(!empty(trim($_POST["ssn"])) && strlen(trim($_POST["ssn"])) == 9)
-            $ssn = trim($_POST["ssn"]);
-        if(!empty($fname) && !empty($lname) && !empty($dob) && !empty($addr) && !empty($city) && !empty($zip) && !empty($email) && !empty($pnum) && !empty($ssn)){
-            $run = "INSERT INTO PostalService.Employee (first_name, minit, last_name, dob, home_address, home_city, home_zipcode, email, phone_number, ssn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
-                mysqli_stmt_bind_param($stmt, "ssssssssss", $fname, $minit, $lname, $dob, $addr, $city, $zip, $email, $pnum, $ssn);
-                mysqli_stmt_execute($stmt);
-            }
+    if (trim($_POST["action"]) == "add") {
+        $veh_id = trim($_POST["veh_id"]);
+        $emp_id = trim($_POST["emp_id"]);
+        $start_id = trim($_POST["start_id"]);
+        $run = "INSERT INTO PostalService.Vehicle_Use (vehicle_id, driven_by_employee_id, start_location_id) VALUES (?, ?, ?);";
+        if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
+            mysqli_stmt_bind_param($stmt, "iii", $veh_id, $emp_id, $start_id);
+            mysqli_stmt_execute($stmt);
         }
     }
-    else if ($_POST["action"] == "delete") {
-        $emp_id = trim($_POST["emp_id"]);
-        $run = "DELETE FROM PostalService.Employee WHERE employee_id = ?";
+    else if (trim($_POST["action"]) == "update") {
+        $log_id = trim($_POST["log_id"]);
+        $end_id = trim($_POST["end_id"]);
+        $miles_drive = trim($_POST["miles_drive"]);
+        $run = "UPDATE PostalService.Vehicle_Use SET date_returned = now(), end_location_id = ?, miles_driven = ? WHERE log_id = ?;";
         if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
-            mysqli_stmt_bind_param($stmt, "i", $emp_id);
+            mysqli_stmt_bind_param($stmt, "iii", $end_id, $miles_drive, $log_id);
             mysqli_stmt_execute($stmt);
         }
     }
@@ -147,67 +131,72 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
             <div class="col">
-                <h6 class="display-6">Employees</h6>
+                <h6 class="display-6">Vehicle Use</h6>
                 <table class="table table-bordered table-primary table-hover">
                     <thead>
-                        <th scope="col">Employee ID</th>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Middle Init.</th>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">Date of Birth</th>
-                        <th scope="col">Home Address</th>
-                        <th scope="col">City</th>
-                        <th scope="col">Zip Code</th>
-                        <th scope="col">E-mail Address</th>
-                        <th scope="col">Phone Number</th>
-                        <th scope="col">SSN</th>
-                        <th scope="col">Manager ID</th>
-                        <?php if ($_SESSION["is_employee"] == "3") { ?><th scope="col"></th><?php } ?>
+                        <th scope="col">Log ID</th>
+                        <th scope="col">Vehicle ID</th>
+                        <th scope="col">Driven by Employee ID</th>
+                        <th scope="col">Date Departed</th>
+                        <th scope="col">Date Returned</th>
+                        <th scope="col">Start Location ID</th>
+                        <th scope="col">End Location ID</th>
+                        <th scope="col">Miles Driven</th>
+                        <th scope="col"></th>
                     </thead>
                     <tbody>
-                        <?php if ($_SESSION["is_employee"] == "3") { ?>
-                            <tr>
-                                <form method="post" action="<?php htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                    <input type="hidden" name="action" value="add">
-                                    <td></td>
-                                    <td><input class="form-control" type="text" name="fname" maxlength="30"></td>
-                                    <td><input class="form-control" type="text" name="minit" maxlength="1" oninput="this.value = this.value.toUpperCase();"></td>
-                                    <td><input class="form-control" type="text" name="lname" maxlength="30"></td>
-                                    <td><input class="form-control" type="date" name="dob"></td>
-                                    <td><input class="form-control" type="text" name="address" maxlength="255"></td>
-                                    <td><input class="form-control" type="text" name="city" maxlength="50"></td>
-                                    <td><input class="form-control" type="text" name="zip" maxlength="5"></td>
-                                    <td><input class="form-control" type="email" name="email" maxlength="75"></td>
-                                    <td><input class="form-control" type="text" name="phone_num" maxlength="10"></td>
-                                    <td><input class="form-control" type="text" name="ssn" maxlength="9"></td>
-                                    <td></td>
-                                    <td><input type="submit" name="submit" class="btn btn-primary" value="Add"></td>
-                                </form>
-                            </tr>
-                        <?php } else {} ?>
-                        <?php while (mysqli_stmt_fetch($stmt)) { ?>
                         <tr>
                             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="emp_id" value="<?php echo $emp_id; ?>">
-                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $emp_id; } ?></td>
-                                <td><?php echo $fname; ?></td>
-                                <td><?php echo $minit; ?></td>
-                                <td><?php echo $lname; ?></td>
-                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $dob; } ?></td>
-                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $addr; } ?></td>
-                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $city; } ?></td>
-                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $zip; } ?></td>
-                                <td><?php echo $email; ?></td>
-                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $pnum; } ?></td>
-                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $ssn; } ?></td>
-                                <td><?php echo $m_id; ?></td>
-                                <?php if ($_SESSION["is_employee"] == "3") { ?><td><input type="submit" class="btn btn-outline-danger" value="Delete"></td><?php } ?>
+                                <input type="hidden" name="action" value="add">
+                                <td></td>
+                                <td><input type="number" name="veh_id" class="form-control" min="1"></td>
+                                <td><input type="number" name="emp_id" class="form-control" min="1"></td>
+                                <td></td>
+                                <td></td>
+                                <td><input type="number" name="start_id" class="form-control" min="1"></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <input type="submit" class="btn btn-primary" value="Clock In">
+                                </td>
                             </form>
                         </tr>
+                        <?php while (mysqli_stmt_fetch($stmt)) { ?>
+                            <tr>
+                                <?php if ($date_ret == "" && $end_id == "" && $miles_drive == "") { ?>
+                                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                    <input type="hidden" name="action" value="update">
+                                    <input type="hidden" name="log_id" value="<?php echo $log_id; ?>">
+                                    <td><?php echo $log_id; ?></td>
+                                    <td><?php echo $veh_id; ?></td>
+                                    <td><?php echo $emp_id; ?></td>
+                                    <td><?php echo $date_dep; ?></td>
+                                    <td></td>
+                                    <td><?php echo $start_id; ?></td>
+                                    <td><input type="number" name="end_id" class="form-control" min="1"></td>
+                                    <td><input type="number" name="miles_drive" class="form-control"></td>
+                                    <td><input type="submit" class="btn btn-success" value="Clock Out"></td>
+                                </form>
+                                <?php } else { ?>
+                                    <td><?php echo $log_id; ?></td>
+                                    <td><?php echo $veh_id; ?></td>
+                                    <td><?php echo $emp_id; ?></td>
+                                    <td><?php echo $date_dep; ?></td>
+                                    <td><?php echo $date_ret ?></td>
+                                    <td><?php echo $start_id; ?></td>
+                                    <td><?php echo $end_id; ?></td>
+                                    <td><?php echo $miles_drive; ?></td>
+                                    <td></td>
+                                <?php } ?>
+                            </tr>
                         <?php } ?>
                     </tbody>
                 </table>
+            </div>
+        </div>
+        <div class="m-4 row justify-content-center">
+            <div class="col-auto">
+                <a href="ps-vehicles.php"><button class="btn btn-outline-primary">Back</button></a>
             </div>
         </div>
     </div>
