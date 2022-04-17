@@ -16,7 +16,16 @@ if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
-    $fname = $minit = $lname = $dob = $addr = $city = $zip = $email = $pnum = $ssn = "";
+    $fname = $_POST["fname"];
+    $minit = $_POST["minit"];
+    $lname = $_POST["lname"];
+    $dob = $_POST["dob"];
+    $addr = $_POST["address"];
+    $city = $_POST["city"];
+    $zip = $_POST["zip"];
+    $email = $_POST["email"];
+    $pnum = $_POST["phone_num"];
+    $ssn = $_POST["ssn"];
     $run = "INSERT INTO PostalService.Employee (first_name, minit, last_name, dob, home_address, home_city, home_zipcode, email, phone_number, ssn)
             VALUES ('".$fname."', '".$minit."', '".$lname."', '".$dob."', '".$addr."', '".$city."', '".$zip."', '".$email."', '".$pnum."', '".$ssn."')";
     mysqli_query($conn_PostalService, $run);
@@ -49,6 +58,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             .bd-placeholder-img-lg {
                 font-size: 3.5rem;
             }
+        }
+        
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            /* display: none; <- Crashes Chrome on hover */
+            -webkit-appearance: none;
+            margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+        }
+        
+        input[type=number] {
+            -moz-appearance:textfield; /* Firefox */
         }
     </style>
     <link href="headers.css" rel="stylesheet">
@@ -105,6 +125,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="col">
                 <h6 class="display-6">Employees</h6>
+            </div>
+        </div>
+        <div class="m-4 row">
+            <div class="col">
                 <table class="table table-bordered table-primary table-hover">
                     <thead>
                         <th scope="col">Employee ID</th>
@@ -119,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <th scope="col">Phone Number</th>
                         <th scope="col">SSN</th>
                         <th scope="col">Manager ID</th>
-                        <th scope="col">Create</th>
+                        <th scope="col"></th>
                     </thead>
                     <tbody>
                         <tr>
@@ -131,12 +155,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <td><input class="form-control" type="date" name="dob"></td>
                                 <td><input class="form-control" type="text" name="address"></td>
                                 <td><input class="form-control" type="text" name="city"></td>
-                                <td><input class="form-control" type="number" name="zip"></td>
+                                <td><input class="form-control" type="text" name="zip" maxlength="5"></td>
                                 <td><input class="form-control" type="email" name="email"></td>
-                                <td><input class="form-control" type="number" name="ssn"></td>
-                                <td><input class="form-control" type="number" name="phone_num"></td>
+                                <td><input class="form-control" type="text" name="phone_num" maxlength="10"></td>
+                                <td><input class="form-control" type="text" name="ssn" maxlength="9"></td>
                                 <td></td>
-                                <td><input type="submit" name="submit" class="btn btn-primary" value="Create"></td>
+                                <td><input type="submit" name="submit" class="btn btn-primary" value="Add"></td>
                             </form>
                         </tr>
                         <?php while (mysqli_stmt_fetch($stmt)) { ?>
