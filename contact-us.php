@@ -4,12 +4,6 @@ require_once "db_conn_WebLogins.php";
 require_once "db_conn_PostalService.php";
 $name = $email = $message = "";
 $name_err = $email_err = $message_err = $success = $error = "";
-// if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-//     $email = $_SESSION["email"];
-//     $grab_name_sql = "SELECT name FROM WebLogins.users WHERE email='$email'";
-//     $result = mysqli_query($conn_WebLogins, $grab_name_sql);
-//     $name = mysqli_fetch_assoc($result)["name"];
-// }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
         if (empty(trim($_POST["name"]))) $name_err = "Please enter a name.";
@@ -69,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account Options</a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <?php if ($_SESSION["is_employee"] >= "1") { ?>
+                                <?php if ($_SESSION["is_employee"] > "1") { ?>
                                     <a href="database-access.php" class="dropdown-item">Database Access</a>
                                 <?php } ?>
                                 <a href="my-account.php" class="dropdown-item">My Account</a>
