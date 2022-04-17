@@ -16,17 +16,17 @@ if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
-    if (trim($_POST["action"]) == "change") {
-        $id = trim($_POST["user-id"]);
-        $access = trim($_POST["access-level"]);
+    if (trim($_POST["action"]) == "update") {
+        $id = trim($_POST["user_id"]);
+        $is_employee = trim($_POST["is_employee"]);
         $run = "UPDATE WebLogins.users SET is_employee = ? WHERE id = ?";
         if ($stmt = mysqli_prepare($conn_WebLogins, $run)) {
-            mysqli_stmt_bind_param($stmt, "ii", $access, $id);
+            mysqli_stmt_bind_param($stmt, "ii", $is_employee, $id);
             mysqli_stmt_execute($stmt);
         }
     }
     else if (trim($_POST["action"]) == "delete") {
-        $id = trim($_POST["user-id"]);
+        $id = trim($_POST["user_id"]);
         $run = "DELETE FROM WebLogins.users WHERE id = ?";
         if ($stmt = mysqli_prepare($conn_WebLogins, $run)) {
             mysqli_stmt_bind_param($stmt, "i", $id);
@@ -150,10 +150,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <td><?php echo $date_created; ?></td>
                                     <td>
                                         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                            <input type="hidden" name="action" value="change">
-                                            <input type="hidden" name="user-id" value="'.$id.'">
+                                            <input type="hidden" name="action" value="update">
+                                            <input type="hidden" name="user_id" value="<?php echo $id; ?>">
                                             <div class="input-group">
-                                                <input type="number" name="access-level" class="form-control" value="<?php echo $is_employee; ?>" min="1" max="3">
+                                                <input type="number" name="is_employee" class="form-control" value="<?php echo $is_employee; ?>" min="1" max="3">
                                                 <input type="submit" class="btn btn-outline-primary" value="Change">
                                             </div>
                                         </form>
@@ -161,7 +161,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <td>
                                         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                                             <input type="hidden" name="action" value="delete">
-                                            <input type="hidden" name="user-id" value="<?php echo $id; ?>">
+                                            <input type="hidden" name="user_id" value="<?php echo $id; ?>">
                                             <input type="submit" class="btn btn-danger" value="Delete">
                                         </form>
                                     </td>
