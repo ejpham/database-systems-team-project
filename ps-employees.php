@@ -5,10 +5,10 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location:sign-in.php");
     exit;
 }
-if ($_SESSION["is_employee"] < "2") {
+if ($_SESSION["is_employee"] == "1") {
     header("location:index.php");
     exit;
-}
+} else {}
 $sql = "SELECT * FROM PostalService.Employee";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
     mysqli_stmt_execute($stmt);
@@ -146,7 +146,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <th scope="col"></th>
                     </thead>
                     <tbody>
-                        <?php if ($_SESSION["is_employee"] === "3") { ?>
+                        <?php if ($_SESSION["is_employee"] == "3") { ?>
                             <tr>
                                 <form method="post" action="">
                                     <td></td>
@@ -164,7 +164,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <td><input type="submit" name="submit" class="btn btn-primary" value="Add"></td>
                                 </form>
                             </tr>
-                        <?php } ?>
+                        <?php } else {} ?>
                         <?php while (mysqli_stmt_fetch($stmt)) { ?>
                         <tr>
                             <td><?php echo $emp_id; ?></td>

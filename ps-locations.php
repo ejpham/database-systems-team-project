@@ -8,10 +8,10 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location:sign-in.php");
     exit;
 }
-if ($_SESSION["is_employee"] < "2") {
+if ($_SESSION["is_employee"] == "1") {
     header("location:index.php");
     exit;
-}
+} else {}
 $employeeCheck = $_SESSION["is_employee"];
 
 $sql = "SELECT location_id, location_address, location_city, location_state, location_zipcode, location_dept FROM PostalService.Location ORDER BY location_id ASC";

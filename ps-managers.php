@@ -5,10 +5,10 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location:sign-in.php");
     exit;
 }
-if ($_SESSION["is_employee"] < "2") {
+if ($_SESSION["is_employee"] == "1") {
     header("location:index.php");
     exit;
-}
+} else {}
 ?>
 
 <!DOCTYPE html>

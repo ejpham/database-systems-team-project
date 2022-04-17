@@ -5,10 +5,10 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location:sign-in.php");
     exit;
 }
-if ($_SESSION["is_employee"] < "2") {
+if ($_SESSION["is_employee"] == "1") {
     header("location:index.php");
     exit;
-}
+} else {}
 $sql = "SELECT mail_id, tracking_number, to_name, to_address, from_name, from_address, delivered_on FROM PostalService.Mail ORDER BY mail_id DESC";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
     mysqli_stmt_execute($stmt);

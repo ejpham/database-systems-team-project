@@ -5,10 +5,10 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location:sign-in.php");
     exit;
 }
-if ($_SESSION["is_employee"] < "2") {
+if ($_SESSION["is_employee"] == "1") {
     header("location:index.php");
     exit;
-}
+} else {}
 $sql = "SELECT id, email, name, is_employee FROM WebLogins.users ORDER BY id ASC";
 if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
     mysqli_stmt_execute($stmt);
@@ -130,7 +130,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </table>
             </div>
         </div>
-        <?php if ($_SESSION["is_employee"] === "3") { ?>
+        <?php if ($_SESSION["is_employee"] == "3") { ?>
             <div class="m-4 row justify-content-center">
                 <div class="col-5">
                     <h6 class="display-6">Adjust Access Level</h6>
@@ -152,7 +152,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </form>
                 </div>
             </div>
-        <?php } ?>
+        <?php } else {} ?>
     </div>
 </body>
 </html>
