@@ -22,10 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $type = trim($_POST["type"]);
         $run = "INSERT INTO PostalService.Company_Vehicle (vehicle_miles, vehicle_cost, vehicle_type) VALUES (?, ?, ?)";
         if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
-            mysqli_stmt_bind_param($stmt, "ids", $param_miles, $param_cost, $param_type);
-            $param_miles = $miles;
-            $param_cost = $cost;
-            $param_type = $type;
+            mysqli_stmt_bind_param($stmt, "ids", $miles, $cost, $type);
             mysqli_stmt_execute($stmt);
         }
     }
