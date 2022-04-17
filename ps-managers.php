@@ -145,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <td><?php echo $man_id; ?></td>
                                     <td><?php echo $lname; ?></td>
                                     <td><?php echo $emp_id; ?></td>
-                                    <?php if ($_SESSION["is_employee"] == "3") { ?><td><input type="submit" class="btn btn-outline-danger" value="Delete"></td><?php } ?>
+                                    <?php if ($_SESSION["is_employee"] == "3") { ?><td><input type="submit" class="btn btn-danger" value="Delete"></td><?php } ?>
                                 </form>
                             </tr>
                         <?php } ?>

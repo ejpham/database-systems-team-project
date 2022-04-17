@@ -228,7 +228,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <td><?php echo $location_zipcode; ?></td>
                                 <td><?php echo $location_dept; ?></td>
                                 <?php if ($_SESSION["is_employee"] == "3") { ?>
-                                <td><input type="submit" class="btn btn-outline-danger" value="Delete"></td>
+                                <td><input type="submit" class="btn btn-danger" value="Delete"></td>
                                 <?php } ?>
                             </form>
                         </tr>

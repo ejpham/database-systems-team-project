@@ -157,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <td></td>
                                 <td></td>
                                 <td>
-                                    <input type="submit" class="btn btn-primary" value="Clock In">
+                                    <input type="submit" class="btn btn-success" value="Clock In">
                                 </td>
                             </form>
                         </tr>
@@ -175,7 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <td><?php echo $start_id; ?></td>
                                     <td><input type="number" name="end_id" class="form-control" min="1"></td>
                                     <td><input type="number" name="miles_drive" class="form-control"></td>
-                                    <td><input type="submit" class="btn btn-success" value="Clock Out"></td>
+                                    <td><input type="submit" class="btn btn-warning" value="Clock Out"></td>
                                 </form>
                                 <?php } else { ?>
                                     <td><?php echo $log_id; ?></td>

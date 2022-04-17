@@ -171,7 +171,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <input type="hidden" name="action" value="add">
                                     <td></td>
                                     <td><input class="form-control" type="text" name="fname" maxlength="30"></td>
-                                    <td><input class="form-control" type="text" name="minit" maxlength="1" oninput="this.value = this.value.toUpperCase();"></td>
+                                    <td><input class="form-control w-50" type="text" name="minit" maxlength="1" oninput="this.value = this.value.toUpperCase();"></td>
                                     <td><input class="form-control" type="text" name="lname" maxlength="30"></td>
                                     <td><input class="form-control" type="date" name="dob"></td>
                                     <td><input class="form-control" type="text" name="address" maxlength="255"></td>
@@ -202,12 +202,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <td><?php if ($_SESSION["is_employee"] == "3") { echo $pnum; } ?></td>
                                 <td><?php if ($_SESSION["is_employee"] == "3") { echo $ssn; } ?></td>
                                 <td><?php echo $m_id; ?></td>
-                                <?php if ($_SESSION["is_employee"] == "3") { ?><td><input type="submit" class="btn btn-outline-danger" value="Delete"></td><?php } ?>
+                                <?php if ($_SESSION["is_employee"] == "3") { ?><td><input type="submit" class="btn btn-danger" value="Delete"></td><?php } ?>
                             </form>
                         </tr>
                         <?php } ?>
                     </tbody>
                 </table>
+            </div>
+        </div>
+        <div class="m-4 row justify-content-center">
+            <div class="col-auto">
+                <a href="ps-employee-shift.php"><button class="btn btn-outline-primary">Employee Shift</button></a>
+                <a href="ps-works-at.php"><button class="btn btn-outline-primary">Employee Works At</button></a>
             </div>
         </div>
     </div>

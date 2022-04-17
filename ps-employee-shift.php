@@ -1,6 +1,6 @@
 <?php
 session_start();
-require "db_conn_WebLogins.php";
+require "db_conn_PostalService.php";
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location:sign-in.php");
     exit;
@@ -9,27 +9,26 @@ if ($_SESSION["is_employee"] == "1") {
     header("location:index.php");
     exit;
 } else {}
-$sql = "SELECT id, email, name, created_at, is_employee FROM WebLogins.users ORDER BY id ASC";
-if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
+$sql = "SELECT * FROM PostalService.Employee_Shift";
+if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
     mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $id, $email, $name, $date_created, $is_employee);
+    mysqli_stmt_bind_result($stmt, $shift_id, $emp_id, $shift_start, $shift_end);
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
-    if (trim($_POST["action"]) == "change") {
-        $id = trim($_POST["user-id"]);
-        $access = trim($_POST["access-level"]);
-        $run = "UPDATE WebLogins.users SET is_employee = ? WHERE id = ?";
-        if ($stmt = mysqli_prepare($conn_WebLogins, $run)) {
-            mysqli_stmt_bind_param($stmt, "ii", $access, $id);
+    if ($_POST["action"] == "add") {
+        $emp_id = trim($_POST["emp_id"]);
+        $run = "INSERT INTO PostalService.Employee_Shift (employee_id) VALUES (?);";
+        if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
+            mysqli_stmt_bind_param($stmt, "i", $emp_id);
             mysqli_stmt_execute($stmt);
         }
     }
-    else if (trim($_POST["action"]) == "delete") {
-        $id = trim($_POST["user-id"]);
-        $run = "DELETE FROM WebLogins.users WHERE id = ?";
-        if ($stmt = mysqli_prepare($conn_WebLogins, $run)) {
-            mysqli_stmt_bind_param($stmt, "i", $id);
+    else if ($_POST["action"] == "update") {
+        $shift_id = trim($_POST["shift_id"]);
+        $run = "UPDATE PostalService.Employee_Shift SET shift_end = now() WHERE shift_id = ?";
+        if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
+            mysqli_stmt_bind_param($stmt, "i", $shift_id);
             mysqli_stmt_execute($stmt);
         }
     }
@@ -63,6 +62,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 font-size: 3.5rem;
             }
         }
+        
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            /* display: none; <- Crashes Chrome on hover */
+            -webkit-appearance: none;
+            margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+        }
+        
+        input[type=number] {
+            -moz-appearance:textfield; /* Firefox */
+        }
     </style>
     <link href="headers.css" rel="stylesheet">
 </head>
@@ -74,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <ul class="nav navbar-nav me-auto">
                         <span id="name" class="nav-item">Logged in as: <?php echo $_SESSION["name"] ?></span>
                     </ul>
-                    <span class="navbar-brand mx-auto">Web Logins</span>
+                    <span class="navbar-brand mx-auto">Postal Service</span>
                     <ul class="nav navbar-nav ms-auto">
                         <a href="sign-out.php" class="nav-item nav-link">Sign Out</a>
                     </ul>
@@ -117,59 +127,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
             <div class="col">
-                <h6 class="display-6">Users</h6>
+                <h6 class="display-6">Employee Shift</h6>
                 <table class="table table-bordered table-primary table-hover">
                     <thead>
-                        <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">E-mail Address</th>
-                        <th scope="col">Date Created</th>
-                        <th scope="col">Access Level</th>
+                        <th scope="col">Shift ID</th>
+                        <th scope="col">Employee ID</th>
+                        <th scope="col">Shift Start</th>
+                        <th scope="col">Shift End</th>
                         <th scope="col"></th>
                     </thead>
                     <tbody>
+                        <tr>
+                            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                <input type="hidden" name="action" value="add">
+                                <td></td>
+                                <td><input type="number" name="emp_id" class="form-control w-25" min="1"></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <input type="submit" class="btn btn-success align-self-start" value="Clock In">
+                                </td>
+                            </form>
+                        </tr>
                         <?php while (mysqli_stmt_fetch($stmt)) { ?>
                             <tr>
-                                <?php if ($_SESSION["is_employee"] == "2" && $is_employee == "1") { ?>
-                                    <td><?php echo $id; ?></td>
-                                    <td><?php echo $name; ?></td>
-                                    <td><?php echo $email; ?></td>
-                                    <td><?php echo $date_created; ?></td>
-                                    <td><?php echo $is_employee; ?></td>
-                                    <td>
-                                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                            <input type="hidden" name="action" value="delete">
-                                            <input type="hidden" name="user-id" value="<?php echo $id; ?>">
-                                            <input type="submit" class="btn btn-outline-danger text-small" value="Delete">
-                                        </form>
-                                    </td>
-                                <?php } else if ($_SESSION["is_employee"] == "3") { ?>
-                                    <td><?php echo $id; ?></td>
-                                    <td><?php echo $name; ?></td>
-                                    <td><?php echo $email; ?></td>
-                                    <td><?php echo $date_created; ?></td>
-                                    <td>
-                                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                            <input type="hidden" name="action" value="change">
-                                            <input type="hidden" name="user-id" value="'.$id.'">
-                                            <div class="input-group">
-                                                <input type="number" name="access-level" class="form-control" value="<?php echo $is_employee; ?>" min="1" max="3">
-                                                <input type="submit" class="btn btn-outline-primary" value="Change">
-                                            </div>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                            <input type="hidden" name="action" value="delete">
-                                            <input type="hidden" name="user-id" value="<?php echo $id; ?>">
-                                            <input type="submit" class="btn btn-danger" value="Delete">
-                                        </form>
-                                    </td>
+                                <?php if ($shift_end == "") { ?>
+                                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                    <input type="hidden" name="action" value="update">
+                                    <input type="hidden" name="shift_id" value="<?php echo $shift_id; ?>">
+                                    <td><?php echo $shift_id; ?></td>
+                                    <td><?php echo $emp_id; ?></td>
+                                    <td><?php echo $shift_start; ?></td>
+                                    <td></td>
+                                    <td><input type="submit" class="btn btn-warning" value="Clock Out"></td>
+                                </form>
+                                <?php } else { ?>
+                                    <td><?php echo $shift_id; ?></td>
+                                    <td><?php echo $emp_id; ?></td>
+                                    <td><?php echo $shift_start; ?></td>
+                                    <td><?php echo $shift_end ?></td>
+                                    <td></td>
                                 <?php } ?>
                             </tr>
                         <?php } ?>
                     </tbody>
                 </table>
+            </div>
+        </div>
+        <div class="m-4 row justify-content-center">
+            <div class="col-auto">
+                <a href="ps-employees.php"><button class="btn btn-outline-primary">Back</button></a>
             </div>
         </div>
     </div>
