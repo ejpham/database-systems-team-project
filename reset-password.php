@@ -76,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </ul>
                 <a href="index.php" class="navbar-brand"><span style="margin-right:7.8rem">Postal Office</style></a>
                 <ul class="nav navbar-nav ms-auto">
-                    <a href="sign-in.php" class="nav-item nav-link">Sign In</a>
+                    <a href="sign-in.php" class="nav-item nav-link active">Sign In</a>
                     <a href="sign-up.php" class="nav-item nav-link">Sign Up</a>
                 </ul>
             </div>
@@ -132,7 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <input type="submit" name="submit" class="btn btn-outline-secondary" value="Reset Password">
                     </div>
                 </form>
-                <p>Change your mind? <a href="sign-in.php">Sign in</a> here.</p>
+                <p>Remember your password? <a href="sign-in.php">Sign in</a> here.</p>
             </div>
         </div>
     </div>

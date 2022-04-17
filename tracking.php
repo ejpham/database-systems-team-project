@@ -1,30 +1,23 @@
 <?php
 session_start();
-
 require_once "db_conn_PostalService.php";
 $tracking = "";
 $tracking_err = $success = $error = $stat = "";
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
     if (empty(trim($_POST["trackingNum"]))) $tracking_err = "Please enter a tracking number.";
     else $tracking = trim($_POST["trackingNum"]);
-
     if (empty($tracking_err)) {
         $sql = "SELECT status FROM PostalService.MailOrders WHERE trackingNumber = $tracking";
         $resultingStatus = $conn_PostalService->query($sql);
-            
-        if($resultingStatus->num_rows > 0){
+        if ($resultingStatus->num_rows > 0) {
             $row = $resultingStatus->fetch_assoc();
             $stat = $row["status"];
         }
-
-        if (!empty($row)){ 
+        if (!empty($row)) {
             $success = '<div class="alert alert-success" role="alert">Successfully Retrieved your mail status.</div>';
         }
         else $error = '<div class="alert alert-danger" role="alert">Could not find your package based on this tracking number.</div>';
     }
-
     mysqli_close($conn_PostalService);
 }
 ?>
@@ -47,9 +40,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="container-fluid">
                 <ul class="nav navbar-nav me-auto">
                     <a href="index.php" class="nav-item nav-link">Home</a>
-                    <a href="mail.php" class="nav-item nav-link">Mail</a>
+                    <a href="mail.php" class="nav-item nav-link active">Mail</a>
                     <a href="pricing.php" class="nav-item nav-link">Pricing</a>
-                    <a href="contact-us.php" class="nav-item nav-link active">Contact Us</a>
+                    <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
                 </ul>
                 <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
                     <a href="index.php" class="navbar-brand"><span style="margin-right:7.3rem">Postal Office</style></a>
@@ -81,35 +74,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container-fluid col-sm-6">
         <div class="row">
             <div class="m-4">
-                <h6 class="display-6">Track Your Mail Here</h6>
-                <p>Fill out the form below to see the status of your mail.</p>
+                <h6 class="display-6">Track Mail</h6>
+                <p>Fill out the form below to track mail or <a href="mail.php">send your mail</a> here.</p>
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                     <?php
                         echo $success;
                         echo $error;
-                        if(!empty($stat))
-                            echo "Mail Status:" . $stat;
+                        if (!empty($stat)) echo "Mail Status:" . $stat;
                     ?>
                     <div class="m-3">
                         <label class="form-label">Tracking Number</label>
-                        <input type="text" name="trackingNum" class="form-control <?php echo (!empty($tracking_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $tracking; ?>" id="inputTracking" maxlength = "10" placeholder="tracking number">
+                        <input type="text" name="trackingNum" class="form-control <?php echo (!empty($tracking_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $tracking; ?>" id="inputTracking" maxlength = "10" placeholder="Tracking #">
                         <span class="invalid-feedback"><?php echo $tracking_err; ?></span>
                     </div>
                     <div class="m-3">
-                        <input type="submit" name="submit" class="btn btn-outline-secondary" value="Send">
+                        <input type="submit" name="submit" class="btn btn-outline-secondary" value="Track">
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-        $('textarea').keyup(function() {
-            var characterCount = $(this).val().length,
-            current_count = $('#current_count'),
-            maximum_count = $('#maximum_count'),
-            count = $('#count');
-            current_count.text(characterCount);
-        });
-    </script>
 </body>
 </html>

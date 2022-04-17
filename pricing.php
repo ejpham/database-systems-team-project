@@ -69,7 +69,7 @@ session_start();
                     <li>12 x 10 x 4: $12</li>
                     <li>12 x 12 x 3: $13</li>
                 </ul>
-                <P> For packages there will also be 10 cent increase per pound.</p>
+                <P>Packages are an extra 10 cents per pound.</p>
             </div>
         </div>
     </div>
