@@ -16,19 +16,31 @@ if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
-    $fname = $_POST["fname"];
-    $minit = $_POST["minit"];
-    $lname = $_POST["lname"];
-    $dob = $_POST["dob"];
-    $addr = $_POST["address"];
-    $city = $_POST["city"];
-    $zip = $_POST["zip"];
-    $email = $_POST["email"];
-    $pnum = $_POST["phone_num"];
-    $ssn = $_POST["ssn"];
-    $run = "INSERT INTO PostalService.Employee (first_name, minit, last_name, dob, home_address, home_city, home_zipcode, email, phone_number, ssn)
-            VALUES ('".$fname."', '".$minit."', '".$lname."', '".$dob."', '".$addr."', '".$city."', '".$zip."', '".$email."', '".$pnum."', '".$ssn."')";
-    mysqli_query($conn_PostalService, $run);
+    if ($_POST["action"] == "add") {
+        $fname = trim($_POST["fname"]);
+        $minit = trim($_POST["minit"]);
+        $lname = trim($_POST["lname"]);
+        $dob = trim($_POST["dob"]);
+        $addr = trim($_POST["address"]);
+        $city = trim($_POST["city"]);
+        $zip = trim($_POST["zip"]);
+        $email = trim($_POST["email"]);
+        $pnum = trim($_POST["phone_num"]);
+        $ssn = trim($_POST["ssn"]);
+        $run = "INSERT INTO PostalService.Employee (first_name, minit, last_name, dob, home_address, home_city, home_zipcode, email, phone_number, ssn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
+            mysqli_stmt_bind_param($stmt, "ssssssssss", $fname, $minit, $lname, $dob, $addr, $city, $zip, $email, $pnum, $ssn);
+            mysqli_stmt_execute($stmt);
+        }
+    }
+    else if ($_POST["action"] == "delete") {
+        $emp_id = trim($_POST["emp_id"]);
+        $run = "DELETE FROM PostalService.Employee WHERE employee_id = ?";
+        if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
+            mysqli_stmt_bind_param($stmt, "i", $emp_id);
+            mysqli_stmt_execute($stmt);
+        }
+    }
     header("refresh:0;");
 }
 ?>
@@ -125,10 +137,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="col">
                 <h6 class="display-6">Employees</h6>
-            </div>
-        </div>
-        <div class="m-4 row">
-            <div class="col">
                 <table class="table table-bordered table-primary table-hover">
                     <thead>
                         <th scope="col">Employee ID</th>
@@ -143,21 +151,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <th scope="col">Phone Number</th>
                         <th scope="col">SSN</th>
                         <th scope="col">Manager ID</th>
-                        <th scope="col"></th>
+                        <?php if ($_SESSION["is_employee"] == "3") { ?><th scope="col"></th><?php } ?>
                     </thead>
                     <tbody>
                         <?php if ($_SESSION["is_employee"] == "3") { ?>
                             <tr>
                                 <form method="post" action="">
+                                    <input type="hidden" name="action" value="add">
                                     <td></td>
-                                    <td><input class="form-control" type="text" name="fname"></td>
+                                    <td><input class="form-control" type="text" name="fname" maxlength="30"></td>
                                     <td><input class="form-control" type="text" name="minit" maxlength="1" oninput="this.value = this.value.toUpperCase();"></td>
-                                    <td><input class="form-control" type="text" name="lname"></td>
+                                    <td><input class="form-control" type="text" name="lname" maxlength="30"></td>
                                     <td><input class="form-control" type="date" name="dob"></td>
-                                    <td><input class="form-control" type="text" name="address"></td>
-                                    <td><input class="form-control" type="text" name="city"></td>
+                                    <td><input class="form-control" type="text" name="address" maxlength="255"></td>
+                                    <td><input class="form-control" type="text" name="city" maxlength="50"></td>
                                     <td><input class="form-control" type="text" name="zip" maxlength="5"></td>
-                                    <td><input class="form-control" type="email" name="email"></td>
+                                    <td><input class="form-control" type="email" name="email" maxlength="75"></td>
                                     <td><input class="form-control" type="text" name="phone_num" maxlength="10"></td>
                                     <td><input class="form-control" type="text" name="ssn" maxlength="9"></td>
                                     <td></td>
@@ -167,19 +176,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <?php } else {} ?>
                         <?php while (mysqli_stmt_fetch($stmt)) { ?>
                         <tr>
-                            <td><?php echo $emp_id; ?></td>
-                            <td><?php echo $fname; ?></td>
-                            <td><?php echo $minit; ?></td>
-                            <td><?php echo $lname; ?></td>
-                            <td><?php echo $dob; ?></td>
-                            <td><?php echo $addr; ?></td>
-                            <td><?php echo $city; ?></td>
-                            <td><?php echo $zip; ?></td>
-                            <td><?php echo $email; ?></td>
-                            <td><?php echo $pnum; ?></td>
-                            <td><?php echo $ssn; ?></td>
-                            <td><?php echo $m_id; ?></td>
-                            <td></td>
+                            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="emp_id" value="<?php echo $emp_id; ?>">
+                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $emp_id; } ?></td>
+                                <td><?php echo $fname; ?></td>
+                                <td><?php echo $minit; ?></td>
+                                <td><?php echo $lname; ?></td>
+                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $dob; } ?></td>
+                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $addr; } ?></td>
+                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $city; } ?></td>
+                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $zip; } ?></td>
+                                <td><?php echo $email; ?></td>
+                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $pnum; } ?></td>
+                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $ssn; } ?></td>
+                                <td><?php echo $m_id; ?></td>
+                                <?php if ($_SESSION["is_employee"] == "3") { ?><td><input type="submit" class="btn btn-outline-danger" value="Delete"></td><?php } ?>
+                            </form>
                         </tr>
                         <?php } ?>
                     </tbody>
