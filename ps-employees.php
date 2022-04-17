@@ -146,23 +146,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <th scope="col"></th>
                     </thead>
                     <tbody>
-                        <tr>
-                            <form method="post" action="">
-                                <td></td>
-                                <td><input class="form-control" type="text" name="fname"></td>
-                                <td><input class="form-control" type="text" name="minit" maxlength="1" oninput="this.value = this.value.toUpperCase();"></td>
-                                <td><input class="form-control" type="text" name="lname"></td>
-                                <td><input class="form-control" type="date" name="dob"></td>
-                                <td><input class="form-control" type="text" name="address"></td>
-                                <td><input class="form-control" type="text" name="city"></td>
-                                <td><input class="form-control" type="text" name="zip" maxlength="5"></td>
-                                <td><input class="form-control" type="email" name="email"></td>
-                                <td><input class="form-control" type="text" name="phone_num" maxlength="10"></td>
-                                <td><input class="form-control" type="text" name="ssn" maxlength="9"></td>
-                                <td></td>
-                                <td><input type="submit" name="submit" class="btn btn-primary" value="Add"></td>
-                            </form>
-                        </tr>
+                        <?php if ($_SESSION["is_employee"] === "3") { ?>
+                            <tr>
+                                <form method="post" action="">
+                                    <td></td>
+                                    <td><input class="form-control" type="text" name="fname"></td>
+                                    <td><input class="form-control" type="text" name="minit" maxlength="1" oninput="this.value = this.value.toUpperCase();"></td>
+                                    <td><input class="form-control" type="text" name="lname"></td>
+                                    <td><input class="form-control" type="date" name="dob"></td>
+                                    <td><input class="form-control" type="text" name="address"></td>
+                                    <td><input class="form-control" type="text" name="city"></td>
+                                    <td><input class="form-control" type="text" name="zip" maxlength="5"></td>
+                                    <td><input class="form-control" type="email" name="email"></td>
+                                    <td><input class="form-control" type="text" name="phone_num" maxlength="10"></td>
+                                    <td><input class="form-control" type="text" name="ssn" maxlength="9"></td>
+                                    <td></td>
+                                    <td><input type="submit" name="submit" class="btn btn-primary" value="Add"></td>
+                                </form>
+                            </tr>
+                        <?php } ?>
                         <?php while (mysqli_stmt_fetch($stmt)) { ?>
                         <tr>
                             <td><?php echo $emp_id; ?></td>
