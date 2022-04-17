@@ -13,6 +13,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         else if (strlen(trim($_POST["email"])) > 75) $email_err = "E-mail address can be no longer than 75 characters.";
         else $email = trim($_POST["email"]);
     }
+    else {
+        $name = $_SESSION["name"];
+        $email = $_SESSION["email"];
+    }
     if (empty(trim($_POST["message"]))) $message_err = "Please enter a message.";
     else $message = trim($_POST["message"]);
     if (empty($email_err) && empty($name_err) && empty($message_err)) {
