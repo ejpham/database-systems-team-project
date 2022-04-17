@@ -9,17 +9,10 @@ if ($_SESSION["is_employee"] == "1") {
     header("location:index.php");
     exit;
 } else {}
-$sql = "SELECT mail_id, tracking_number, to_name, to_address, from_name, from_address, delivered_on FROM PostalService.Mail ORDER BY mail_id DESC";
+$sql = "SELECT * FROM PostalService.Mail ORDER BY mail_id DESC";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
     mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $mail_id, $tracking_number, $from_name, $from_address, $to_name, $to_address, $delivered_on);
-}
-$id = "";
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    mysqli_stmt_close($stmt);
-    $id = trim($_POST["id"]);
-    mysqli_query($conn_PostalService, "UPDATE PostalService.Mail SET delivered_on = now() WHERE mail_id = '".$id."'");
-    header("refresh:0;");
+    mysqli_stmt_bind_result($stmt, $mail_id, $mail_type, $from_name, $from_address, $from_city, $from_state, $from_zipcode, $to_name, $to_address, $to_city, $to_state, $to_zipcode, $shipping_class, $shipping_cost, $label_created, $delivered_on, $tracking_number);
 }
 ?>
 
@@ -104,42 +97,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="col">
                 <h6 class="display-6">Mail</h6>
-                <table class="table table-bordered table-primary table-hover">
+                <table class="table table-bordered table-primary table-hover align-middle">
                     <thead>
-                        <th scope="col">ID</th>
-                        <th scope="col">Tracking Number</th>
+                        <th scope="col">Mail ID</th>
+                        <th scope="col">Mail Type</th>
                         <th scope="col">From Name</th>
                         <th scope="col">From Address</th>
+                        <th scope="col">From City</th>
+                        <th scope="col">From State</th>
+                        <th scope="col">From Zip Code</th>
                         <th scope="col">To Name</th>
                         <th scope="col">To Address</th>
+                        <th scope="col">To City</th>
+                        <th scope="col">To State</th>
+                        <th scope="col">To Zip Code</th>
+                        <th scope="col">Shipping Class</th>
+                        <th scope="col">Shipping Cost</th>
+                        <th scope="col">Label Created</th>
                         <th scope="col">Delivered On</th>
+                        <th scope="col">Tracking Number</th>
                     </thead>
                     <tbody>
                         <?php while (mysqli_stmt_fetch($stmt)) { ?>
                         <tr>
                             <td><?php echo $mail_id; ?></td>
-                            <td><?php echo $tracking_number; ?></td>
+                            <td><?php echo $mail_type; ?></td>
                             <td><?php echo $from_name; ?></td>
                             <td><?php echo $from_address; ?></td>
+                            <td><?php echo $from_city; ?></td>
+                            <td><?php echo $from_state; ?></td>
+                            <td><?php echo $from_zipcode; ?></td>
                             <td><?php echo $to_name; ?></td>
                             <td><?php echo $to_address; ?></td>
-                            <td>
-                                <?php
-                                if (empty($delivered_on)) {
-                                    echo '
-                                    <form method="post" action="">
-                                        <input type="hidden" name="id" value="'.$mail_id.'">
-                                        <input type="submit" name="submit" class="btn btn-primary" value="Delivered">
-                                    </form>
-                                    ';
-                                }
-                                else echo $delivered_on;
-                                ?>
-                            </td>
+                            <td><?php echo $to_city; ?></td>
+                            <td><?php echo $to_state; ?></td>
+                            <td><?php echo $to_zipcode; ?></td>
+                            <td><?php echo $shipping_class; ?></td>
+                            <td><?php echo $shipping_cost; ?></td>
+                            <td><?php echo $label_created; ?></td>
+                            <td><?php echo $delivered_on; ?></td>
+                            <td><?php echo $tracking_number; ?></td>
                         </tr>
                         <?php } ?>
                     </tbody>
                 </table>
+            </div>
+        </div>
+        <div class="m-4 row justify-content-center">
+            <div class="col-auto">
+                <a href="ps-mail-orders.php"><button class="btn btn-outline-primary">Mail Orders</button></a>
             </div>
         </div>
     </div>

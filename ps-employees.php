@@ -148,7 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="col">
                 <h6 class="display-6">Employees</h6>
-                <table class="table table-bordered table-primary table-hover">
+                <table class="table table-bordered table-primary table-hover align-middle">
                     <thead>
                         <th scope="col">Employee ID</th>
                         <th scope="col">First Name</th>

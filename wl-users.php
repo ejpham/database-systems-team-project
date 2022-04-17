@@ -118,9 +118,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="col">
                 <h6 class="display-6">Users</h6>
-                <table class="table table-bordered table-primary table-hover">
+                <table class="table table-bordered table-primary table-hover align-middle">
                     <thead>
-                        <th scope="col">ID</th>
+                        <th scope="col">User ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">E-mail Address</th>
                         <th scope="col">Date Created</th>

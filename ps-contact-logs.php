@@ -97,9 +97,9 @@ if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
             </div>
             <div class="col">
                 <h6 class="display-6">Contact Logs</h6>
-                <table class="table table-bordered table-primary table-hover">
+                <table class="table table-bordered table-primary table-hover align-middle">
                     <thead>
-                        <th scope="col">ID</th>
+                        <th scope="col">Log ID</th>
                         <th scope="col">Full Name</th>
                         <th scope="col">E-mail Address</th>
                         <th scope="col">Message</th>

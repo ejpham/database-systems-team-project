@@ -32,10 +32,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["fromstate"]))) $fromstate_err = "Please make a state selection.";
     else $fromstate = trim($_POST["fromstate"]);
     if (empty(trim($_POST["city"]))) $city_err = "Please enter a valid city.";
-    else if (strlen(trim($_POST["city"])) > 75) $city_err = "City can be no longer than 75 characters.";
+    else if (strlen(trim($_POST["city"])) > 50) $city_err = "City can be no longer than 50 characters.";
     else $city = trim($_POST["city"]);
     if (empty(trim($_POST["fromcity"]))) $fromcity_err = "Please enter a valid city.";
-    else if (strlen(trim($_POST["fromcity"])) > 75) $fromcity_err = "City can be no longer than 75 characters.";
+    else if (strlen(trim($_POST["fromcity"])) > 50) $fromcity_err = "City can be no longer than 50 characters.";
     else $fromcity = trim($_POST["fromcity"]);
     if (empty(trim($_POST["tozipCode"]))) $toZip_err = "Please enter a zip code.";
     else if (strlen(trim($_POST["tozipCode"])) != 5) $toZip_err = "zip code must be 5 characters.";
@@ -106,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty($error)) {
             if ($stmt2 = mysqli_prepare($conn_PostalService, $sql2)) {
                 mysqli_stmt_bind_param($stmt2, "sssiss", $param_tracking, $param_status, $param_packageSize, $param_packageWeight, $param_billingAdd, $param_sendersEmail);
-                $param_status = "On The Way";
+                $param_status = "Label Created";
                 $param_packageSize = $packSize;
                 if ($weight > 0) $param_packageWeight = $weight;
                 else $param_packageWeight = NULL;
@@ -154,8 +154,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account Options</a>
                             <div class="dropdown-menu dropdown-menu-end">
+                                <?php if ($_SESSION["is_employee"] > "1") { ?>
+                                    <a href="database-access.php" class="dropdown-item">Database Access</a>
+                                <?php } ?>
                                 <a href="my-account.php" class="dropdown-item">My Account</a>
-                                <a href="database-access.php" class="dropdown-item">Database Access</a>
                                 <a href="sign-out.php" class="dropdown-item">Sign Out</a>
                             </div>
                         </li>

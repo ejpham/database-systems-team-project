@@ -134,9 +134,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="col">
                 <h6 class="display-6">Locations</h6>
-                <table class="table table-bordered table-primary table-hover">
+                <table class="table table-bordered table-primary table-hover align-middle">
                     <thead>
-                        <th scope="col">ID</th>
+                        <th scope="col">Location ID</th>
                         <th scope="col">Address</th>
                         <th scope="col">City</th>
                         <th scope="col">State</th>
@@ -210,7 +210,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <option value="WY">WY</option>
                                         </select>
                                     </td>
-                                    <td><input type="text" name="Zip" class="form-control" placeholder="ZipCode" maxlength = "5"></td>
+                                    <td><input type="text" name="Zip" class="form-control" placeholder="Zip code" maxlength = "5"></td>
                                     <td><input type="text" name="Department" class="form-control" placeholder="Department"></td>
                                     <td><input type="submit" class="btn btn-primary" value="Add"></td>
                                 </form>

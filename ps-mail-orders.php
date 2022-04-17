@@ -9,32 +9,19 @@ if ($_SESSION["is_employee"] == "1") {
     header("location:index.php");
     exit;
 } else {}
-$sql = "SELECT * FROM PostalService.Vehicle_Use";
+$sql = "SELECT * FROM PostalService.MailOrders ORDER BY order_id DESC";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
     mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $log_id, $veh_id, $emp_id, $date_dep, $date_ret, $start_id, $end_id, $miles_drive);
+    mysqli_stmt_bind_result($stmt, $order_id, $tracking_number, $status, $package_size, $package_weight, $billing, $email);
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
-    if (trim($_POST["action"]) == "add") {
-        $veh_id = trim($_POST["veh_id"]);
-        $emp_id = trim($_POST["emp_id"]);
-        $start_id = trim($_POST["start_id"]);
-        $run = "INSERT INTO PostalService.Vehicle_Use (vehicle_id, driven_by_employee_id, start_location_id) VALUES (?, ?, ?);";
-        if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
-            mysqli_stmt_bind_param($stmt, "iii", $veh_id, $emp_id, $start_id);
-            mysqli_stmt_execute($stmt);
-        }
-    }
-    else if (trim($_POST["action"]) == "update") {
-        $log_id = trim($_POST["log_id"]);
-        $end_id = trim($_POST["end_id"]);
-        $miles_drive = trim($_POST["miles_drive"]);
-        $run = "UPDATE PostalService.Vehicle_Use SET date_returned = now(), end_location_id = ?, miles_driven = ? WHERE log_id = ?;";
-        if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
-            mysqli_stmt_bind_param($stmt, "iii", $end_id, $miles_drive, $log_id);
-            mysqli_stmt_execute($stmt);
-        }
+    $order_id = trim($_POST["order_id"]);
+    $status = trim($_POST["status"]);
+    $run = "UPDATE PostalService.MailOrders SET status = ? WHERE order_id = ?;";
+    if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
+        mysqli_stmt_bind_param($stmt, "si", $status, $order_id);
+        mysqli_stmt_execute($stmt);
     }
     header("refresh:0;");
 }
@@ -65,17 +52,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             .bd-placeholder-img-lg {
                 font-size: 3.5rem;
             }
-        }
-        
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            /* display: none; <- Crashes Chrome on hover */
-            -webkit-appearance: none;
-            margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
-        }
-        
-        input[type=number] {
-            -moz-appearance:textfield; /* Firefox */
         }
     </style>
     <link href="headers.css" rel="stylesheet">
@@ -131,64 +107,64 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
             <div class="col">
-                <h6 class="display-6">Vehicle Use</h6>
+                <h6 class="display-6">Mail Orders</h6>
                 <table class="table table-bordered table-primary table-hover align-middle">
                     <thead>
-                        <th scope="col">Log ID</th>
-                        <th scope="col">Vehicle ID</th>
-                        <th scope="col">Driven by Employee ID</th>
-                        <th scope="col">Date Departed</th>
-                        <th scope="col">Date Returned</th>
-                        <th scope="col">Start Location ID</th>
-                        <th scope="col">End Location ID</th>
-                        <th scope="col">Miles Driven</th>
-                        <th scope="col"></th>
+                        <th scope="col">Order ID</th>
+                        <th scope="col">Tracking Number</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Package Size</th>
+                        <th scope="col">Package Weight</th>
+                        <th scope="col">Billing Address</th>
+                        <th scope="col">Sender's E-mail</th>
                     </thead>
                     <tbody>
-                        <tr>
-                            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                <input type="hidden" name="action" value="add">
-                                <td></td>
-                                <td><input type="number" name="veh_id" class="form-control" min="1"></td>
-                                <td><input type="number" name="emp_id" class="form-control" min="1"></td>
-                                <td></td>
-                                <td></td>
-                                <td><input type="number" name="start_id" class="form-control" min="1"></td>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <input type="submit" class="btn btn-success" value="Clock In">
-                                </td>
-                            </form>
-                        </tr>
                         <?php while (mysqli_stmt_fetch($stmt)) { ?>
-                            <tr>
-                                <?php if ($date_ret == "" && $end_id == "" && $miles_drive == "") { ?>
+                        <tr>
+                            <td><?php echo $order_id; ?></td>
+                            <td><?php echo $tracking_number; ?></td>
+                            <td>
+                                <?php if ($status == "Delivered") { echo $status; } else { ?>
                                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                    <input type="hidden" name="action" value="update">
-                                    <input type="hidden" name="log_id" value="<?php echo $log_id; ?>">
-                                    <td><?php echo $log_id; ?></td>
-                                    <td><?php echo $veh_id; ?></td>
-                                    <td><?php echo $emp_id; ?></td>
-                                    <td><?php echo $date_dep; ?></td>
-                                    <td></td>
-                                    <td><?php echo $start_id; ?></td>
-                                    <td><input type="number" name="end_id" class="form-control" min="1"></td>
-                                    <td><input type="number" name="miles_drive" class="form-control"></td>
-                                    <td><input type="submit" class="btn btn-warning" value="Clock Out"></td>
+                                    <input type="hidden" name="order_id" value="<?php echo $order_id; ?>">
+                                    <div class="input-group">
+                                        <select type="text" class="form-select" name="status" value="<?php echo $status; ?>">
+                                            <?php if ($status == "Label Created") { ?>
+                                                <option value="Label Created" selected disabled>Label Created</option>
+                                                <option value="Processing">Processing</option>
+                                                <option value="In Transit">In Transit</option>
+                                                <option value="Out for Delivery">Out for Delivery</option>
+                                                <option value="Delivered">Delivered</option>
+                                            <?php } else if ($status == "Processing") { ?>
+                                                <option value="Label Created" disabled>Label Created</option>
+                                                <option value="Processing" selected disabled>Processing</option>
+                                                <option value="In Transit">In Transit</option>
+                                                <option value="Out for Delivery">Out for Delivery</option>
+                                                <option value="Delivered">Delivered</option>
+                                            <?php } else if ($status == "In Transit") { ?>
+                                                <option value="Label Created" disabled>Label Created</option>
+                                                <option value="Processing">Processing</option>
+                                                <option value="In Transit" selected disabled>In Transit</option>
+                                                <option value="Out for Delivery">Out for Delivery</option>
+                                                <option value="Delivered">Delivered</option>
+                                            <?php } else if ($status == "Out for Delivery") { ?>
+                                                <option value="Label Created" disabled>Label Created</option>
+                                                <option value="Processing">Processing</option>
+                                                <option value="In Transit">In Transit</option>
+                                                <option value="Out for Delivery" selected disabled>Out for Delivery</option>
+                                                <option value="Delivered">Delivered</option>
+                                            <?php } ?>
+                                        </select>
+                                        <input type="submit" class="btn btn-outline-primary" value="Update">
+                                    </div>
                                 </form>
-                                <?php } else { ?>
-                                    <td><?php echo $log_id; ?></td>
-                                    <td><?php echo $veh_id; ?></td>
-                                    <td><?php echo $emp_id; ?></td>
-                                    <td><?php echo $date_dep; ?></td>
-                                    <td><?php echo $date_ret ?></td>
-                                    <td><?php echo $start_id; ?></td>
-                                    <td><?php echo $end_id; ?></td>
-                                    <td><?php echo $miles_drive; ?></td>
-                                    <td></td>
                                 <?php } ?>
-                            </tr>
+                            </td>
+                            <td><?php echo $package_size; ?></td>
+                            <td><?php echo $package_weight; ?></td>
+                            <td><?php echo $billing; ?></td>
+                            <td><?php echo $email; ?></td>
+                        </tr>
                         <?php } ?>
                     </tbody>
                 </table>
@@ -196,7 +172,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <div class="m-4 row justify-content-center">
             <div class="col-auto">
-                <a href="ps-vehicles.php"><button class="btn btn-outline-primary">Back</button></a>
+                <a href="ps-mail.php"><button class="btn btn-outline-primary">Back</button></a>
+            </div>
+        </div>
+        <div class="m-4 row justify-content-start">
+            <div class="col-auto">
+                <label>Status:</label>
+                <ul>
+                    <li>Label Created</li>
+                    <li>Processing</li>
+                    <li>In Transit</li>
+                    <li>Out for Delivery</li>
+                    <li>Delivered</li>
+                </ul>
             </div>
         </div>
     </div>
