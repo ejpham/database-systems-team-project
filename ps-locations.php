@@ -22,15 +22,22 @@ if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") { 
     mysqli_stmt_close($stmt);
     if ($_POST["action"] == "add") {
-        $location_address = trim($_POST["Address"]);
-        $location_city = trim($_POST["City"]);
-        $location_state = trim($_POST["State"]);
-        $location_zipcode = trim($_POST["Zip"]);
-        $location_dept = trim($_POST["Department"]);
-        $run = "INSERT INTO PostalService.Location (location_address, location_city, location_state, location_zipcode, location_dept) VALUES (?, ?, ?, ?, ?)";
-        if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
-            mysqli_stmt_bind_param($stmt, "sssss", $location_address, $location_city, $location_state, $location_zipcode, $location_dept);
-            mysqli_stmt_execute($stmt);
+        if(!empty(trim($_POST["Address"])))
+            $location_address = trim($_POST["Address"]);
+        if(!empty(trim($_POST["City"])))
+            $location_city = trim($_POST["City"]);
+        if(trim($_POST["Address"]) != "State")
+            $location_state = trim($_POST["State"]);
+        if(!empty(trim($_POST["Zip"])))
+            $location_zipcode = trim($_POST["Zip"]);
+        if(!empty(trim($_POST["Department"])))
+            $location_dept = trim($_POST["Department"]);
+        if(!empty($location_address) && !empty($location_city) && !empty($location_state) && !empty($location_zipcode) && !empty($location_dept)){
+            $run = "INSERT INTO PostalService.Location (location_address, location_city, location_state, location_zipcode, location_dept) VALUES (?, ?, ?, ?, ?)";
+            if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
+                mysqli_stmt_bind_param($stmt, "sssss", $location_address, $location_city, $location_state, $location_zipcode, $location_dept);
+                mysqli_stmt_execute($stmt);
+            }
         }
     }
     else if ($_POST["action"] == "delete") {
@@ -203,7 +210,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <option value="WY">WY</option>
                                         </select>
                                     </td>
-                                    <td><input type="text" name="Zip" class="form-control" placeholder="ZipCode"></td>
+                                    <td><input type="text" name="Zip" class="form-control" placeholder="ZipCode" maxlength = "5"></td>
                                     <td><input type="text" name="Department" class="form-control" placeholder="Department"></td>
                                     <td><input type="submit" class="btn btn-primary" value="Add"></td>
                                 </form>

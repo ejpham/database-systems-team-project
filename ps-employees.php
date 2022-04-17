@@ -17,20 +17,32 @@ if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
     if ($_POST["action"] == "add") {
-        $fname = trim($_POST["fname"]);
-        $minit = trim($_POST["minit"]);
-        $lname = trim($_POST["lname"]);
-        $dob = trim($_POST["dob"]);
-        $addr = trim($_POST["address"]);
-        $city = trim($_POST["city"]);
-        $zip = trim($_POST["zip"]);
-        $email = trim($_POST["email"]);
-        $pnum = trim($_POST["phone_num"]);
-        $ssn = trim($_POST["ssn"]);
-        $run = "INSERT INTO PostalService.Employee (first_name, minit, last_name, dob, home_address, home_city, home_zipcode, email, phone_number, ssn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
-            mysqli_stmt_bind_param($stmt, "ssssssssss", $fname, $minit, $lname, $dob, $addr, $city, $zip, $email, $pnum, $ssn);
-            mysqli_stmt_execute($stmt);
+        if(!empty(trim($_POST["fname"])))
+            $fname = trim($_POST["fname"]);
+        if(!empty(trim($_POST["minit"])) && !is_numeric(trim($_POST["minit"])))
+            $minit = trim($_POST["minit"]);
+        if(!empty(trim($_POST["lname"])))
+            $lname = trim($_POST["lname"]);
+        if(!empty(trim($_POST["dob"])))
+            $dob = trim($_POST["dob"]);
+        if(!empty(trim($_POST["address"])))
+            $addr = trim($_POST["address"]);
+        if(!empty(trim($_POST["city"])))
+            $city = trim($_POST["city"]);
+        if(!empty(trim($_POST["zip"])))
+            $zip = trim($_POST["zip"]);
+        if(!empty(trim($_POST["email"])))
+            $email = trim($_POST["email"]);
+        if(!empty(trim($_POST["fname"])))
+            $pnum = trim($_POST["fname"]);
+        if(!empty(trim($_POST["ssn"])) && strlen(trim($_POST["ssn"])) == 9)
+            $ssn = trim($_POST["ssn"]);
+        if(!empty($fname) && !empty($minit) && !empty($lname) && !empty($dob) && !empty($addr) && !empty($city) && !empty($zip) && !empty($email) && !empty($pnum) && !empty($ssn)){
+            $run = "INSERT INTO PostalService.Employee (first_name, minit, last_name, dob, home_address, home_city, home_zipcode, email, phone_number, ssn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
+                mysqli_stmt_bind_param($stmt, "ssssssssss", $fname, $minit, $lname, $dob, $addr, $city, $zip, $email, $pnum, $ssn);
+                mysqli_stmt_execute($stmt);
+            }
         }
     }
     else if ($_POST["action"] == "delete") {
