@@ -53,13 +53,13 @@ session_start();
         <div class="row">
             <div class="m-4">
                 <h6 class="display-6">Pricing</h6>
-                <p><b>Mail</b></p>
-                <ul style = "list-style-type:square">
-                    <li>Fast: $3</li>
-                    <li>Express: $6</li>
+                <p><b>Mail Shipping Speed</b></p>
+                <ul style = "list-style-type:circle">
+                    <li>Regular: $3</li>
+                    <li>Premium: $6</li>
                 </ul>
                 <p><b>Packages Based on size</b></p>
-                <ul style = "list-style-type:square">
+                <ul style = "list-style-type:circle">
                     <li>8 x 8 x 6: $6</li>
                     <li>8 x 8 x 8: $7</li>
                     <li>10 x 8 x 6: $8</li>
@@ -69,6 +69,7 @@ session_start();
                     <li>12 x 10 x 4: $12</li>
                     <li>12 x 12 x 3: $13</li>
                 </ul>
+                <P> For packages there will also be 10 cent increase per pound.</p>
             </div>
         </div>
     </div>

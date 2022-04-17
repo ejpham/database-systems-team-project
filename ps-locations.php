@@ -1,7 +1,6 @@
 <?php
 session_start();
 require "db_conn_PostalService.php";
-
 $newAdd = $newCity = $newState = $newZip = $newDept = "";
 $success = $error = "";
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
@@ -12,7 +11,6 @@ if ($_SESSION["is_employee"] == "1") {
     header("location:index.php");
     exit;
 } else {}
-$employeeCheck = $_SESSION["is_employee"];
 
 $sql = "SELECT location_id, location_address, location_city, location_state, location_zipcode, location_dept FROM PostalService.Location ORDER BY location_id ASC";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
@@ -22,31 +20,28 @@ if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") { 
-    if(!empty(trim($_POST["add"])))
-        $newAdd = trim($_POST["add"]);
-    if(!empty(trim($_POST["city"])))
-        $newCity = trim($_POST["city"]);
-    if(trim($_POST["state"]) != "State")
-        $newState = trim($_POST["state"]);
-    if(!empty(trim($_POST["zip"])))
-        $newZip = trim($_POST["zip"]);
-    if(!empty(trim($_POST["dept"])))
-        $newDept = trim($_POST["dept"]);
-
-    if(!empty($newAdd) && !empty($newCity) && !empty($newState) && !empty($newZip) && !empty($newDept)){
-        mysqli_stmt_close($stmt);
-        $sql = "INSERT INTO PostalService.Location (location_address, location_city, location_state, location_zipcode, location_dept) VALUES (?, ?, ?, ?, ?)";
-        if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-            mysqli_stmt_bind_param($stmt, "sssss", $newAdd, $newCity, $newState, $newZip, $newDept);
-
-            if (mysqli_stmt_execute($stmt)) $success = '<div class="alert alert-success" role="alert">New Location added</div>';
-            else $error = '<div class="alert alert-danger" role="alert">Could not add new location</div>';
+    mysqli_stmt_close($stmt);
+    if ($_POST["action"] == "add") {
+        $location_address = trim($_POST["Address"]);
+        $location_city = trim($_POST["City"]);
+        $location_state = trim($_POST["State"]);
+        $location_zipcode = trim($_POST["Zip"]);
+        $location_dept = trim($_POST["Department"]);
+        $run = "INSERT INTO PostalService.Location (location_address, location_city, location_state, location_zipcode, location_dept) VALUES (?, ?, ?, ?, ?)";
+        if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
+            mysqli_stmt_bind_param($stmt, "sssss", $location_address, $location_city, $location_state, $location_zipcode, $location_dept);
+            mysqli_stmt_execute($stmt);
         }
-        header("refresh:0;");
     }
-    else{
-        $error = '<div class="alert alert-danger" role="alert">Make sure to fill every cell</div>';
+    else if ($_POST["action"] == "delete") {
+        $location_id = $_POST["location_id"];
+        $run = "DELETE FROM PostalService.Location WHERE location_id = ?";
+        if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
+            mysqli_stmt_bind_param($stmt, "i", $location_id);
+            mysqli_stmt_execute($stmt);
+        }
     }
+    header("refresh:0;");
 }
 ?>
 
@@ -140,122 +135,103 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <th scope="col">State</th>
                         <th scope="col">Zip Code</th>
                         <th scope="col">Department</th>
+                        <?php if ($_SESSION["is_employee"] == "3") { ?>
+                        <th></th>
+                        <?php } ?>
                     </thead>
                     <tbody>
+                        <?php if ($_SESSION["is_employee"] == "3") { ?>
+                            <tr>
+                                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                    <input type="hidden" name="action" value="add">
+                                    <td></td>
+                                    <td><input type="text" name="Address" class="form-control" placeholder="Address"></td>
+                                    <td><input type="text" name="City" class="form-control" placeholder="City"></td>
+                                    <td>
+                                    <select class="form-select" type = "text" name = "State">
+                                            <option value = "">State</option>
+                                            <option value="AL">AL</option>
+                                            <option value="AK">AK</option>
+                                            <option value="AR">AR</option>	
+                                            <option value="AZ">AZ</option>
+                                            <option value="CA">CA</option>
+                                            <option value="CO">CO</option>
+                                            <option value="CT">CT</option>
+                                            <option value="DC">DC</option>
+                                            <option value="DE">DE</option>
+                                            <option value="FL">FL</option>
+                                            <option value="GA">GA</option>
+                                            <option value="HI">HI</option>
+                                            <option value="IA">IA</option>
+                                            <option value="ID">ID</option>
+                                            <option value="IL">IL</option>
+                                            <option value="IN">IN</option>
+                                            <option value="KS">KS</option>
+                                            <option value="KY">KY</option>
+                                            <option value="LA">LA</option>
+                                            <option value="MA">MA</option>
+                                            <option value="MD">MD</option>
+                                            <option value="ME">ME</option>
+                                            <option value="MI">MI</option>
+                                            <option value="MN">MN</option>
+                                            <option value="MO">MO</option>	
+                                            <option value="MS">MS</option>
+                                            <option value="MT">MT</option>
+                                            <option value="NC">NC</option>	
+                                            <option value="NE">NE</option>
+                                            <option value="NH">NH</option>
+                                            <option value="NJ">NJ</option>
+                                            <option value="NM">NM</option>			
+                                            <option value="NV">NV</option>
+                                            <option value="NY">NY</option>
+                                            <option value="ND">ND</option>
+                                            <option value="OH">OH</option>
+                                            <option value="OK">OK</option>
+                                            <option value="OR">OR</option>
+                                            <option value="PA">PA</option>
+                                            <option value="RI">RI</option>
+                                            <option value="SC">SC</option>
+                                            <option value="SD">SD</option>
+                                            <option value="TN">TN</option>
+                                            <option value="TX">TX</option>
+                                            <option value="UT">UT</option>
+                                            <option value="VT">VT</option>
+                                            <option value="VA">VA</option>
+                                            <option value="WA">WA</option>
+                                            <option value="WI">WI</option>	
+                                            <option value="WV">WV</option>
+                                            <option value="WY">WY</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="text" name="Zip" class="form-control" placeholder="ZipCode"></td>
+                                    <td><input type="text" name="Department" class="form-control" placeholder="Department"></td>
+                                    <td><input type="submit" class="btn btn-primary" value="Add"></td>
+                                </form>
+                            </tr>
+                        <?php } ?>
                         <?php while (mysqli_stmt_fetch($stmt)) { ?>
                         <tr>
-                            <td><?php echo $location_id; ?></td>
-                            <td><?php echo $location_address; ?></td>
-                            <td><?php echo $location_city; ?></td>
-                            <td><?php echo $location_state; ?></td>
-                            <td><?php echo $location_zipcode; ?></td>
-                            <td><?php echo $location_dept; ?></td>
+                            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="location_id" value="<?php echo $location_id; ?>">
+                                <td><?php echo $location_id; ?></td>
+                                <td><?php echo $location_address; ?></td>
+                                <td><?php echo $location_city; ?></td>
+                                <td><?php echo $location_state; ?></td>
+                                <td><?php echo $location_zipcode; ?></td>
+                                <td><?php echo $location_dept; ?></td>
+                                <?php if ($_SESSION["is_employee"] == "3") { ?>
+                                <td><input type="submit" class="btn btn-outline-danger" value="Delete"></td>
+                                <?php } ?>
+                            </form>
                         </tr>
                         <?php } ?>
                     </tbody>
                 </table>
-
-                <br />
-
-                <div class="m-3" style="display:flex; justify-content:center;">Fill out table below to add new location.</div>
-
-                <div class="" style="display:flex; justify-content:center;" id="theform">
-                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                        <table class="table table-bordered">
-                            <thead>
-                                <th scope="col">Address</th>
-                                <th scope="col">City</th>
-                                <th scope="col">State</th>
-                                <th scope="col">Zip Code</th>
-                                <th scope="col">Department</th>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td> <input class="form-control" type="text" name="add"/> </td>
-                                <td> <input class="form-control"type="text" name="city" oninput="this.value = this.value.toUpperCase();"/> </td>
-                                <td> 
-                                    <select class="form-select" type = "text" name = "state">
-                                        <option value = "">State</option>
-                                        <option value="AL">AL</option>
-                                        <option value="AK">AK</option>
-                                        <option value="AR">AR</option>	
-                                        <option value="AZ">AZ</option>
-                                        <option value="CA">CA</option>
-                                        <option value="CO">CO</option>
-                                        <option value="CT">CT</option>
-                                        <option value="DC">DC</option>
-                                        <option value="DE">DE</option>
-                                        <option value="FL">FL</option>
-                                        <option value="GA">GA</option>
-                                        <option value="HI">HI</option>
-                                        <option value="IA">IA</option>
-                                        <option value="ID">ID</option>
-                                        <option value="IL">IL</option>
-                                        <option value="IN">IN</option>
-                                        <option value="KS">KS</option>
-                                        <option value="KY">KY</option>
-                                        <option value="LA">LA</option>
-                                        <option value="MA">MA</option>
-                                        <option value="MD">MD</option>
-                                        <option value="ME">ME</option>
-                                        <option value="MI">MI</option>
-                                        <option value="MN">MN</option>
-                                        <option value="MO">MO</option>	
-                                        <option value="MS">MS</option>
-                                        <option value="MT">MT</option>
-                                        <option value="NC">NC</option>	
-                                        <option value="NE">NE</option>
-                                        <option value="NH">NH</option>
-                                        <option value="NJ">NJ</option>
-                                        <option value="NM">NM</option>			
-                                        <option value="NV">NV</option>
-                                        <option value="NY">NY</option>
-                                        <option value="ND">ND</option>
-                                        <option value="OH">OH</option>
-                                        <option value="OK">OK</option>
-                                        <option value="OR">OR</option>
-                                        <option value="PA">PA</option>
-                                        <option value="RI">RI</option>
-                                        <option value="SC">SC</option>
-                                        <option value="SD">SD</option>
-                                        <option value="TN">TN</option>
-                                        <option value="TX">TX</option>
-                                        <option value="UT">UT</option>
-                                        <option value="VT">VT</option>
-                                        <option value="VA">VA</option>
-                                        <option value="WA">WA</option>
-                                        <option value="WI">WI</option>	
-                                        <option value="WV">WV</option>
-                                        <option value="WY">WY</option>
-                                    </select>
-                                </td>
-                                <td> <input class="form-control" type="text" name="zip" maxlength = "5"/> </td>
-                                <td> <input class="form-control"type="text" name="dept" oninput="this.value = this.value.toUpperCase();"/> </td>
-                                <td> <input class="form-control"type="submit" name="submit" class="btn btn-outline-secondary" value="Send"></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </form>
-                </div>
-                <div><?php echo $error ?></div>
             </div>
         </div>
         <main>
         </main>
     </div>
-
-    <script type = "text/javascript">
-
-        function accessCheck() {
-            if($employeeCheck == 3){
-                document.getElementById("theform").style.display = "flex";
-            }
-            else
-                document.getElementById("theform").style.display = "none";
-
-        }
-
-        window.onload = accessCheck();
-    </script>
 </body>
 </html>

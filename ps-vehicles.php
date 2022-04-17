@@ -17,13 +17,19 @@ if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
     if ($_POST["action"] == "add") {
-        $miles = trim($_POST["miles"]);
-        $cost = trim($_POST["cost"]);
-        $type = trim($_POST["type"]);
-        $run = "INSERT INTO PostalService.Company_Vehicle (vehicle_miles, vehicle_cost, vehicle_type) VALUES (?, ?, ?)";
-        if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
-            mysqli_stmt_bind_param($stmt, "ids", $miles, $cost, $type);
-            mysqli_stmt_execute($stmt);
+        if(!empty(trim($_POST["miles"])) && is_numeric(trim($_POST["miles"])))
+            $miles = trim($_POST["miles"]);
+        if(!empty(trim($_POST["cost"])) && is_numeric(trim($_POST["cost"])))
+            $cost = trim($_POST["cost"]);
+        if(!empty(trim($_POST["miles"])))
+            $type = trim($_POST["type"]);
+        
+        if(!empty($miles) && !empty($cost) && !empty($type)){
+            $run = "INSERT INTO PostalService.Company_Vehicle (vehicle_miles, vehicle_cost, vehicle_type) VALUES (?, ?, ?)";
+            if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
+                mysqli_stmt_bind_param($stmt, "ids", $miles, $cost, $type);
+                mysqli_stmt_execute($stmt);
+            }
         }
     }
     else if ($_POST["action"] == "delete") {
@@ -136,19 +142,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <th scope="col">Vehicle Miles</th>
                         <th scope="col">Vehicle Cost</th>
                         <th scope="col">Vehicle Type</th>
+                        <?php if ($_SESSION["is_employee"] == "3") { ?>
                         <th scope="col"></th>
+                        <?php } ?>
                     </thead>
                     <tbody>
-                        <tr>
-                            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                <input type="hidden" name="action" value="add">
-                                <td></td>
-                                <td><input type="number" name="miles" class="form-control" min="0" placeholder="Vehicle Mileage"></td>
-                                <td><input type="currency" name="cost" class="form-control" placeholder="Vehicle Cost"></td>
-                                <td><input type="text" name="type" class="form-control" placeholder="Vehicle Type"></td>
-                                <td><input type="submit" class="btn btn-primary" value="Add"></td>
-                            </form>
-                        </tr>
+                        <?php if ($_SESSION["is_employee"] == "3") { ?>
+                            <tr>
+                                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                    <input type="hidden" name="action" value="add">
+                                    <td></td>
+                                    <td><input type="number" name="miles" class="form-control" min="0" placeholder="Vehicle Mileage"></td>
+                                    <td><input type="currency" name="cost" class="form-control" placeholder="Vehicle Cost"></td>
+                                    <td><input type="text" name="type" class="form-control" placeholder="Vehicle Type"></td>
+                                    <td><input type="submit" class="btn btn-primary" value="Add"></td>
+                                </form>
+                            </tr>
+                        <?php } ?>
                         <?php while (mysqli_stmt_fetch($stmt)) { ?>
                             <tr>
                                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
@@ -158,7 +168,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <td><?php echo $miles; ?></td>
                                     <td><?php echo $cost; ?></td>
                                     <td><?php echo $type; ?></td>
-                                    <td><input type="submit" class="btn btn-outline-danger" value="Delete"></td>
+                                    <?php if ($_SESSION["is_employee"] == "3") { ?>
+                                        <td><input type="submit" class="btn btn-outline-danger" value="Delete"></td>
+                                    <?php } ?>
                                 </form>
                             </tr>
                         <?php } ?>
