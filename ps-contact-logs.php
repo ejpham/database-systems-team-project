@@ -53,7 +53,7 @@ if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
                     <ul class="nav navbar-nav me-auto">
                         <span id="name" class="nav-item">Logged in as: <?php echo $_SESSION["name"] ?></span>
                     </ul>
-                    <span class="navbar-brand mx-auto">Postal Service Mail</span>
+                    <span class="navbar-brand mx-auto">Postal Service</span>
                     <ul class="nav navbar-nav ms-auto">
                         <a href="sign-out.php" class="nav-item nav-link">Sign Out</a>
                     </ul>

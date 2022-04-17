@@ -19,7 +19,7 @@ $input_id_err = $input_access_level_err = $success = $error = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["input_id"])) || trim($_POST["input_id"]) < 1) $input_id_err = '<div class="alert alert-danger" role="alert">Please enter a valid User ID.</div>';
     else $input_id = $_POST["input_id"];
-    if (empty(trim($_POST["input_access_level"])) || trim($_POST["input_access_level"]) < 0 || trim($_POST["input_access_level"]) > 3) $input_access_level_err = '<div class="alert alert-danger" role="alert">Please enter a valid access level.</div>';
+    if (empty(trim($_POST["input_access_level"])) || trim($_POST["input_access_level"]) < 1 || trim($_POST["input_access_level"]) > 3) $input_access_level_err = '<div class="alert alert-danger" role="alert">Please enter a valid access level.</div>';
     else $input_access_level = $_POST["input_access_level"];
     if (empty($input_id_err) && empty($input_access_level_err)) {
         mysqli_stmt_close($stmt);
@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <ul class="nav navbar-nav me-auto">
                         <span id="name" class="nav-item">Logged in as: <?php echo $_SESSION["name"] ?></span>
                     </ul>
-                    <span class="navbar-brand mx-auto">Postal Service Mail</span>
+                    <span class="navbar-brand mx-auto">Web Logins</span>
                     <ul class="nav navbar-nav ms-auto">
                         <a href="sign-out.php" class="nav-item nav-link">Sign Out</a>
                     </ul>
@@ -140,8 +140,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </ul>
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                     <?php
-                    echo $input_id_err;
-                    echo $input_access_level_err;
+                        echo $input_id_err;
+                        echo $input_access_level_err;
                     ?>
                     <div class="m-3 input-group">
                         <input type="number" name="input_id" class="form-control" value="<?php echo $input_id; ?>" id="inputID" placeholder="User ID" min="1">

@@ -14,6 +14,13 @@ if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
     mysqli_stmt_execute($stmt);
     mysqli_stmt_bind_result($stmt, $mail_id, $tracking_number, $from_name, $from_address, $to_name, $to_address, $delivered_on);
 }
+$id = "";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    mysqli_stmt_close($stmt);
+    $id = trim($_POST["id"]);
+    mysqli_query($conn_PostalService, "UPDATE PostalService.Mail SET delivered_on = now() WHERE mail_id = '".$id."'");
+    header("refresh:0;");
+}
 ?>
 
 <!DOCTYPE html>
@@ -53,7 +60,7 @@ if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
                     <ul class="nav navbar-nav me-auto">
                         <span id="name" class="nav-item">Logged in as: <?php echo $_SESSION["name"] ?></span>
                     </ul>
-                    <span class="navbar-brand mx-auto">Postal Service Mail</span>
+                    <span class="navbar-brand mx-auto">Postal Service</span>
                     <ul class="nav navbar-nav ms-auto">
                         <a href="sign-out.php" class="nav-item nav-link">Sign Out</a>
                     </ul>
@@ -106,7 +113,6 @@ if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
                         <th scope="col">To Name</th>
                         <th scope="col">To Address</th>
                         <th scope="col">Delivered On</th>
-                        <th scope="col">Confirm Delivery</th>
                     </thead>
                     <tbody>
                         <?php while (mysqli_stmt_fetch($stmt)) { ?>
@@ -117,8 +123,19 @@ if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
                             <td><?php echo $from_address; ?></td>
                             <td><?php echo $to_name; ?></td>
                             <td><?php echo $to_address; ?></td>
-                            <td><?php echo $delivered_on; ?></td>
-                            <td><button>Delivered</button></td>
+                            <td>
+                                <?php
+                                if (empty($delivered_on)) {
+                                    echo '
+                                    <form method="post" action="">
+                                        <input type="hidden" name="id" value="'.$mail_id.'">
+                                        <input type="submit" name="submit" class="btn btn-primary" value="Delivered">
+                                    </form>
+                                    ';
+                                }
+                                else echo $delivered_on;
+                                ?>
+                            </td>
                         </tr>
                         <?php } ?>
                     </tbody>
