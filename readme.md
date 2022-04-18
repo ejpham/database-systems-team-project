@@ -47,12 +47,18 @@ Customer Page (Everyone):
     Sign In:
         
         sign-in.php
-        ()
-        
+        (If you already have an account, you can click the Sign In button on the Home page; once you have, input your
+        registered E-mail Address and Password. If you put in the correct credentials, you are signed into your account.
+        If not, en error message will appear mentioning "Invalid e-mail address or password".)
     Reset Password:
     
         reset-password.php
-        ()
+        (You can click this link on the Sign In page if you have forgotten your password. You are then prompted to fill
+        out a form in order to reset your password. Inputting your E-mail Address is first. Then, you are given a dropbox
+        to pick a security question to answer [the chosen security question is picked during the sign-up of your account,
+        and the question you chose and answered during sign-up will be recorded  //in the database// and used in the case
+        of a forgotten password]. After, you can input a new password to replace your old one, and the process is finished
+        once you click the Reset Password button.)
     Sign Up:
     
         sign-up.php
