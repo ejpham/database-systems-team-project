@@ -85,7 +85,7 @@ Database Access (Employee & Manager Only):
             Zipcode], the Receiver's info [Name, Address, City, State, and Zipcode], the Shipping Class, the Shipping Cost,
             the date of the Mail's Label's creation, Delivered-on date, and the Mail's Tracking Number.)
             ps-mail-orders.php
-            ()
+            (By clicking on the Mail-Orders button on the Mail page, employees are able to view the details of all the Mail orders made through this web application. These details include the Order ID of that mail, that Mail's Tracking Number, the Status of that Mail Order [Label Created, Processing, In Transit, Out for Delivery, Delivered][the employee can update the Status of the Order by picking any of the corresponding names], the Size of the Package [if it is a letter order, no sizes are displayed], the Weight of the Package [if letter order, no weight amount is displayed], the Billing Address of the Sender, and the Sender's E-mail.)
         Employees:
             
             ps-employees.php
