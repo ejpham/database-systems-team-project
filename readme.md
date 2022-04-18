@@ -1,7 +1,7 @@
 Logins for Website:
-manager@uh.edu 123456 (access level {is_employee} =3)
-employee@uh.edu 123456 (access level {is_employee} =2)
-customer@uh.edu 123456 (access level {is_employee} =1)
+    manager@uh.edu 123456 (access level {is_employee} =3)
+    employee@uh.edu 123456 (access level {is_employee} =2)
+    customer@uh.edu 123456 (access level {is_employee} =1)
 
 Customer Page:
 
