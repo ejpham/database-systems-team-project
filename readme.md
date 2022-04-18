@@ -108,6 +108,7 @@ Database Access (Employee & Manager Only):
             and End of Shifts. When an employee wants to Clock In for their shift, all is asked from them is to enter their Employee ID number
             and click the Clock In button to start their shift. And once they are finished for the day, they can click the Clock Out button on 
             the buttom left of the page and the time of their shift is recorded in the system.)
+            
             ps-works-at.php
             (The Employee Works At page can be accessed from the main Employees page. You are then presented a table that displays the 
             Employee IDs, Location ID [of where that employee with the corresponding Employee ID works at], and their Employement Date. 
