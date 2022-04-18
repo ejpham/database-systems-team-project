@@ -95,7 +95,11 @@ Database Access (Employee & Manager Only):
         Employees:
             
             ps-employees.php
-            ()
+            (The Employees page by clicking on the Employees button on the left side of the page displays the information of all employees registered. 
+            Employees are only able to see information like First Name, Middle Inital, and Last Name of other employees as well as E-mail Addresses 
+            and Manager IDs of manager employees. Managers of this Postal Office, however, are able to see more of every Employee's registered information,
+            and this information include the Employee ID, their First Name, Middle Initial, and Last Name, their Date of Birth, Home Address, City, Zipcode,
+            E-mail Address, Phone Number, SSN, and Manager ID if they have one.)
             ps-employee-shift.php
             ()
             ps-works-at.php
