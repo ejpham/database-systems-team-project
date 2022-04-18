@@ -4,37 +4,57 @@ Logins for Website:
     customer@uh.edu 123456 (access level {is_employee} =1)
     
     
-This readme file is separated into 
+The sections in this readme file consist of the .php file and the description of its corresponding page. 
 
 Customer Page (Everyone):
 
     Home:
+    
         index.php
     Mail:
+    
         mail.php
     Pricing:
+    
         pricing.php
     Contact Us:
+        
+        contact-us.php
     
     Sign In:
-    
+        
+        sign-in.php
+        Takes you 
+        
     Reset Password:
     
+        reset-password.php
+    
     Sign Up:
+    
+        sign-up.php
+        
 
 Database Access (Employee & Manager Only):
+    
+    database-access.php
+    
 
     Postal Service:
 
         Mail:
-
+        
+            ps-mail.php
+            ps-mail-orders.php
         Employees:
             
-            employees.php
-            employee-shift.php
-            works-at.php
+            ps-employees.php
+            ps-employee-shift.php
+            ps-works-at.php
         Managers:
 
+            ps-managers.php
+            
             is_employee {
                 1 = customer
                 2 = employee
@@ -42,20 +62,27 @@ Database Access (Employee & Manager Only):
             }
 
         Locations:
-
+            
+            ps-locations.php
+            
             location_dept {
                 1 = postal office
                 2 = warehouse
                 3 = corporate
             }
-
         Vehicles:
-        
+            
+            ps-vehicles.php
+            ps-vechicle-use.php
+            
         Contact Logs:
-
+            
+            ps-contact-logs.php
     Web Logins:
 
         Users:
+            
+            wl-users.php
 
     Reports:
 
