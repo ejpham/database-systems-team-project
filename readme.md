@@ -12,4 +12,56 @@ location_dept {
 
 Database Access:
 
+    Postal Service:
+
+        Mail:
+
+
+
+            Employees:
+
+
+
+            Managers:
+
+
+
+            Locations:
+
+
+
+
+            Vehicles:
+
+
+
+
+            Contact Logs:
+
+
+
+    Web Logins:
+
+
+        Users:
+
+
+
+    Reports:
+
+
+
+        Employee Hours:
+
+
+
+        Number of Employeess at Location:
+
+
+
+
+        Total Miles Driven by Vehicle:
+
+    
+    
 
