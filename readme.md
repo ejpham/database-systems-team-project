@@ -9,3 +9,7 @@ location_dept {
     2 = warehouse
     3 = corporate
 }
+
+Database Access:
+
+
