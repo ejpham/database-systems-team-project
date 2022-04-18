@@ -1,6 +1,5 @@
 <?php
 session_start();
-require "db_conn_PostalService.php";
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location:sign-in.php");
     exit;
@@ -9,32 +8,6 @@ if ($_SESSION["is_employee"] == "1") {
     header("location:index.php");
     exit;
 } else {}
-$sql = "SELECT * FROM PostalService.Manager";
-if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $man_id, $lname, $emp_id);
-}
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    mysqli_stmt_close($stmt);
-    if (trim($_POST["action"]) == "add") {
-        $lname = trim($_POST["lname"]);
-        $emp_id = trim($_POST["emp_id"]);
-        $run = "INSERT INTO PostalService.Manager (manager_lname, employee_id) VALUES (?, ?);";
-        if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
-            mysqli_stmt_bind_param($stmt, "si", $lname, $emp_id);
-            mysqli_stmt_execute($stmt);
-        }
-    }
-    else if (trim($_POST["action"]) == "delete") {
-        $man_id = trim($_POST["man_id"]);
-        $run = "DELETE FROM PostalService.Manager WHERE manager_id = ?;";
-        if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
-            mysqli_stmt_bind_param($stmt, "i", $man_id);
-            mysqli_stmt_execute($stmt);
-        }
-    }
-    header("refresh:0;");
-}
 ?>
 
 <!DOCTYPE html>
@@ -74,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <ul class="nav navbar-nav me-auto">
                         <span id="name" class="nav-item">Logged in as: <?php echo $_SESSION["name"] ?></span>
                     </ul>
-                    <span class="navbar-brand mx-auto">Postal Service</span>
+                    <span class="navbar-brand mx-auto">Reports</span>
                     <ul class="nav navbar-nav ms-auto">
                         <a href="sign-out.php" class="nav-item nav-link">Sign Out</a>
                     </ul>
@@ -129,40 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
             <div class="col">
-                <h6 class="display-6">Managers</h6>
-                <table class="table table-bordered table-primary table-hover align-middle">
-                    <thead>
-                        <th scope="col">Manager ID</th>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">Employee ID</th>
-                        <?php if ($_SESSION["is_employee"] == "3") { echo '<th scope="col"></th>'; } ?>
-                    </thead>
-                    <tbody>
-                        <?php if ($_SESSION["is_employee"] == "3") { ?>
-                            <tr>
-                                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                    <input type="hidden" name="action" value="add">
-                                    <td></td>
-                                    <td><input type="text" name="lname" class="form-control" maxlength="30"></td>
-                                    <td><input type="number" name="emp_id" class="form-control" min="1"></td>
-                                    <td><input type="submit" class="btn btn-primary" value="Add"></td>
-                                </form>
-                            </tr>
-                        <?php } ?>
-                        <?php while (mysqli_stmt_fetch($stmt)) { ?>
-                            <tr>
-                                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="man_id" value="<?php echo $man_id; ?>">
-                                    <td><?php echo $man_id; ?></td>
-                                    <td><?php echo $lname; ?></td>
-                                    <td><?php echo $emp_id; ?></td>
-                                    <?php if ($_SESSION["is_employee"] == "3") { ?><td><input type="submit" class="btn btn-danger" value="Delete"></td><?php } ?>
-                                </form>
-                            </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+                <h6 class="display-6">Number of Employees at Location</h6>
             </div>
         </div>
     </div>

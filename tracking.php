@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <?php
                         echo $success;
                         echo $error;
-                        if (!empty($stat)) echo "Mail Status:" . $stat;
+                        if (!empty($stat)) echo "Mail Status: " . $stat;
                     ?>
                     <div class="m-3">
                         <label class="form-label">Tracking Number</label>

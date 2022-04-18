@@ -103,6 +103,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </ul>
                             </div>
                         </li>
+                        <li class="mb-1">
+                            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
+                                Reports
+                            </button>
+                            <div class="collapse show" id="reports-collapse">
+                                <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
+                                    <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
+                                    <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
+                                    <li><a href="rp-miles-driven-by-vehicle.php" class="nav-item nav-link rounded">Total Miles Driven by Vehicle</a></li>
+                                </ul>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>

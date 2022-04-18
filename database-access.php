@@ -1,6 +1,5 @@
 <?php
 session_start();
-require "db_conn_WebLogins.php";
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location:sign-in.php");
     exit;
@@ -48,7 +47,7 @@ if ($_SESSION["is_employee"] == "1") {
                     <ul class="nav navbar-nav me-auto">
                         <span id="name" class="nav-item">Logged in as: <?php echo $_SESSION["name"] ?></span>
                     </ul>
-                    <span class="navbar-brand mx-auto">Web Logins</span>
+                    <span class="navbar-brand mx-auto">Database Access</span>
                     <ul class="nav navbar-nav ms-auto">
                         <a href="sign-out.php" class="nav-item nav-link">Sign Out</a>
                     </ul>
@@ -87,11 +86,23 @@ if ($_SESSION["is_employee"] == "1") {
                                 </ul>
                             </div>
                         </li>
+                        <li class="mb-1">
+                            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
+                                Reports
+                            </button>
+                            <div class="collapse show" id="reports-collapse">
+                                <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
+                                    <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
+                                    <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
+                                    <li><a href="rp-miles-driven-by-vehicle.php" class="nav-item nav-link rounded">Total Miles Driven by Vehicle</a></li>
+                                </ul>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
             <div class="col">
-                <h6 class="display-6">Database Access Index</h6>
+                <h6 class="display-6">Index</h6>
             </div>
         </div>
     </div>
