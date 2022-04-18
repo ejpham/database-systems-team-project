@@ -1,7 +1,23 @@
-This is a readme
+Logins for Website:
+manager@uh.edu 123456 (access level {is_employee} =3)
+employee@uh.edu 123456 (access level {is_employee} =2)
+customer@uh.edu 123456 (access level {is_employee} =1)
 
-Main Postal Office Page:
+Customer Page:
 
+    Home:
+    
+    Mail:
+    
+    Pricing:
+    
+    Contact Us:
+    
+    Sign In:
+    
+    Reset Password:
+    
+    Sign Up:
 
 Database Access:
 
@@ -9,11 +25,7 @@ Database Access:
 
         Mail:
 
-
-
         Employees:
-
-
 
         Managers:
 
@@ -31,39 +43,18 @@ Database Access:
                 3 = corporate
             }
 
-
-
         Vehicles:
-
-
-
-
+        
         Contact Logs:
-
-
 
     Web Logins:
 
-
         Users:
-
-
 
     Reports:
 
-
-
         Employee Hours:
-
-
 
         Number of Employeess at Location:
 
-
-
-
         Total Miles Driven by Vehicle:
-
-    
-    
-
