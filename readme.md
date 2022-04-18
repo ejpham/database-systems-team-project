@@ -6,9 +6,9 @@ Logins for Website:
 Customer Page:
 
     Home:
-    
+        index.php
     Mail:
-    
+        mail.php
     Pricing:
     
     Contact Us:
