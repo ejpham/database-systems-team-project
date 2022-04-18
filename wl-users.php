@@ -121,7 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
                                     <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
                                     <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
-                                    <li><a href="rp-miles-driven-by-vehicle.php" class="nav-item nav-link rounded">Total Miles Driven by Vehicle</a></li>
+                                    <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -182,27 +182,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <?php } ?>
                     </tbody>
                 </table>
-            </div>
-        </div>
-        <div class="m-4 row justify-content-center">
-            <div class="col-5">
-                <h6 class="display-6">Adjust Access Level</h6>
-                <ul class="list">
-                    <li>1 = Customer</li>
-                    <li>2 = Employee</li>
-                    <li>3 = Manager</li>
-                </ul>
-                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                    <?php
-                        echo $input_id_err;
-                        echo $input_access_level_err;
-                    ?>
-                    <div class="m-3 input-group">
-                        <input type="number" name="input_id" class="form-control" value="<?php echo $input_id; ?>" id="inputID" placeholder="User ID" min="1">
-                        <input type="number" name="input_access_level" class="form-control" value="<?php echo $input_access_level; ?>" id="inputAccessLevel" placeholder="New Access Level" min="1" max="3">
-                        <input type="submit" name="submit" class="btn btn-primary" value="Query">
-                    </div>
-                </form>
             </div>
         </div>
     </div>

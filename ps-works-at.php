@@ -9,7 +9,7 @@ if ($_SESSION["is_employee"] == "1") {
     header("location:index.php");
     exit;
 } else {}
-$sql = "SELECT * FROM PostalService.WORKS_AT";
+$sql = "SELECT * FROM PostalService.WORKS_AT ORDER BY location_id ASC, employee_id ASC";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
     mysqli_stmt_execute($stmt);
     mysqli_stmt_bind_result($stmt, $emp_id, $loc_id, $emp_date);
@@ -141,7 +141,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
                                     <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
                                     <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
-                                    <li><a href="rp-miles-driven-by-vehicle.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
+                                    <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
                                 </ul>
                             </div>
                         </li>

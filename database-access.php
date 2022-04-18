@@ -94,7 +94,7 @@ if ($_SESSION["is_employee"] == "1") {
                                 <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
                                     <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
                                     <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
-                                    <li><a href="rp-miles-driven-by-vehicle.php" class="nav-item nav-link rounded">Total Miles Driven by Vehicle</a></li>
+                                    <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
                                 </ul>
                             </div>
                         </li>

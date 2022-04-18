@@ -9,46 +9,50 @@ if ($_SESSION["is_employee"] == "1") {
     header("location:index.php");
     exit;
 } else {}
-$sql = "SELECT * FROM PostalService.Manager";
-if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $man_id, $lname, $emp_id);
-}
-$err = "";
+
+$from_date_err = $to_date_err = $err = "";
+$sql1 = $sql2 = "";
+$totalPrice = 0;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    mysqli_stmt_close($stmt);
-    if (trim($_POST["action"]) == "add") {
-        $lname = trim($_POST["lname"]);
-        $emp_id = trim($_POST["emp_id"]);
-        $check = mysqli_query($conn_PostalService, "SELECT * FROM PostalService.Employee WHERE employee_id = $emp_id AND last_name = '$lname';");
-        $num_rows = mysqli_num_rows($check);
-        if ($num_rows == 0) {
-            $err = '<div class="alert alert-danger" role="alert">Please enter the correct last name and employee ID.</div>';
-            header("refresh:1;");
-        }
-        $check = mysqli_query($conn_PostalService, "SELECT * FROM PostalService.Manager WHERE manager_lname = '$lname' AND employee_id = $emp_id");
-        $num_rows = mysqli_num_rows($check);
-        if ($num_rows > 0) {
-            $err = '<div class="alert alert-danger" role="alert">They are already a manager.</div>';
-            header("refresh:1;");
-        }
-        if (empty($err)) {
-            $run = "INSERT INTO PostalService.Manager (manager_lname, employee_id) VALUES (?, ?);";
-            if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
-                mysqli_stmt_bind_param($stmt, "si", $lname, $emp_id);
-                mysqli_stmt_execute($stmt);
-            }
-        }
+
+    if (empty(trim($_POST["from_date"])) && !empty(trim($_POST["to_date"]))) $from_date_err = '<div class="alert alert-danger" role="alert">Please enter a from date.</div>';
+    else if (!empty(trim($_POST["from_date"])) && empty(trim($_POST["to_date"]))) $to_date_err = '<div class="alert alert-danger" role="alert">Please enter a to date.</div>';
+    else if (!empty(trim($_POST["from_date"])) && !empty(trim($_POST["to_date"]))) {
+        $from_date = trim($_POST["from_date"]);
+        $to_date = trim($_POST["to_date"]);
+        $sql = "SELECT mail_type, from_address, to_address, delivered_on, shipping_cost FROM PostalService.Mail WHERE DATE(?) <= DATE(label_created) AND DATE(?) >= DATE(label_created)";
     }
-    else if (trim($_POST["action"]) == "delete") {
-        $man_id = trim($_POST["man_id"]);
-        $run = "DELETE FROM PostalService.Manager WHERE manager_id = ?;";
-        if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
-            mysqli_stmt_bind_param($stmt, "i", $man_id);
+    else $err = '<div class="alert alert-danger" role="alert">Please enter a from and to date.</div>';
+    if (empty($from_date_err) && empty($to_date_err) && empty($err)) {
+        if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
+            mysqli_stmt_bind_param($stmt, "ss", $from_date, $to_date);
             mysqli_stmt_execute($stmt);
+            mysqli_stmt_bind_result($stmt, $mail_type, $from_address, $to_address, $delivered_on, $shipping_cost);
+            $showtable = '
+            <table class="table table-bordered table-primary table-hover align-middle">
+                <thead>
+                    <th scope="col">Mail Type</th>
+                    <th scope="col">From Address</th>
+                    <th scope="col">To Address</th>
+                    <th scope="col">Delivered On</th>
+                </thead>
+                <tbody>';
+            while (mysqli_stmt_fetch($stmt)) {
+                $totalPrice = $totalPrice + $shipping_cost;
+                $showtable .= '<tr><td>';
+                $showtable .= $mail_type;
+                $showtable .= '</td><td>';
+                $showtable .= $from_address;
+                $showtable .= '</td><td>';
+                $showtable .= $to_address;
+                $showtable .= '</td><td>';
+                $showtable .= $delivered_on;
+                $showtable .= '</td></tr>';
+            }
+            $showtable .= '</tbody></table>';
+            mysqli_stmt_close($stmt);
         }
     }
-    header("refresh:0;");
 }
 ?>
 
@@ -89,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <ul class="nav navbar-nav me-auto">
                         <span id="name" class="nav-item">Logged in as: <?php echo $_SESSION["name"] ?></span>
                     </ul>
-                    <span class="navbar-brand mx-auto">Postal Service</span>
+                    <span class="navbar-brand mx-auto">Reports</span>
                     <ul class="nav navbar-nav ms-auto">
                         <a href="sign-out.php" class="nav-item nav-link">Sign Out</a>
                     </ul>
@@ -144,43 +148,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
             <div class="col">
-                <h6 class="display-6">Managers</h6>
-                <?php echo $err; ?>
-                <table class="table table-bordered table-primary table-hover align-middle">
-                    <thead>
-                        <th scope="col">Manager ID</th>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">Employee ID</th>
-                        <?php if ($_SESSION["is_employee"] == "3") { echo '<th scope="col"></th>'; } ?>
-                    </thead>
-                    <tbody>
-                        <?php if ($_SESSION["is_employee"] == "3") { ?>
-                            <tr>
-                                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                    <input type="hidden" name="action" value="add">
-                                    <td></td>
-                                    <td><input type="text" name="lname" class="form-control" maxlength="30"></td>
-                                    <td><input type="number" name="emp_id" class="form-control" min="1"></td>
-                                    <td><input type="submit" class="btn btn-primary" value="Add"></td>
-                                </form>
-                            </tr>
-                        <?php } ?>
-                        <?php while (mysqli_stmt_fetch($stmt)) { ?>
-                            <tr>
-                                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="man_id" value="<?php echo $man_id; ?>">
-                                    <td><?php echo $man_id; ?></td>
-                                    <td><?php echo $lname; ?></td>
-                                    <td><?php echo $emp_id; ?></td>
-                                    <?php if ($_SESSION["is_employee"] == "3") { ?><td><input type="submit" class="btn btn-danger" value="Delete"></td><?php } ?>
-                                </form>
-                            </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+                <h6 class="display-6">Packages Sent Out</h6>
+                <?php
+                    echo $from_date_err;
+                    echo $to_date_err;
+                    echo $err;
+                ?>
+                <div class="m-3 d-print-none">
+                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                        <div class="input-group">
+                        <a href=""><button type="button" class="btn btn-outline-secondary">Refresh</button></a>
+                            <span class="input-group-text">From Date</span>
+                            <input type="date" name="from_date" class="form-control" value="<?php echo $from_date; ?>" id="datePickerID1">
+                            <span class="input-group-text">To Date</span>
+                            <input type="date" name="to_date" class="form-control" value="<?php echo $to_date; ?>" id="datePickerID2">
+                            <input type="submit" class="btn btn-outline-primary" value="Generate">
+                        </div>
+                    </form>
+                </div>
+                <?php
+                    echo $showtable;
+                    echo "Total Revenue From This Period: " . $totalPrice;
+                ?>
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        datePickerID1.max = new Date().toLocaleDateString('en-ca');
+        datePickerID2.max = new Date().toLocaleDateString('en-ca');
+    </script>
 </body>
 </html>
