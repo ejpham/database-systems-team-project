@@ -181,7 +181,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="m-3 d-print-none">
                     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                         <div class="input-group">
-                            <a href="rp-employee-hours.php"><button type="button" class="btn btn-outline-secondary">Refresh</button></a>
+                            <a href=""><button type="button" class="btn btn-outline-secondary">Refresh</button></a>
                             <span class="input-group-text">Employee ID</span>
                             <input type="number" name="emp_id" class="form-control" value="<?php echo $emp_id; ?>" min="1">
                             <span class="input-group-text">From Date</span>
