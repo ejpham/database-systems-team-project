@@ -87,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="container-fluid">
-        <div class="m-4">
+        <div class="m-4 d-print-none">
             <nav class="navbar navbar-expand-sm navbar-light rounded" style="background-color: #e3f2fd;">
                 <div class="container-fluid">
                     <ul class="nav navbar-nav me-auto">
@@ -101,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </nav>
         </div>
         <div class="m-4 row">
-            <div class="col-auto">
+            <div class="col-auto d-print-none">
                 <div class="flex-column flex-shrink-0 p-3 rounded" style="width: 14rem; background-color: #e3f2fd;">
                     <a href="database-access.php" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
                         <span class="fs-5 fw-semibold">Databases</span>
