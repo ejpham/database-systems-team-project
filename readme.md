@@ -80,12 +80,15 @@ Database Access (Employee & Manager Only):
         Mail:
         
             ps-mail.php
+            ()
             ps-mail-orders.php
             ()
         Employees:
             
             ps-employees.php
+            ()
             ps-employee-shift.php
+            ()
             ps-works-at.php
             ()
         Managers:
@@ -110,6 +113,7 @@ Database Access (Employee & Manager Only):
         Vehicles:
             
             ps-vehicles.php
+            ()
             ps-vechicle-use.php
             ()
         Contact Logs:
