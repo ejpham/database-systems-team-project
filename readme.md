@@ -4,7 +4,7 @@ Logins for Website:
     customer@uh.edu 123456 (access level {is_employee} =1)
     
     
-The sections in this readme file consist of the .php file and the description of its corresponding page. 
+The sections in this readme file consist of the .php file and the description of its corresponding page on the web application. 
 
 Customer Page (Everyone):
 
@@ -84,8 +84,9 @@ Database Access (Employee & Manager Only):
             [the order of the Mail requests made], the Mail type, the Sender's info [Name, Address, City, State, and 
             Zipcode], the Receiver's info [Name, Address, City, State, and Zipcode], the Shipping Class, the Shipping Cost,
             the date of the Mail's Label's creation, Delivered-on date, and the Mail's Tracking Number.)
+            
             ps-mail-orders.php
-            (By clicking on the Mail-Orders button on the Mail page, employees are able to view the details of all the Mail 
+            (By clicking on the Mail-Orders button on the bottom of the Mail page, employees are able to view the details of all the Mail 
             orders made through this web application. These details include the Order ID of that mail, that Mail's Tracking Number, 
             the Status of that Mail Order [Label Created, Processing, In Transit, Out for Delivery, Delivered][the employee can 
             update the Status of the Order by picking any of the corresponding names], the Size of the Package [if it is a letter 
