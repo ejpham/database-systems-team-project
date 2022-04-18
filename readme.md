@@ -24,8 +24,13 @@ Customer Page (Everyone):
         Package, you can choose between Regular or Premium package speed as well as the dimensions of the package you 
         are sending. Additionally, a slidebar is shown to pick the weight of that package. The total price of the package
         [depending on the package speed, dimensions, and weight] is shown and you are then asked for your payment info.)
+        
         tracking.php
-        ()
+        (In the Mail page towards the top, if you already have a mail order created, you can click the link to keep 
+        track of that order. When you click the link, you are asked to provide the tracking number of your mail order. 
+        If you input a valid Tracking Number, you can receive the status of your mail order; the statuses are: Label
+        Created, Processing, In Transit, Out for Delivery, and Delivered. On the other hand, if you enter this page and
+        you have not sent a mail order, there is a link that will send you back to the Mail page to send an order out.)
     Pricing:
     
         pricing.php
