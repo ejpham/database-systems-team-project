@@ -62,7 +62,12 @@ Customer Page (Everyone):
     Sign Up:
     
         sign-up.php
-        ()
+        (If you do not have an account for this Post Office, you can create one by clicking on the Sign Up button on the 
+        Main page at the top OR on the Sign In page at the bottom. The account creation process starts with you being
+        for your Full Name and the E-mail Address you'll use for this account. Then, you are asked to input a Password 
+        and confirm that Password. You are given a dropbox to choose a security question [which will be used to help reset
+        your Password] and answer for that question. Once all of this has been completed, you can click the Sign Up button
+        and your account will now have been created.)
 
 Database Access (Employee & Manager Only):
     
