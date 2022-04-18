@@ -38,7 +38,8 @@ Customer Page (Everyone):
 Database Access (Employee & Manager Only):
     
     database-access.php
-    
+    (This page, as well as every subsequent page here, can only be accessed by anybody that is an employee or a manager.
+    Additionally, they would have to be logged into their account to access this page)
 
     Postal Service:
 
