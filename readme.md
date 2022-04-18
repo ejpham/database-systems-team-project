@@ -40,7 +40,10 @@ Customer Page (Everyone):
     Contact Us:
         
         contact-us.php
-        ()
+        (If you want to send a message to the establishment, you can click the Contact Us button to do so. When NOT signed
+        in, you are asked to put your Full Name and E-mail Address before you can send a message. Otherwise, if you are
+        signed into your account, your registered name and email are shown. The maximum number of characters in your
+        message is 255.)
     Sign In:
         
         sign-in.php
