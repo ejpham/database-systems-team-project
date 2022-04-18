@@ -80,7 +80,10 @@ Database Access (Employee & Manager Only):
         Mail:
         
             ps-mail.php
-            ()
+            (This page lists out details of the Mail orders made to this Postal Office. These details include the Mail ID 
+            [the order of the Mail requests made], the Mail type, the Sender's info [Name, Address, City, State, and 
+            Zipcode], the Receiver's info [Name, Address, City, State, and Zipcode], the Shipping Class, the Shipping Cost,
+            the date of the Mail's Label's creation, Delivered-on date, and the Mail's Tracking Number.)
             ps-mail-orders.php
             ()
         Employees:
