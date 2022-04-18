@@ -1,5 +1,6 @@
 <?php
 session_start();
+require "db_conn_PostalService.php";
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location:sign-in.php");
     exit;
@@ -8,6 +9,54 @@ if ($_SESSION["is_employee"] == "1") {
     header("location:index.php");
     exit;
 } else {}
+
+$from_date_err = $to_date_err = "";
+$sql1 = $sql2 = "";
+$totalPrice = 0;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    if (empty(trim($_POST["from_date"])) && !empty(trim($_POST["to_date"]))) $from_date_err = '<div class="alert alert-danger" role="alert">Please enter a from date.</div>';
+    else if (!empty(trim($_POST["from_date"])) && empty(trim($_POST["to_date"]))) $to_date_err = '<div class="alert alert-danger" role="alert">Please enter a to date.</div>';
+    else if (!empty(trim($_POST["from_date"])) && !empty(trim($_POST["to_date"]))) {
+        $from_date = trim($_POST["from_date"]);
+        $to_date = trim($_POST["to_date"]);
+        $sql = "SELECT mail_type, from_address, to_address, delivered_on, shipping_cost FROM PostalService.Mail WHERE DATE(?) <= DATE(label_created) AND DATE(?) >= DATE(label_created)";
+    }
+    else {
+        // $sql1 = "SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(shift_end , shift_start)))) FROM PostalService.Employee_Shift WHERE employee_id = ?;";
+        // $sql2 = "SELECT * FROM PostalService.Employee_Shift WHERE employee_id = ?";
+    }
+    if (empty($from_date_err) && empty($to_date_err)) {
+        if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
+            mysqli_stmt_bind_param($stmt, "ss", $from_date, $to_date);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_bind_result($stmt, $mail_type, $from_address, $to_address, $delivered_on, $shipping_cost);
+            $showtable = '
+            <table class="table table-bordered table-primary table-hover align-middle">
+                <thead>
+                    <th scope="col">Mail Type</th>
+                    <th scope="col">From Address</th>
+                    <th scope="col">To Address</th>
+                    <th scope="col">Delivered On</th>
+                </thead>
+                <tbody>';
+            while (mysqli_stmt_fetch($stmt)) {
+                $totalPrice = $totalPrice + $shipping_cost;
+                $showtable .= '<tr><td>';
+                $showtable .= $mail_type;
+                $showtable .= '</td><td>';
+                $showtable .= $from_address;
+                $showtable .= '</td><td>';
+                $showtable .= $to_address;
+                $showtable .= '</td><td>';
+                $showtable .= $delivered_on;
+                $showtable .= '</td></tr>';
+            }
+            $showtable .= '</tbody></table>';
+            mysqli_stmt_close($stmt);
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -94,7 +143,7 @@ if ($_SESSION["is_employee"] == "1") {
                                 <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
                                     <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
                                     <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
-                                    <li><a href="rp-miles-driven-by-vehicle.php" class="nav-item nav-link rounded">Total Miles Driven by Vehicle</a></li>
+                                    <li><a href="rp-miles-driven-by-vehicle.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -102,9 +151,33 @@ if ($_SESSION["is_employee"] == "1") {
                 </div>
             </div>
             <div class="col">
-                <h6 class="display-6">Miles Driven by Vehicle</h6>
+                <h6 class="display-6">Packages Sent Out</h6>
+                <?php
+                    echo $from_date_err;
+                    echo $to_date_err;
+                ?>
+                <div class="m-3 d-print-none">
+                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                        <div class="input-group">
+                        <a href=""><button type="button" class="btn btn-outline-secondary">Refresh</button></a>
+                            <span class="input-group-text">From Date</span>
+                            <input type="date" name="from_date" class="form-control" value="<?php echo $from_date; ?>" id="datePickerID1">
+                            <span class="input-group-text">To Date</span>
+                            <input type="date" name="to_date" class="form-control" value="<?php echo $to_date; ?>" id="datePickerID2">
+                            <input type="submit" class="btn btn-outline-primary" value="Generate">
+                        </div>
+                    </form>
+                </div>
+                <?php
+                    echo $showtable;
+                    echo "Total Revenue from this period: " . $totalPrice;
+                ?>
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        datePickerID1.max = new Date().toLocaleDateString('en-ca');
+        datePickerID2.max = new Date().toLocaleDateString('en-ca');
+    </script>
 </body>
 </html>

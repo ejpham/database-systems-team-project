@@ -1,5 +1,6 @@
 <?php
 session_start();
+require "db_conn_PostalService.php";
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location:sign-in.php");
     exit;
@@ -8,6 +9,49 @@ if ($_SESSION["is_employee"] == "1") {
     header("location:index.php");
     exit;
 } else {}
+$location_id_err = "";
+$sql1 = $sql2 = "";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (empty(trim($_POST["location_id"]))) $location_id_err = '<div class="alert alert-danger" role="alert">Please enter a Location ID.</div>';
+    else $location_id = trim($_POST["location_id"]);
+
+    $sql = "SELECT PostalService.Employee.employee_id, first_name, last_name, manager_id, PostalService.WORKS_AT.employment_date FROM PostalService.Employee, PostalService.WORKS_AT WHERE PostalService.WORKS_AT.employee_id = PostalService.Employee.employee_id AND PostalService.WORKS_AT.location_id = ?";
+
+
+    if (empty($location_id_err)) {
+        if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
+
+            mysqli_stmt_bind_param($stmt, "i", $location_id);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_bind_result($stmt, $employee_id, $first_name, $last_name, $manager_id, $employment_date);
+            $showtable = '
+            <table class="table table-bordered table-primary table-hover align-middle">
+                <thead>
+                    <th scope="col">Employee ID</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Manager id</th>
+                    <th scope="col">Employment Date</th>
+                </thead>
+                <tbody>';
+            while (mysqli_stmt_fetch($stmt)) {
+                $showtable .= '<tr><td>';
+                $showtable .= $employee_id;
+                $showtable .= '</td><td>';
+                $showtable .= $first_name;
+                $showtable .= '</td><td>';
+                $showtable .= $last_name;
+                $showtable .= '</td><td>';
+                $showtable .= $manager_id;
+                $showtable .= '</td><td>';
+                $showtable .= $employment_date;
+                $showtable .= '</td></tr>';
+            }
+            $showtable .= '</tbody></table>';
+            mysqli_stmt_close($stmt);
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -94,7 +138,7 @@ if ($_SESSION["is_employee"] == "1") {
                                 <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
                                     <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
                                     <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
-                                    <li><a href="rp-miles-driven-by-vehicle.php" class="nav-item nav-link rounded">Total Miles Driven by Vehicle</a></li>
+                                    <li><a href="rp-miles-driven-by-vehicle.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -103,6 +147,22 @@ if ($_SESSION["is_employee"] == "1") {
             </div>
             <div class="col">
                 <h6 class="display-6">Number of Employees at Location</h6>
+                <?php
+                    echo $location_id_err;
+                ?>
+                <div class="m-3 d-print-none">
+                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                        <div class="input-group">
+                            <a href=""><button type="button" class="btn btn-outline-secondary">Refresh</button></a>
+                            <span class="input-group-text">Location ID</span>
+                            <input type="number" name="location_id" class="form-control" value="<?php echo $location_id; ?>" min="1">
+                            <input type="submit" class="btn btn-outline-primary" value="Generate">
+                        </div>
+                    </form>
+                </div>
+                <?php
+                    echo $showtable;
+                ?>
             </div>
         </div>
     </div>
