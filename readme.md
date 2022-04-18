@@ -99,9 +99,15 @@ Database Access (Employee & Manager Only):
             Employees are only able to see information like First Name, Middle Inital, and Last Name of other employees as well as E-mail Addresses 
             and Manager IDs of manager employees. Managers of this Postal Office, however, are able to see more of every Employee's registered information,
             and this information include the Employee ID, their First Name, Middle Initial, and Last Name, their Date of Birth, Home Address, City, Zipcode,
-            E-mail Address, Phone Number, SSN, and Manager ID if they have one.)
+            E-mail Address, Phone Number, SSN, and Manager ID if they have one. Only Managers are able to add new Employees to the roster, and those
+            new Employees will be given a new Employee ID number once added.)
+            
             ps-employee-shift.php
-            ()
+            (You can view the Employee Shift page, whether an Employee or Manager, and be shown the details of the past shifts worked by employees 
+            of the establishment. These details are the Shift ID numbers, Employee ID numbers, Year-Month-Day and timestamp of the Start of Shifts 
+            and End of Shifts. When an employee wants to Clock In for their shift, all is asked from them is to enter their Employee ID number
+            and click the Clock In button to start their shift. And once they are finished for the day, they can click the Clock Out button on 
+            the buttom left of the page and the time of their shift is recorded in the system.)
             ps-works-at.php
             ()
         Managers:
