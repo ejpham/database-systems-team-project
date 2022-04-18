@@ -40,20 +40,34 @@ Customer Page (Everyone):
     Contact Us:
         
         contact-us.php
-        ()
+        (If you want to send a message to the establishment, you can click the Contact Us button to do so. When NOT signed
+        in, you are asked to put your Full Name and E-mail Address before you can send a message. Otherwise, if you are
+        signed into your account, your registered name and email are shown. The maximum number of characters in your
+        message is 255.)
     Sign In:
         
         sign-in.php
-        ()
-        
+        (If you already have an account, you can click the Sign In button on the Home page; once you have, input your
+        registered E-mail Address and Password. If you put in the correct credentials, you are signed into your account.
+        If not, en error message will appear mentioning "Invalid e-mail address or password".)
     Reset Password:
     
         reset-password.php
-        ()
+        (You can click this link on the Sign In page if you have forgotten your password. You are then prompted to fill
+        out a form in order to reset your password. Inputting your E-mail Address is first. Then, you are given a dropbox
+        to pick a security question to answer [the chosen security question is picked during the sign-up of your account,
+        and the question you chose and answered during sign-up will be recorded  //in the database// and used in the case
+        of a forgotten password]. After, you can input a new password to replace your old one, and the process is finished
+        once you click the Reset Password button.)
     Sign Up:
     
         sign-up.php
-        ()
+        (If you do not have an account for this Post Office, you can create one by clicking on the Sign Up button on the 
+        Main page at the top OR on the Sign In page at the bottom. The account creation process starts with you being
+        for your Full Name and the E-mail Address you'll use for this account. Then, you are asked to input a Password 
+        and confirm that Password. You are given a dropbox to choose a security question [which will be used to help reset
+        your Password] and answer for that question. Once all of this has been completed, you can click the Sign Up button
+        and your account will now have been created.)
 
 Database Access (Employee & Manager Only):
     
@@ -66,12 +80,15 @@ Database Access (Employee & Manager Only):
         Mail:
         
             ps-mail.php
+            ()
             ps-mail-orders.php
             ()
         Employees:
             
             ps-employees.php
+            ()
             ps-employee-shift.php
+            ()
             ps-works-at.php
             ()
         Managers:
@@ -96,6 +113,7 @@ Database Access (Employee & Manager Only):
         Vehicles:
             
             ps-vehicles.php
+            ()
             ps-vechicle-use.php
             ()
         Contact Logs:
