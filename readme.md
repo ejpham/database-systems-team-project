@@ -109,7 +109,11 @@ Database Access (Employee & Manager Only):
             and click the Clock In button to start their shift. And once they are finished for the day, they can click the Clock Out button on 
             the buttom left of the page and the time of their shift is recorded in the system.)
             ps-works-at.php
-            ()
+            (The Employee Works At page can be accessed from the main Employees page. You are then presented a table that displays the 
+            Employee IDs, Location ID [of where that employee with the corresponding Employee ID works at], and their Employement Date. 
+            Normal employees do NOT have the ability to change their own Location ID; only Managers have the power to change the 
+            Location IDs of every Employee working at the establishment. Managers are also the only ones who can add a New Employee 
+            to this table by inserting that Employee's ID number and the Location ID of where they will be working at.)
         Managers:
 
             ps-managers.php
