@@ -34,7 +34,9 @@ Customer Page (Everyone):
     Pricing:
     
         pricing.php
-        ()
+        (The Pricing page shows a list of the different pricings of the package selections from the Mail page. This is only 
+        relevant for packages because the prices for letters consist of only the type of delivery speed for those letters,
+        so the prices can be easily displayed on the Mail page.)
     Contact Us:
         
         contact-us.php
