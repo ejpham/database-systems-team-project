@@ -16,6 +16,15 @@ Customer Page (Everyone):
     Mail:
     
         mail.php
+        (Clicking on the Mail button on the main page sends you to the Mail page, where you can send mail. You are asked 
+        to first put in your full name, email address, your own address, and then input the recipient's full name and 
+        address. Once filled out, you can choose between sending a Letter or a Package. Picking Letter, you can choose
+        between Regular or Premium letter speed [how quick the letter will be sent to the recipient], and you'll be given
+        the total price [only depending on the letter speed] and asked to put in your payment information. Picking 
+        Package, you can choose between Regular or Premium package speed as well as the dimensions of the package you 
+        are sending. Additionally, a slidebar is shown to pick the weight of that package. The total price of the package
+        [depending on the package speed, dimensions, and weight] is shown and you are then asked for your payment info.)
+        tracking.php
         ()
     Pricing:
     
