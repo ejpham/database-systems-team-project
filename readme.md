@@ -11,35 +11,39 @@ Customer Page (Everyone):
     Home:
     
         index.php
+        (This is the main page of our web application. It provides links to the Mail-sending page, Pricing list, and
+        Contact-Us page. While NOT signed in, on the top right section there are Sign In and Sign Up buttons)
     Mail:
     
         mail.php
+        ()
     Pricing:
     
         pricing.php
+        ()
     Contact Us:
         
         contact-us.php
-    
+        ()
     Sign In:
         
         sign-in.php
-        Takes you 
+        ()
         
     Reset Password:
     
         reset-password.php
-    
+        ()
     Sign Up:
     
         sign-up.php
-        
+        ()
 
 Database Access (Employee & Manager Only):
     
     database-access.php
     (This page, as well as every subsequent page here, can only be accessed by anybody that is an employee or a manager.
-    Additionally, they would have to be logged into their account to access this page)
+    Additionally, they would have to be logged into their account to access this page.)
 
     Postal Service:
 
@@ -47,15 +51,17 @@ Database Access (Employee & Manager Only):
         
             ps-mail.php
             ps-mail-orders.php
+            ()
         Employees:
             
             ps-employees.php
             ps-employee-shift.php
             ps-works-at.php
+            ()
         Managers:
 
             ps-managers.php
-            
+            ()
             is_employee {
                 1 = customer
                 2 = employee
@@ -65,7 +71,7 @@ Database Access (Employee & Manager Only):
         Locations:
             
             ps-locations.php
-            
+            ()
             location_dept {
                 1 = postal office
                 2 = warehouse
@@ -75,26 +81,28 @@ Database Access (Employee & Manager Only):
             
             ps-vehicles.php
             ps-vechicle-use.php
-            
+            ()
         Contact Logs:
             
             ps-contact-logs.php
+            ()
     Web Logins:
 
         Users:
             
             wl-users.php
-
+            ()
     Reports:
 
         Employee Hours:
 
             rp-employee-hours-worked.php
-
+            ()
         Number of Employeess at Location:
         
             rp-number-of-employees.php
-
+            ()
         Total Miles Driven by Vehicle:
         
             rp-miles-driven-by-vehicle.php
+            ()
