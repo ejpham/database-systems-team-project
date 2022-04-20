@@ -1,25 +1,25 @@
 <?php
 session_start();
 // check if already logged in, if so, redirect to index
-if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] === true) {
     header("location:index.php");
     exit;
 }
 // run script to connect to WebLogins schema in database
 require_once "db_conn_WebLogins.php";
 // declare variables
-$email = $name = $password = $confirm_password = $security_question = $security_answer = "";
+$email = $name = $password = $confirm_password = $security_question = $security_answer = $access_level = "";
 $email_err = $name_err = $password_err = $confirm_password_err = $security_question_err = $security_answer_err = $success = $error = "";
 // if "post" was called from submit button in form below
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // validate email from textbox
-    if (empty(trim($_POST["email"]))) $email_err = "Please enter a valid e-mail address.";
-    else if (strlen(trim($_POST["email"])) > 75) $email_err = "E-mail address can be no longer than 75 characters.";
-    else $email = trim($_POST["email"]);
     // validate name from textbox
     if (empty(trim($_POST["name"]))) $name_err = "Please enter a name.";
     else if (strlen(trim($_POST["name"])) > 75) $name_err = "Name can be no longer than 75 characters.";
     else $name = trim($_POST["name"]);
+    // validate email from textbox
+    if (empty(trim($_POST["email"]))) $email_err = "Please enter a valid e-mail address.";
+    else if (strlen(trim($_POST["email"])) > 75) $email_err = "E-mail address can be no longer than 75 characters.";
+    else $email = trim($_POST["email"]);
     // validate password from textbox
     if (empty(trim($_POST["password"]))) $password_err = "Please enter a password.";
     else if (strlen(trim($_POST["password"])) < 6) $password_err = "Password must have at least 6 characters.";
@@ -36,24 +36,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     else $security_question = trim($_POST["security_question"]);
     if (empty(trim($_POST["security_answer"]))) $security_answer_err = "Please enter a security answer.";
     else $security_answer = trim($_POST["security_answer"]);
-    
-    // variable containing query to search database for given email from textbox
-    $check_db_email = "SELECT * FROM WebLogins.users WHERE email='$email'";
-    // stores true/false into result variable indicating if query was successful
-    $result = mysqli_query($conn_WebLogins, $check_db_email);
-    // stores all tuples/records as array rows into row variable
-    $row = mysqli_fetch_assoc($result);
-    // if an email exists
-    if ($row["email"] == $email) $email_err = "E-mail address is already taken.";
-    
+    // if no email errors, check for existing email
+    if (empty($email_err)) {
+        // variable containing query to search database for given email from textbox
+        $check_WL_email = "SELECT * FROM WebLogins.users WHERE email = '$email'";
+        // stores true/false into result variable indicating if query was successful
+        if ($result = mysqli_query($conn_WebLogins, $check_WL_email)) {
+            // stores all tuples/records as array rows into row variable
+            $row = mysqli_fetch_assoc($result);
+            // if an email exists
+            if ($row["email"] == $email) $email_err = "E-mail address is already taken.";
+        }
+        // check if it is an employee, if so set access level accordingly
+        $check_PS_email = "SELECT * FROM PostalService.Employee WHERE email = '$email'";
+        if ($result = mysqli_query($conn_WebLogins, $check_PS_email)) {
+            $row = mysqli_fetch_assoc($result);
+            if ($row["email"] == $email) {
+                if ($row["manager_id"] > 0) $access_level = 3;
+                else $access_level = 2;
+            }
+            else $access_level = 1;
+        }
+    }
     // if all error strings are empty meaning all info is valid
     if (empty($email_err) && empty($name_err) && empty($password_err) && empty($confirm_password_err) && empty($security_question_err) && empty($security_answer_err)) {
         // variable containing query to insert info into database
-        $sql = "INSERT INTO WebLogins.users (email, name, pass, is_employee, security_question, security_answer) VALUES (?, ?, ?, 1, ?, ?)";
+        $sql = "INSERT INTO WebLogins.users (email, name, pass, access_level, security_question, security_answer) VALUES (?, ?, ?, ?, ?, ?)";
         // prepare query statement
         if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
             // bind parameters into query statement
-            mysqli_stmt_bind_param($stmt, "sssss", $param_email, $param_name, $param_pass, $param_security_question, $param_security_answer);
+            mysqli_stmt_bind_param($stmt, "sssiss", $param_email, $param_name, $param_pass, $access_level, $param_security_question, $param_security_answer);
             $param_email = $email;
             $param_name = $name;
             // encrypt password
@@ -96,7 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                     <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
                 </ul>
-                <a href="index.php" class="navbar-brand"><span style="margin-right:7.8rem">Postal Office</style></a>
+                <a href="index.php" class="navbar-brand">Postal Office</a>
                 <ul class="nav navbar-nav ms-auto">
                     <a href="sign-in.php" class="nav-item nav-link">Sign In</a>
                     <a href="sign-up.php" class="nav-item nav-link active">Sign Up</a>
@@ -112,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <p>Fill out the form below to create an account.</p>
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                     <?php
-                        echo $sucess;
+                        echo $success;
                         echo $error;
                     ?>
                     <div class="m-3">

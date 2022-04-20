@@ -1,56 +1,83 @@
 <?php
 session_start();
 require "db_conn_PostalService.php";
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] !== true) {
     header("location:sign-in.php");
     exit;
 }
-if ($_SESSION["is_employee"] == "1") {
+if ($_SESSION["access_level"] == "1") {
     header("location:index.php");
     exit;
-} else {}
-
-$from_date_err = $to_date_err = $err = "";
-$sql1 = $sql2 = "";
-$totalPrice = 0;
+}
+if ($_SESSION["access_level"] == "2") {
+    header("location:database-access.php");
+    exit;
+}
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
     if (empty(trim($_POST["from_date"])) && !empty(trim($_POST["to_date"]))) $from_date_err = '<div class="alert alert-danger" role="alert">Please enter a from date.</div>';
     else if (!empty(trim($_POST["from_date"])) && empty(trim($_POST["to_date"]))) $to_date_err = '<div class="alert alert-danger" role="alert">Please enter a to date.</div>';
     else if (!empty(trim($_POST["from_date"])) && !empty(trim($_POST["to_date"]))) {
         $from_date = trim($_POST["from_date"]);
         $to_date = trim($_POST["to_date"]);
-        $sql = "SELECT mail_type, from_address, to_address, delivered_on, shipping_cost FROM PostalService.Mail WHERE DATE(?) <= DATE(label_created) AND DATE(?) >= DATE(label_created)";
+        $sql1 = "SELECT COUNT(*) FROM PostalService.Mail WHERE DATE(?) <= DATE(label_created) AND DATE(?) >= DATE(label_created)";
+        $sql2 = "SELECT SUM(shipping_cost) FROM PostalService.Mail WHERE DATE(?) <= DATE(label_created) AND DATE(?) >= DATE(label_created)";
+        $sql3 = "SELECT mail_type, from_address, to_address, delivered_on, shipping_cost FROM PostalService.Mail WHERE DATE(?) <= DATE(label_created) AND DATE(?) >= DATE(label_created)";
     }
     else $err = '<div class="alert alert-danger" role="alert">Please enter a from and to date.</div>';
     if (empty($from_date_err) && empty($to_date_err) && empty($err)) {
-        if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-            mysqli_stmt_bind_param($stmt, "ss", $from_date, $to_date);
-            mysqli_stmt_execute($stmt);
-            mysqli_stmt_bind_result($stmt, $mail_type, $from_address, $to_address, $delivered_on, $shipping_cost);
-            $showtable = '
-            <table class="table table-bordered table-primary table-hover align-middle">
-                <thead>
-                    <th scope="col">Mail Type</th>
-                    <th scope="col">From Address</th>
-                    <th scope="col">To Address</th>
-                    <th scope="col">Delivered On</th>
-                </thead>
-                <tbody>';
-            while (mysqli_stmt_fetch($stmt)) {
-                $totalPrice = $totalPrice + $shipping_cost;
-                $showtable .= '<tr><td>';
-                $showtable .= $mail_type;
-                $showtable .= '</td><td>';
-                $showtable .= $from_address;
-                $showtable .= '</td><td>';
-                $showtable .= $to_address;
-                $showtable .= '</td><td>';
-                $showtable .= $delivered_on;
-                $showtable .= '</td></tr>';
+        if ($stmt1 = mysqli_prepare($conn_PostalService, $sql1)) {
+            mysqli_stmt_bind_param($stmt1, "ss", $from_date, $to_date);
+            if (mysqli_stmt_execute($stmt1)) {
+                $totalMail = 0;
+                mysqli_stmt_bind_result($stmt1, $totalMail);
+                mysqli_stmt_fetch($stmt1);
+                $showtotalMail = 'Total mail sent: '.$totalMail.'';
+                mysqli_stmt_close($stmt1);
             }
-            $showtable .= '</tbody></table>';
-            mysqli_stmt_close($stmt);
+        }
+        if ($stmt2 = mysqli_prepare($conn_PostalService, $sql2)) {
+            mysqli_stmt_bind_param($stmt2, "ss", $from_date, $to_date);
+            if (mysqli_stmt_execute($stmt2)) {
+                $totalPrice = 0;
+                mysqli_stmt_bind_result($stmt2, $totalPrice);
+                mysqli_stmt_fetch($stmt2);
+                $showtotalPrice = 'Gross revenue of mail sent: $'.number_format($totalPrice, 2, '.', ',').'';
+                mysqli_stmt_close($stmt2);
+            }
+        }
+        if ($stmt3 = mysqli_prepare($conn_PostalService, $sql3)) {
+            mysqli_stmt_bind_param($stmt3, "ss", $from_date, $to_date);
+            if (mysqli_stmt_execute($stmt3)) {
+                mysqli_stmt_bind_result($stmt3, $mail_type, $from_address, $to_address, $delivered_on, $shipping_cost);
+                $showtable = '
+                <div class="table-responsive">
+                    <table class="table table-bordered table-primary table-striped table-sm align-middle caption-top">
+                        <caption>'.$showtotalMail.'</caption>
+                        <caption>'.$showtotalPrice.'</caption>
+                        <thead>
+                            <th scope="col">Mail Type</th>
+                            <th scope="col">From Address</th>
+                            <th scope="col">To Address</th>
+                            <th scope="col">Delivered On</th>
+                            <th scope="col">Shipping Cost</th>
+                        </thead>
+                        <tbody>';
+                while (mysqli_stmt_fetch($stmt3)) {
+                    $showtable .= '<tr><td>';
+                    $showtable .= $mail_type;
+                    $showtable .= '</td><td>';
+                    $showtable .= $from_address;
+                    $showtable .= '</td><td>';
+                    $showtable .= $to_address;
+                    $showtable .= '</td><td>';
+                    $showtable .= $delivered_on;
+                    $showtable .= '</td><td>';
+                    $showtable .= $shipping_cost;
+                    $showtable .= '</td></tr></div>';
+                }
+                $showtable .= '</tbody></table>';
+                mysqli_stmt_close($stmt3);
+            }
         }
     }
 }
@@ -92,6 +119,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="container-fluid">
                     <ul class="nav navbar-nav me-auto">
                         <span id="name" class="nav-item">Logged in as: <?php echo $_SESSION["name"] ?></span>
+                        <span id="name" class="nav-item">, Employee ID: <?php echo $_SESSION["employee_id"] ?></span>
+                        <span id="name" class="nav-item">, Access Level: <?php if ($_SESSION["access_level"] == "3") echo 'Manager'; else echo 'Employee'; ?></span>
                     </ul>
                     <span class="navbar-brand mx-auto">Reports</span>
                     <ul class="nav navbar-nav ms-auto">
@@ -132,18 +161,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </ul>
                             </div>
                         </li>
-                        <li class="mb-1">
-                            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
-                                Reports
-                            </button>
-                            <div class="collapse show" id="reports-collapse">
-                                <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
-                                    <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
-                                    <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
-                                    <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
-                                </ul>
-                            </div>
-                        </li>
+                        <?php if ($_SESSION["access_level"] == "3") { ?>
+                            <li class="mb-1">
+                                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
+                                    Reports
+                                </button>
+                                <div class="collapse show" id="reports-collapse">
+                                    <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
+                                        <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
+                                        <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
+                                        <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        <?php } ?>
                     </ul>
                 </div>
             </div>
@@ -168,7 +199,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <?php
                     echo $showtable;
-                    echo "Total Revenue From This Period: " . $totalPrice;
                 ?>
             </div>
         </div>

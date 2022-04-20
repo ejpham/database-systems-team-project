@@ -7,7 +7,7 @@ $packSizeSelected = $packSpeedSelected = $lettSpeedSelected = "0:0";
 $name = $email = $mail_type = $address = $fromaddress = $state = $fromstate = $city = $fromcity = $cvv = $expDate = $cardnum = $recName = $lettSpeed = $packSize = $packSpeed = $toZip = $fromZip = $tracking = "";
 $name_err = $email_err = $mail_type_err = $state_err = $fromstate_err = $success = $error = $address_err = $fromaddress_err = $city_err = $fromcity_err = $cvv_err = $expDate_err = $cardnum_err = $recName_err = $lettSpeed_err = $packSize_err = $packSpeed_err = $weight_err = $toZip_err= $fromZip_err = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+    if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] === true) {
         $name = $_SESSION["name"];
         $email = $_SESSION["email"];
     }
@@ -144,17 +144,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                     <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
                 </ul>
-                <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
-                    <a href="index.php" class="navbar-brand"><span style="margin-right:7.3rem">Postal Office</style></a>
-                <?php } else { ?>
-                    <a href="index.php" class="navbar-brand"><span style="margin-right:7.8rem">Postal Office</style></a>
-                <?php } ?>
+                <a href="index.php" class="navbar-brand">Postal Office</a>
                 <ul class="nav navbar-nav ms-auto">
-                    <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
+                    <?php if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] === true) { ?>
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account Options</a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <?php if ($_SESSION["is_employee"] > "1") { ?>
+                                <?php if ($_SESSION["access_level"] > "1") { ?>
                                     <a href="database-access.php" class="dropdown-item">Database Access</a>
                                 <?php } ?>
                                 <a href="my-account.php" class="dropdown-item">My Account</a>
@@ -184,7 +180,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <?php } ?>
                         <div class="m-3">
                             <label class="form-label">Sender's Full Name</label>
-                            <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
+                            <?php if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] === true) { ?>
                                 <input type="text" name="name" class="form-control-plaintext" value="<?php echo $_SESSION["name"]; ?>" id="inputName" readonly>
                             <?php } else { ?>
                                 <input type="text" name="name" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>" id="inputName" placeholder="Full Name">
@@ -193,7 +189,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                         <div class="m-3">
                             <label class="form-label" for="inputEmail">E-mail Address</label>
-                            <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
+                            <?php if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] === true) { ?>
                                 <input type="email" name="email" class="form-control-plaintext" value="<?php echo $_SESSION["email"]; ?>" id="inputEmail" readonly>
                             <?php } else { ?>
                                 <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" id="inputEmail" placeholder="E-mail Address">

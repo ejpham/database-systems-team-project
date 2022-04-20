@@ -1,18 +1,17 @@
 <?php
 session_start();
 require "db_conn_PostalService.php";
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] !== true) {
     header("location:sign-in.php");
     exit;
 }
-if ($_SESSION["is_employee"] == "1") {
+if ($_SESSION["access_level"] == "1") {
     header("location:index.php");
     exit;
-} else {}
+}
 $sql = "SELECT * FROM PostalService.MailOrders ORDER BY order_id DESC";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $order_id, $tracking_number, $status, $package_size, $package_weight, $billing, $email);
+    if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $order_id, $tracking_number, $status, $package_size, $package_weight, $billing, $email);
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
@@ -21,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $run = "UPDATE PostalService.MailOrders SET status = ? WHERE order_id = ?;";
     if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
         mysqli_stmt_bind_param($stmt, "si", $status, $order_id);
-        mysqli_stmt_execute($stmt);
+        if (mysqli_stmt_execute($stmt));
     }
     header("refresh:0;");
 }
@@ -63,6 +62,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="container-fluid">
                     <ul class="nav navbar-nav me-auto">
                         <span id="name" class="nav-item">Logged in as: <?php echo $_SESSION["name"] ?></span>
+                        <span id="name" class="nav-item">, Employee ID: <?php echo $_SESSION["employee_id"] ?></span>
+                        <span id="name" class="nav-item">, Access Level: <?php if ($_SESSION["access_level"] == "3") echo 'Manager'; else echo 'Employee'; ?></span>
                     </ul>
                     <span class="navbar-brand mx-auto">Postal Service</span>
                     <ul class="nav navbar-nav ms-auto">
@@ -103,100 +104,88 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </ul>
                             </div>
                         </li>
-                        <li class="mb-1">
-                            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
-                                Reports
-                            </button>
-                            <div class="collapse show" id="reports-collapse">
-                                <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
-                                    <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
-                                    <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
-                                    <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
-                                </ul>
-                            </div>
-                        </li>
+                        <?php if ($_SESSION["access_level"] == "3") { ?>
+                            <li class="mb-1">
+                                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
+                                    Reports
+                                </button>
+                                <div class="collapse show" id="reports-collapse">
+                                    <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
+                                        <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
+                                        <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
+                                        <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        <?php } ?>
                     </ul>
                 </div>
             </div>
             <div class="col">
-                <h6 class="display-6">Mail Orders</h6>
-                <table class="table table-bordered table-primary table-hover align-middle">
-                    <thead>
-                        <th scope="col">Order ID</th>
-                        <th scope="col">Tracking Number</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Package Size</th>
-                        <th scope="col">Package Weight</th>
-                        <th scope="col">Billing Address</th>
-                        <th scope="col">Sender's E-mail</th>
-                    </thead>
-                    <tbody>
-                        <?php while (mysqli_stmt_fetch($stmt)) { ?>
-                        <tr>
-                            <td><?php echo $order_id; ?></td>
-                            <td><?php echo $tracking_number; ?></td>
-                            <td>
-                                <?php if ($status == "Delivered") { echo $status; } else { ?>
-                                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                    <input type="hidden" name="order_id" value="<?php echo $order_id; ?>">
-                                    <div class="input-group">
-                                        <select type="text" class="form-select" name="status" value="<?php echo $status; ?>">
-                                            <?php if ($status == "Label Created") { ?>
-                                                <option value="Label Created" selected disabled>Label Created</option>
-                                                <option value="Processing">Processing</option>
-                                                <option value="In Transit">In Transit</option>
-                                                <option value="Out for Delivery">Out for Delivery</option>
-                                                <option value="Delivered">Delivered</option>
-                                            <?php } else if ($status == "Processing") { ?>
-                                                <option value="Label Created" disabled>Label Created</option>
-                                                <option value="Processing" selected disabled>Processing</option>
-                                                <option value="In Transit">In Transit</option>
-                                                <option value="Out for Delivery">Out for Delivery</option>
-                                                <option value="Delivered">Delivered</option>
-                                            <?php } else if ($status == "In Transit") { ?>
-                                                <option value="Label Created" disabled>Label Created</option>
-                                                <option value="Processing">Processing</option>
-                                                <option value="In Transit" selected disabled>In Transit</option>
-                                                <option value="Out for Delivery">Out for Delivery</option>
-                                                <option value="Delivered">Delivered</option>
-                                            <?php } else if ($status == "Out for Delivery") { ?>
-                                                <option value="Label Created" disabled>Label Created</option>
-                                                <option value="Processing">Processing</option>
-                                                <option value="In Transit">In Transit</option>
-                                                <option value="Out for Delivery" selected disabled>Out for Delivery</option>
-                                                <option value="Delivered">Delivered</option>
-                                            <?php } ?>
-                                        </select>
-                                        <input type="submit" class="btn btn-outline-primary" value="Update">
-                                    </div>
-                                </form>
-                                <?php } ?>
-                            </td>
-                            <td><?php echo $package_size; ?></td>
-                            <td><?php echo $package_weight; ?></td>
-                            <td><?php echo $billing; ?></td>
-                            <td><?php echo $email; ?></td>
-                        </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="m-4 row justify-content-center">
-            <div class="col-auto">
                 <a href="ps-mail.php"><button class="btn btn-outline-primary">Back</button></a>
-            </div>
-        </div>
-        <div class="m-4 row justify-content-start">
-            <div class="col-auto">
-                <label>Status:</label>
-                <ul>
-                    <li>Label Created</li>
-                    <li>Processing</li>
-                    <li>In Transit</li>
-                    <li>Out for Delivery</li>
-                    <li>Delivered</li>
-                </ul>
+                <h6 class="display-6">Mail Orders</h6>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-primary table-striped table-hover table-sm align-middle">
+                        <thead>
+                            <th scope="col">Order ID</th>
+                            <th scope="col">Tracking Number</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Package Size</th>
+                            <th scope="col">Package Weight</th>
+                            <th scope="col">Billing Address</th>
+                            <th scope="col">Sender's E-mail</th>
+                        </thead>
+                        <tbody>
+                            <?php while (mysqli_stmt_fetch($stmt)) { ?>
+                            <tr>
+                                <td><?php echo $order_id; ?></td>
+                                <td><?php echo $tracking_number; ?></td>
+                                <td>
+                                    <?php if ($status == "Delivered") { echo $status; } else { ?>
+                                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                        <input type="hidden" name="order_id" value="<?php echo $order_id; ?>">
+                                        <div class="input-group">
+                                            <select type="text" class="form-select" name="status" value="<?php echo $status; ?>">
+                                                <?php if ($status == "Label Created") { ?>
+                                                    <option value="Label Created" selected disabled>Label Created</option>
+                                                    <option value="Processing">Processing</option>
+                                                    <option value="In Transit">In Transit</option>
+                                                    <option value="Out for Delivery">Out for Delivery</option>
+                                                    <option value="Delivered">Delivered</option>
+                                                <?php } else if ($status == "Processing") { ?>
+                                                    <option value="Label Created" disabled>Label Created</option>
+                                                    <option value="Processing" selected disabled>Processing</option>
+                                                    <option value="In Transit">In Transit</option>
+                                                    <option value="Out for Delivery">Out for Delivery</option>
+                                                    <option value="Delivered">Delivered</option>
+                                                <?php } else if ($status == "In Transit") { ?>
+                                                    <option value="Label Created" disabled>Label Created</option>
+                                                    <option value="Processing">Processing</option>
+                                                    <option value="In Transit" selected disabled>In Transit</option>
+                                                    <option value="Out for Delivery">Out for Delivery</option>
+                                                    <option value="Delivered">Delivered</option>
+                                                <?php } else if ($status == "Out for Delivery") { ?>
+                                                    <option value="Label Created" disabled>Label Created</option>
+                                                    <option value="Processing">Processing</option>
+                                                    <option value="In Transit">In Transit</option>
+                                                    <option value="Out for Delivery" selected disabled>Out for Delivery</option>
+                                                    <option value="Delivered">Delivered</option>
+                                                <?php } ?>
+                                            </select>
+                                            <input type="submit" class="btn btn-outline-primary" value="Update">
+                                        </div>
+                                    </form>
+                                    <?php } ?>
+                                </td>
+                                <td><?php echo $package_size; ?></td>
+                                <td><?php echo $package_weight; ?></td>
+                                <td><?php echo $billing; ?></td>
+                                <td><?php echo $email; ?></td>
+                            </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

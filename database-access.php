@@ -1,13 +1,13 @@
 <?php
 session_start();
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] !== true) {
     header("location:sign-in.php");
     exit;
 }
-if ($_SESSION["is_employee"] == "1") {
+if ($_SESSION["access_level"] == "1") {
     header("location:index.php");
     exit;
-} else {}
+}
 ?>
 
 <!DOCTYPE html>
@@ -46,6 +46,8 @@ if ($_SESSION["is_employee"] == "1") {
                 <div class="container-fluid">
                     <ul class="nav navbar-nav me-auto">
                         <span id="name" class="nav-item">Logged in as: <?php echo $_SESSION["name"] ?></span>
+                        <span id="name" class="nav-item">, Employee ID: <?php echo $_SESSION["employee_id"] ?></span>
+                        <span id="name" class="nav-item">, Access Level: <?php if ($_SESSION["access_level"] == "3") echo 'Manager'; else echo 'Employee'; ?></span>
                     </ul>
                     <span class="navbar-brand mx-auto">Database Access</span>
                     <ul class="nav navbar-nav ms-auto">
@@ -86,18 +88,20 @@ if ($_SESSION["is_employee"] == "1") {
                                 </ul>
                             </div>
                         </li>
-                        <li class="mb-1">
-                            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
-                                Reports
-                            </button>
-                            <div class="collapse show" id="reports-collapse">
-                                <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
-                                    <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
-                                    <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
-                                    <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
-                                </ul>
-                            </div>
-                        </li>
+                        <?php if ($_SESSION["access_level"] == "3") { ?>
+                            <li class="mb-1">
+                                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
+                                    Reports
+                                </button>
+                                <div class="collapse show" id="reports-collapse">
+                                    <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
+                                        <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
+                                        <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
+                                        <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        <?php } ?>
                     </ul>
                 </div>
             </div>

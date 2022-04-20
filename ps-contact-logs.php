@@ -1,18 +1,17 @@
 <?php
 session_start();
 require "db_conn_PostalService.php";
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] !== true) {
     header("location:sign-in.php");
     exit;
 }
-if ($_SESSION["is_employee"] == "1") {
+if ($_SESSION["access_level"] == "1") {
     header("location:index.php");
     exit;
-} else {}
+}
 $sql = "SELECT * FROM PostalService.Contact_Logs ORDER BY message_id DESC";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $message_id, $full_name, $email, $message, $received);
+    if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $message_id, $full_name, $email, $message, $received);
 }
 ?>
 
@@ -52,6 +51,8 @@ if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
                 <div class="container-fluid">
                     <ul class="nav navbar-nav me-auto">
                         <span id="name" class="nav-item">Logged in as: <?php echo $_SESSION["name"] ?></span>
+                        <span id="name" class="nav-item">, Employee ID: <?php echo $_SESSION["employee_id"] ?></span>
+                        <span id="name" class="nav-item">, Access Level: <?php if ($_SESSION["access_level"] == "3") echo 'Manager'; else echo 'Employee'; ?></span>
                     </ul>
                     <span class="navbar-brand mx-auto">Postal Service</span>
                     <ul class="nav navbar-nav ms-auto">
@@ -92,43 +93,47 @@ if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
                                 </ul>
                             </div>
                         </li>
-                        <li class="mb-1">
-                            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
-                                Reports
-                            </button>
-                            <div class="collapse show" id="reports-collapse">
-                                <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
-                                    <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
-                                    <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
-                                    <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
-                                </ul>
-                            </div>
-                        </li>
+                        <?php if ($_SESSION["access_level"] == "3") { ?>
+                            <li class="mb-1">
+                                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
+                                    Reports
+                                </button>
+                                <div class="collapse show" id="reports-collapse">
+                                    <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
+                                        <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
+                                        <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
+                                        <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        <?php } ?>
                     </ul>
                 </div>
             </div>
             <div class="col">
                 <h6 class="display-6">Contact Logs</h6>
-                <table class="table table-bordered table-primary table-hover align-middle">
-                    <thead>
-                        <th scope="col">Log ID</th>
-                        <th scope="col">Full Name</th>
-                        <th scope="col">E-mail Address</th>
-                        <th scope="col">Message</th>
-                        <th scope="col">Date Received</th>
-                    </thead>
-                    <tbody>
-                        <?php while (mysqli_stmt_fetch($stmt)) { ?>
-                        <tr>
-                            <td><?php echo $message_id; ?></td>
-                            <td><?php echo $full_name; ?></td>
-                            <td><?php echo $email; ?></td>
-                            <td><?php echo $message; ?></td>
-                            <td><?php echo $received; ?></td>
-                        </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-primary table-striped table-hover table-sm align-middle">
+                        <thead>
+                            <th scope="col">Log ID</th>
+                            <th scope="col">Full Name</th>
+                            <th scope="col">E-mail Address</th>
+                            <th scope="col">Message</th>
+                            <th scope="col">Date Received</th>
+                        </thead>
+                        <tbody>
+                            <?php while (mysqli_stmt_fetch($stmt)) { ?>
+                            <tr>
+                                <td><?php echo $message_id; ?></td>
+                                <td><?php echo $full_name; ?></td>
+                                <td><?php echo $email; ?></td>
+                                <td><?php echo $message; ?></td>
+                                <td><?php echo $received; ?></td>
+                            </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

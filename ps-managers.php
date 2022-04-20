@@ -1,18 +1,17 @@
 <?php
 session_start();
 require "db_conn_PostalService.php";
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] !== true) {
     header("location:sign-in.php");
     exit;
 }
-if ($_SESSION["is_employee"] == "1") {
+if ($_SESSION["access_level"] == "1") {
     header("location:index.php");
     exit;
-} else {}
+}
 $sql = "SELECT * FROM PostalService.Manager";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $man_id, $lname, $emp_id);
+    if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $man_id, $lname, $emp_id);
 }
 $err = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -20,23 +19,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (trim($_POST["action"]) == "add") {
         $lname = trim($_POST["lname"]);
         $emp_id = trim($_POST["emp_id"]);
-        $check = mysqli_query($conn_PostalService, "SELECT * FROM PostalService.Employee WHERE employee_id = $emp_id AND last_name = '$lname';");
-        $num_rows = mysqli_num_rows($check);
-        if ($num_rows == 0) {
-            $err = '<div class="alert alert-danger" role="alert">Please enter the correct last name and employee ID.</div>';
-            header("refresh:1;");
+        if ($check = mysqli_query($conn_PostalService, "SELECT * FROM PostalService.Employee WHERE employee_id = $emp_id AND last_name = '$lname';")) {
+            $num_rows = mysqli_num_rows($check);
+            if ($num_rows == 0) {
+                $err = '<div class="alert alert-danger" role="alert">Please enter the correct last name and employee ID.</div>';
+                header("refresh:1;");
+            }
         }
-        $check = mysqli_query($conn_PostalService, "SELECT * FROM PostalService.Manager WHERE manager_lname = '$lname' AND employee_id = $emp_id");
-        $num_rows = mysqli_num_rows($check);
-        if ($num_rows > 0) {
-            $err = '<div class="alert alert-danger" role="alert">They are already a manager.</div>';
-            header("refresh:1;");
+        if ($check = mysqli_query($conn_PostalService, "SELECT * FROM PostalService.Manager WHERE manager_lname = '$lname' AND employee_id = $emp_id")) {
+            $num_rows = mysqli_num_rows($check);
+            if ($num_rows > 0) {
+                $err = '<div class="alert alert-danger" role="alert">They are already a manager.</div>';
+                header("refresh:1;");
+            }
         }
         if (empty($err)) {
             $run = "INSERT INTO PostalService.Manager (manager_lname, employee_id) VALUES (?, ?);";
             if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
                 mysqli_stmt_bind_param($stmt, "si", $lname, $emp_id);
-                mysqli_stmt_execute($stmt);
+                if (mysqli_stmt_execute($stmt));
             }
         }
     }
@@ -45,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $run = "DELETE FROM PostalService.Manager WHERE manager_id = ?;";
         if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
             mysqli_stmt_bind_param($stmt, "i", $man_id);
-            mysqli_stmt_execute($stmt);
+            if (mysqli_stmt_execute($stmt));
         }
     }
     header("refresh:0;");
@@ -88,6 +89,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="container-fluid">
                     <ul class="nav navbar-nav me-auto">
                         <span id="name" class="nav-item">Logged in as: <?php echo $_SESSION["name"] ?></span>
+                        <span id="name" class="nav-item">, Employee ID: <?php echo $_SESSION["employee_id"] ?></span>
+                        <span id="name" class="nav-item">, Access Level: <?php if ($_SESSION["access_level"] == "3") echo 'Manager'; else echo 'Employee'; ?></span>
                     </ul>
                     <span class="navbar-brand mx-auto">Postal Service</span>
                     <ul class="nav navbar-nav ms-auto">
@@ -128,57 +131,61 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </ul>
                             </div>
                         </li>
-                        <li class="mb-1">
-                            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
-                                Reports
-                            </button>
-                            <div class="collapse show" id="reports-collapse">
-                                <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
-                                    <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
-                                    <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
-                                    <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
-                                </ul>
-                            </div>
-                        </li>
+                        <?php if ($_SESSION["access_level"] == "3") { ?>
+                            <li class="mb-1">
+                                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
+                                    Reports
+                                </button>
+                                <div class="collapse show" id="reports-collapse">
+                                    <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
+                                        <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
+                                        <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
+                                        <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        <?php } ?>
                     </ul>
                 </div>
             </div>
             <div class="col">
                 <h6 class="display-6">Managers</h6>
                 <?php echo $err; ?>
-                <table class="table table-bordered table-primary table-hover align-middle">
-                    <thead>
-                        <th scope="col">Manager ID</th>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">Employee ID</th>
-                        <?php if ($_SESSION["is_employee"] == "3") { echo '<th scope="col"></th>'; } ?>
-                    </thead>
-                    <tbody>
-                        <?php if ($_SESSION["is_employee"] == "3") { ?>
-                            <tr>
-                                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                    <input type="hidden" name="action" value="add">
-                                    <td></td>
-                                    <td><input type="text" name="lname" class="form-control" maxlength="30"></td>
-                                    <td><input type="number" name="emp_id" class="form-control" min="1"></td>
-                                    <td><input type="submit" class="btn btn-primary" value="Add"></td>
-                                </form>
-                            </tr>
-                        <?php } ?>
-                        <?php while (mysqli_stmt_fetch($stmt)) { ?>
-                            <tr>
-                                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="man_id" value="<?php echo $man_id; ?>">
-                                    <td><?php echo $man_id; ?></td>
-                                    <td><?php echo $lname; ?></td>
-                                    <td><?php echo $emp_id; ?></td>
-                                    <?php if ($_SESSION["is_employee"] == "3") { ?><td><input type="submit" class="btn btn-danger" value="Delete"></td><?php } ?>
-                                </form>
-                            </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-primary table-striped table-hover table-sm align-middle">
+                        <thead>
+                            <th scope="col">Man. ID</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Emp. ID</th>
+                            <?php if ($_SESSION["access_level"] == "3") { echo '<th scope="col"></th>'; } ?>
+                        </thead>
+                        <tbody>
+                            <?php if ($_SESSION["access_level"] == "3") { ?>
+                                <tr>
+                                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                        <input type="hidden" name="action" value="add">
+                                        <td></td>
+                                        <td><input type="text" name="lname" class="form-control" maxlength="30" placeholder="Last Name"></td>
+                                        <td><input type="number" name="emp_id" class="form-control" min="1" placeholder="Employee ID"></td>
+                                        <td><input type="submit" class="btn btn-primary" value="Add"></td>
+                                    </form>
+                                </tr>
+                            <?php } ?>
+                            <?php while (mysqli_stmt_fetch($stmt)) { ?>
+                                <tr>
+                                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="man_id" value="<?php echo $man_id; ?>">
+                                        <td><?php echo $man_id; ?></td>
+                                        <td><?php echo $lname; ?></td>
+                                        <td><?php echo $emp_id; ?></td>
+                                        <?php if ($_SESSION["access_level"] == "3") { ?><td><input type="submit" class="btn btn-danger" value="Delete"></td><?php } ?>
+                                    </form>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

@@ -1,46 +1,37 @@
 <?php
 session_start();
 require "db_conn_PostalService.php";
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] !== true) {
     header("location:sign-in.php");
     exit;
 }
-if ($_SESSION["is_employee"] == "1") {
+if ($_SESSION["access_level"] == "1") {
     header("location:index.php");
     exit;
-} else {}
+}
 $sql = "SELECT * FROM PostalService.Employee";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $emp_id, $fname, $minit, $lname, $dob, $addr, $city, $zip, $email, $pnum, $ssn, $m_id);
+    if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $emp_id, $fname, $minit, $lname, $dob, $addr, $city, $state, $zip, $email, $pnum, $ssn, $m_id, $u_id);
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
     if ($_POST["action"] == "add") {
-        if(!empty(trim($_POST["fname"])))
-            $fname = trim($_POST["fname"]);
+        if (!empty(trim($_POST["fname"]))) $fname = trim($_POST["fname"]);
         $minit = trim($_POST["minit"]);
-        if(!empty(trim($_POST["lname"])))
-            $lname = trim($_POST["lname"]);
-        if(!empty(trim($_POST["dob"])))
-            $dob = trim($_POST["dob"]);
-        if(!empty(trim($_POST["address"])))
-            $addr = trim($_POST["address"]);
-        if(!empty(trim($_POST["city"])))
-            $city = trim($_POST["city"]);
-        if(!empty(trim($_POST["zip"])))
-            $zip = trim($_POST["zip"]);
-        if(!empty(trim($_POST["email"])))
-            $email = trim($_POST["email"]);
-        if(!empty(trim($_POST["phone_num"])) && strlen(trim($_POST["phone_num"])) == 10)
-            $pnum = trim($_POST["phone_num"]);
-        if(!empty(trim($_POST["ssn"])) && strlen(trim($_POST["ssn"])) == 9)
-            $ssn = trim($_POST["ssn"]);
-        if(!empty($fname) && !empty($lname) && !empty($dob) && !empty($addr) && !empty($city) && !empty($zip) && !empty($email) && !empty($pnum) && !empty($ssn)){
-            $run = "INSERT INTO PostalService.Employee (first_name, minit, last_name, dob, home_address, home_city, home_zipcode, email, phone_number, ssn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        if (!empty(trim($_POST["lname"]))) $lname = trim($_POST["lname"]);
+        if (!empty(trim($_POST["dob"]))) $dob = trim($_POST["dob"]);
+        if (!empty(trim($_POST["address"]))) $addr = trim($_POST["address"]);
+        if (!empty(trim($_POST["city"]))) $city = trim($_POST["city"]);
+        if (!empty(trim($_POST["state"]))) $state = trim($_POST["state"]);
+        if (!empty(trim($_POST["zip"]))) $zip = trim($_POST["zip"]);
+        if (!empty(trim($_POST["email"]))) $email = trim($_POST["email"]);
+        if (!empty(trim($_POST["phone_num"])) && strlen(trim($_POST["phone_num"])) == 10) $pnum = trim($_POST["phone_num"]);
+        if (!empty(trim($_POST["ssn"])) && strlen(trim($_POST["ssn"])) == 9) $ssn = trim($_POST["ssn"]);
+        if (!empty($fname) && !empty($lname) && !empty($dob) && !empty($addr) && !empty($city) && !empty($state) && !empty($zip) && !empty($email) && !empty($pnum) && !empty($ssn)){
+            $run = "INSERT INTO PostalService.Employee (first_name, minit, last_name, dob, home_address, home_city, home_state, home_zipcode, email, phone_number, ssn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
-                mysqli_stmt_bind_param($stmt, "ssssssssss", $fname, $minit, $lname, $dob, $addr, $city, $zip, $email, $pnum, $ssn);
-                mysqli_stmt_execute($stmt);
+                mysqli_stmt_bind_param($stmt, "sssssssssss", $fname, $minit, $lname, $dob, $addr, $city, $state, $zip, $email, $pnum, $ssn);
+                if (mysqli_stmt_execute($stmt));
             }
         }
     }
@@ -49,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $run = "DELETE FROM PostalService.Employee WHERE employee_id = ?";
         if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
             mysqli_stmt_bind_param($stmt, "i", $emp_id);
-            mysqli_stmt_execute($stmt);
+            if (mysqli_stmt_execute($stmt));
         }
     }
     header("refresh:0;");
@@ -103,6 +94,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="container-fluid">
                     <ul class="nav navbar-nav me-auto">
                         <span id="name" class="nav-item">Logged in as: <?php echo $_SESSION["name"] ?></span>
+                        <span id="name" class="nav-item">, Employee ID: <?php echo $_SESSION["employee_id"] ?></span>
+                        <span id="name" class="nav-item">, Access Level: <?php if ($_SESSION["access_level"] == "3") echo 'Manager'; else echo 'Employee'; ?></span>
                     </ul>
                     <span class="navbar-brand mx-auto">Postal Service</span>
                     <ul class="nav navbar-nav ms-auto">
@@ -143,89 +136,150 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </ul>
                             </div>
                         </li>
-                        <li class="mb-1">
-                            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
-                                Reports
-                            </button>
-                            <div class="collapse show" id="reports-collapse">
-                                <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
-                                    <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
-                                    <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
-                                    <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
-                                </ul>
-                            </div>
-                        </li>
+                        <?php if ($_SESSION["access_level"] == "3") { ?>
+                            <li class="mb-1">
+                                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
+                                    Reports
+                                </button>
+                                <div class="collapse show" id="reports-collapse">
+                                    <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
+                                        <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
+                                        <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
+                                        <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        <?php } ?>
                     </ul>
                 </div>
             </div>
             <div class="col">
-                <h6 class="display-6">Employees</h6>
-                <table class="table table-bordered table-primary table-hover align-middle">
-                    <thead>
-                        <th scope="col">Employee ID</th>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Middle Init.</th>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">Date of Birth</th>
-                        <th scope="col">Home Address</th>
-                        <th scope="col">City</th>
-                        <th scope="col">Zip Code</th>
-                        <th scope="col">E-mail Address</th>
-                        <th scope="col">Phone Number</th>
-                        <th scope="col">SSN</th>
-                        <th scope="col">Manager ID</th>
-                        <?php if ($_SESSION["is_employee"] == "3") { ?><th scope="col"></th><?php } ?>
-                    </thead>
-                    <tbody>
-                        <?php if ($_SESSION["is_employee"] == "3") { ?>
-                            <tr>
-                                <form method="post" action="<?php htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                    <input type="hidden" name="action" value="add">
-                                    <td></td>
-                                    <td><input class="form-control" type="text" name="fname" maxlength="30"></td>
-                                    <td><input class="form-control w-50" type="text" name="minit" maxlength="1" oninput="this.value = this.value.toUpperCase();"></td>
-                                    <td><input class="form-control" type="text" name="lname" maxlength="30"></td>
-                                    <td><input class="form-control" type="date" name="dob"></td>
-                                    <td><input class="form-control" type="text" name="address" maxlength="255"></td>
-                                    <td><input class="form-control" type="text" name="city" maxlength="50"></td>
-                                    <td><input class="form-control" type="text" name="zip" maxlength="5"></td>
-                                    <td><input class="form-control" type="email" name="email" maxlength="75"></td>
-                                    <td><input class="form-control" type="text" name="phone_num" maxlength="10"></td>
-                                    <td><input class="form-control" type="text" name="ssn" maxlength="9"></td>
-                                    <td></td>
-                                    <td><input type="submit" name="submit" class="btn btn-primary" value="Add"></td>
-                                </form>
-                            </tr>
-                        <?php } else {} ?>
-                        <?php while (mysqli_stmt_fetch($stmt)) { ?>
-                        <tr>
-                            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="emp_id" value="<?php echo $emp_id; ?>">
-                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $emp_id; } ?></td>
-                                <td><?php echo $fname; ?></td>
-                                <td><?php echo $minit; ?></td>
-                                <td><?php echo $lname; ?></td>
-                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $dob; } ?></td>
-                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $addr; } ?></td>
-                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $city; } ?></td>
-                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $zip; } ?></td>
-                                <td><?php echo $email; ?></td>
-                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $pnum; } ?></td>
-                                <td><?php if ($_SESSION["is_employee"] == "3") { echo $ssn; } ?></td>
-                                <td><?php echo $m_id; ?></td>
-                                <?php if ($_SESSION["is_employee"] == "3") { ?><td><input type="submit" class="btn btn-danger" value="Delete"></td><?php } ?>
-                            </form>
-                        </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="m-4 row justify-content-center">
-            <div class="col-auto">
                 <a href="ps-employee-shift.php"><button class="btn btn-outline-primary">Employee Shift</button></a>
                 <a href="ps-works-at.php"><button class="btn btn-outline-primary">Employee Works At</button></a>
+                <h6 class="display-6">Employees</h6>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-primary table-striped table-hover table-sm align-middle">
+                        <thead>
+                            <th scope="col">Emp. ID</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">M.I.</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Date of Birth</th>
+                            <th scope="col">Home Address</th>
+                            <th scope="col">City</th>
+                            <th scope="col">State</th>
+                            <th scope="col">Zip Code</th>
+                            <th scope="col">E-mail Address</th>
+                            <th scope="col">Phone Number</th>
+                            <th scope="col">SSN</th>
+                            <th scope="col">Man. ID</th>
+                            <th scope="col">User ID</th>
+                            <?php if ($_SESSION["access_level"] == "3") { ?><th scope="col"></th><?php } ?>
+                        </thead>
+                        <tbody>
+                            <?php if ($_SESSION["access_level"] == "3") { ?>
+                                <tr>
+                                    <form method="post" action="<?php htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                        <input type="hidden" name="action" value="add">
+                                        <td></td>
+                                        <td><input class="form-control" type="text" name="fname" maxlength="30" placeholder="First Name"></td>
+                                        <td><input class="form-control" type="text" name="minit" maxlength="1" oninput="this.value = this.value.toUpperCase();" placeholder="M.I."></td>
+                                        <td><input class="form-control" type="text" name="lname" maxlength="30" placeholder="Last Name"></td>
+                                        <td class=""><input class="form-control" type="date" name="dob"></td>
+                                        <td><input class="form-control" type="text" name="address" maxlength="255" placeholder="Address"></td>
+                                        <td><input class="form-control" type="text" name="city" maxlength="50" placeholder="City"></td>
+                                        <td>
+                                            <select class="form-select" type="text" name="state">
+                                                <option value="">State</option>
+                                                <option value="AL">AL</option>
+                                                <option value="AK">AK</option>
+                                                <option value="AR">AR</option>	
+                                                <option value="AZ">AZ</option>
+                                                <option value="CA">CA</option>
+                                                <option value="CO">CO</option>
+                                                <option value="CT">CT</option>
+                                                <option value="DC">DC</option>
+                                                <option value="DE">DE</option>
+                                                <option value="FL">FL</option>
+                                                <option value="GA">GA</option>
+                                                <option value="HI">HI</option>
+                                                <option value="IA">IA</option>
+                                                <option value="ID">ID</option>
+                                                <option value="IL">IL</option>
+                                                <option value="IN">IN</option>
+                                                <option value="KS">KS</option>
+                                                <option value="KY">KY</option>
+                                                <option value="LA">LA</option>
+                                                <option value="MA">MA</option>
+                                                <option value="MD">MD</option>
+                                                <option value="ME">ME</option>
+                                                <option value="MI">MI</option>
+                                                <option value="MN">MN</option>
+                                                <option value="MO">MO</option>	
+                                                <option value="MS">MS</option>
+                                                <option value="MT">MT</option>
+                                                <option value="NC">NC</option>	
+                                                <option value="NE">NE</option>
+                                                <option value="NH">NH</option>
+                                                <option value="NJ">NJ</option>
+                                                <option value="NM">NM</option>			
+                                                <option value="NV">NV</option>
+                                                <option value="NY">NY</option>
+                                                <option value="ND">ND</option>
+                                                <option value="OH">OH</option>
+                                                <option value="OK">OK</option>
+                                                <option value="OR">OR</option>
+                                                <option value="PA">PA</option>
+                                                <option value="RI">RI</option>
+                                                <option value="SC">SC</option>
+                                                <option value="SD">SD</option>
+                                                <option value="TN">TN</option>
+                                                <option value="TX">TX</option>
+                                                <option value="UT">UT</option>
+                                                <option value="VT">VT</option>
+                                                <option value="VA">VA</option>
+                                                <option value="WA">WA</option>
+                                                <option value="WI">WI</option>	
+                                                <option value="WV">WV</option>
+                                                <option value="WY">WY</option>
+                                            </select>
+                                        </td>
+                                        <td><input class="form-control" type="text" name="zip" maxlength="5" placeholder="Zip Code"></td>
+                                        <td><input class="form-control" type="email" name="email" maxlength="75" placeholder="E-mail Address"></td>
+                                        <td><input class="form-control" type="text" name="phone_num" maxlength="10" placeholder="1234567890"></td>
+                                        <td><input class="form-control" type="text" name="ssn" maxlength="9" placeholder="123456789"></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><input type="submit" name="submit" class="btn btn-primary" value="Add"></td>
+                                    </form>
+                                </tr>
+                            <?php } else {} ?>
+                            <?php while (mysqli_stmt_fetch($stmt)) { ?>
+                            <tr>
+                                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="emp_id" value="<?php echo $emp_id; ?>">
+                                    <td><?php if ($_SESSION["access_level"] == "3") { echo $emp_id; } ?></td>
+                                    <td><?php echo $fname; ?></td>
+                                    <td><?php echo $minit; ?></td>
+                                    <td><?php echo $lname; ?></td>
+                                    <td><?php if ($_SESSION["access_level"] == "3") { echo $dob; } ?></td>
+                                    <td><?php if ($_SESSION["access_level"] == "3") { echo $addr; } ?></td>
+                                    <td><?php if ($_SESSION["access_level"] == "3") { echo $city; } ?></td>
+                                    <td><?php if ($_SESSION["access_level"] == "3") { echo $state; } ?></td>
+                                    <td><?php if ($_SESSION["access_level"] == "3") { echo $zip; } ?></td>
+                                    <td><?php echo $email; ?></td>
+                                    <td><?php if ($_SESSION["access_level"] == "3") { echo $pnum; } ?></td>
+                                    <td><?php if ($_SESSION["access_level"] == "3") { echo $ssn; } ?></td>
+                                    <td><?php echo $m_id; ?></td>
+                                    <td><?php echo $u_id; ?></td>
+                                    <?php if ($_SESSION["access_level"] == "3") { ?><td><input type="submit" class="btn btn-danger" value="Delete"></td><?php } ?>
+                                </form>
+                            </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

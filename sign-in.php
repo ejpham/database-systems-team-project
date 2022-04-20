@@ -1,9 +1,10 @@
 <?php
 session_start();
-if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] === true) {
     header("location:index.php");
     exit;
 }
+require_once "db_conn_PostalService.php";
 require_once "db_conn_WebLogins.php";
 $email = $password = "";
 $email_err = $password_err = $success = $error = "";
@@ -13,22 +14,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["password"]))) $password_err = "Please enter your password.";
     else $password = trim($_POST["password"]);
     if (empty($email_err) && empty($password_err)) {
-        $sql = "SELECT name, email, pass, is_employee FROM WebLogins.users WHERE email = ?";
+        $sql = "SELECT name, email, pass, access_level FROM WebLogins.users WHERE email = ?";
         if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
-            mysqli_stmt_bind_param($stmt, "s", $param_email);
-            $param_email = $email;
+            mysqli_stmt_bind_param($stmt, "s", $email);
             if (mysqli_stmt_execute($stmt)) {
                 mysqli_stmt_store_result($stmt);
                 if (mysqli_stmt_num_rows($stmt) == 1) {
-                    mysqli_stmt_bind_result($stmt, $name, $email, $hashed_password, $is_employee);
+                    mysqli_stmt_bind_result($stmt, $name, $email, $hashed_password, $access_level);
                     if (mysqli_stmt_fetch($stmt)) {
                         if (password_verify($password, $hashed_password)) {
                             session_start();
-                            $_SESSION["loggedin"] = true;
+                            $_SESSION["logged_in"] = true;
                             $_SESSION["email"] = $email;
                             $_SESSION["name"] = $name;
-                            $_SESSION["is_employee"] = $is_employee;
-                            $success = '<div class="alert alert-success" role="alert">Login successful.</div>';
+                            $_SESSION["access_level"] = $access_level;
+                            if ($access_level == 2 || $access_level == 3) {
+                                if ($result = mysqli_query($conn_PostalService, "SELECT employee_id FROM PostalService.Employee WHERE email = '$email'")) {
+                                    $row = mysqli_fetch_assoc($result);
+                                    $_SESSION["employee_id"] = $row["employee_id"];
+                                    $success = '<div class="alert alert-success" role="alert">Employee login successful.</div>';
+                                }
+                                else $error = '<div class="alert alert-danger" role="alert">Could not grab employee ID.</div>';
+                            }
+                            else $success = '<div class="alert alert-success" role="alert">Customer login successful.</div>';
                             header("refresh:1; url=index.php");
                         }
                         else $error = '<div class="alert alert-danger" role="alert">Invalid e-mail address or password.</div>';
@@ -66,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                     <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
                 </ul>
-                <a href="index.php" class="navbar-brand"><span style="margin-right:7.8rem">Postal Office</style></a>
+                <a href="index.php" class="navbar-brand">Postal Office</a>
                 <ul class="nav navbar-nav ms-auto">
                     <a href="sign-in.php" class="nav-item nav-link active">Sign In</a>
                     <a href="sign-up.php" class="nav-item nav-link">Sign Up</a>

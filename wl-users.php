@@ -1,28 +1,27 @@
 <?php
 session_start();
 require "db_conn_WebLogins.php";
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] !== true) {
     header("location:sign-in.php");
     exit;
 }
-if ($_SESSION["is_employee"] == "1") {
+if ($_SESSION["access_level"] == "1") {
     header("location:index.php");
     exit;
-} else {}
-$sql = "SELECT id, email, name, created_at, is_employee FROM WebLogins.users ORDER BY id ASC";
+}
+$sql = "SELECT id, email, name, created_at, access_level FROM WebLogins.users ORDER BY id ASC";
 if ($stmt = mysqli_prepare($conn_WebLogins, $sql)) {
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $id, $email, $name, $date_created, $is_employee);
+    if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $id, $email, $name, $date_created, $access_level);
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
     if (trim($_POST["action"]) == "update") {
         $id = trim($_POST["user_id"]);
-        $is_employee = trim($_POST["is_employee"]);
-        $run = "UPDATE WebLogins.users SET is_employee = ? WHERE id = ?";
+        $access_level = trim($_POST["access_level"]);
+        $run = "UPDATE WebLogins.users SET access_level = ? WHERE id = ?";
         if ($stmt = mysqli_prepare($conn_WebLogins, $run)) {
-            mysqli_stmt_bind_param($stmt, "ii", $is_employee, $id);
-            mysqli_stmt_execute($stmt);
+            mysqli_stmt_bind_param($stmt, "ii", $access_level, $id);
+            if (mysqli_stmt_execute($stmt));
         }
     }
     else if (trim($_POST["action"]) == "delete") {
@@ -30,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $run = "DELETE FROM WebLogins.users WHERE id = ?";
         if ($stmt = mysqli_prepare($conn_WebLogins, $run)) {
             mysqli_stmt_bind_param($stmt, "i", $id);
-            mysqli_stmt_execute($stmt);
+            if (mysqli_stmt_execute($stmt));
         }
     }
     header("refresh:0;");
@@ -73,6 +72,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="container-fluid">
                     <ul class="nav navbar-nav me-auto">
                         <span id="name" class="nav-item">Logged in as: <?php echo $_SESSION["name"] ?></span>
+                        <span id="name" class="nav-item">, Employee ID: <?php echo $_SESSION["employee_id"] ?></span>
+                        <span id="name" class="nav-item">, Access Level: <?php if ($_SESSION["access_level"] == "3") echo 'Manager'; else echo 'Employee'; ?></span>
                     </ul>
                     <span class="navbar-brand mx-auto">Web Logins</span>
                     <ul class="nav navbar-nav ms-auto">
@@ -113,75 +114,79 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </ul>
                             </div>
                         </li>
-                        <li class="mb-1">
-                            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
-                                Reports
-                            </button>
-                            <div class="collapse show" id="reports-collapse">
-                                <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
-                                    <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
-                                    <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
-                                    <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
-                                </ul>
-                            </div>
-                        </li>
+                        <?php if ($_SESSION["access_level"] == "3") { ?>
+                            <li class="mb-1">
+                                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
+                                    Reports
+                                </button>
+                                <div class="collapse show" id="reports-collapse">
+                                    <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
+                                        <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
+                                        <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
+                                        <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        <?php } ?>
                     </ul>
                 </div>
             </div>
             <div class="col">
                 <h6 class="display-6">Users</h6>
-                <table class="table table-bordered table-primary table-hover align-middle">
-                    <thead>
-                        <th scope="col">User ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">E-mail Address</th>
-                        <th scope="col">Date Created</th>
-                        <th scope="col">Access Level</th>
-                        <th scope="col"></th>
-                    </thead>
-                    <tbody>
-                        <?php while (mysqli_stmt_fetch($stmt)) { ?>
-                            <tr>
-                                <?php if ($_SESSION["is_employee"] == "2" && $is_employee == "1") { ?>
-                                    <td><?php echo $id; ?></td>
-                                    <td><?php echo $name; ?></td>
-                                    <td><?php echo $email; ?></td>
-                                    <td><?php echo $date_created; ?></td>
-                                    <td><?php echo $is_employee; ?></td>
-                                    <td>
-                                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                            <input type="hidden" name="action" value="delete">
-                                            <input type="hidden" name="user-id" value="<?php echo $id; ?>">
-                                            <input type="submit" class="btn btn-outline-danger text-small" value="Delete">
-                                        </form>
-                                    </td>
-                                <?php } else if ($_SESSION["is_employee"] == "3") { ?>
-                                    <td><?php echo $id; ?></td>
-                                    <td><?php echo $name; ?></td>
-                                    <td><?php echo $email; ?></td>
-                                    <td><?php echo $date_created; ?></td>
-                                    <td>
-                                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                            <input type="hidden" name="action" value="update">
-                                            <input type="hidden" name="user_id" value="<?php echo $id; ?>">
-                                            <div class="input-group">
-                                                <input type="number" name="is_employee" class="form-control" value="<?php echo $is_employee; ?>" min="1" max="3">
-                                                <input type="submit" class="btn btn-outline-primary" value="Change">
-                                            </div>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                            <input type="hidden" name="action" value="delete">
-                                            <input type="hidden" name="user_id" value="<?php echo $id; ?>">
-                                            <input type="submit" class="btn btn-danger" value="Delete">
-                                        </form>
-                                    </td>
-                                <?php } ?>
-                            </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-primary table-striped table-hover table-sm align-middle">
+                        <thead>
+                            <th scope="col">User ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">E-mail Address</th>
+                            <th scope="col">Date Created</th>
+                            <th scope="col">Access Level</th>
+                            <th scope="col"></th>
+                        </thead>
+                        <tbody>
+                            <?php while (mysqli_stmt_fetch($stmt)) { ?>
+                                <tr>
+                                    <?php if ($_SESSION["access_level"] == "2" && $access_level == "1") { ?>
+                                        <td><?php echo $id; ?></td>
+                                        <td><?php echo $name; ?></td>
+                                        <td><?php echo $email; ?></td>
+                                        <td><?php echo $date_created; ?></td>
+                                        <td><?php echo $access_level; ?></td>
+                                        <td>
+                                            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                                <input type="hidden" name="action" value="delete">
+                                                <input type="hidden" name="user-id" value="<?php echo $id; ?>">
+                                                <input type="submit" class="btn btn-outline-danger text-small" value="Delete">
+                                            </form>
+                                        </td>
+                                    <?php } else if ($_SESSION["access_level"] == "3") { ?>
+                                        <td><?php echo $id; ?></td>
+                                        <td><?php echo $name; ?></td>
+                                        <td><?php echo $email; ?></td>
+                                        <td><?php echo $date_created; ?></td>
+                                        <td>
+                                            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                                <input type="hidden" name="action" value="update">
+                                                <input type="hidden" name="user_id" value="<?php echo $id; ?>">
+                                                <div class="input-group">
+                                                    <input type="number" name="access_level" class="form-control" value="<?php echo $access_level; ?>" min="1" max="3">
+                                                    <input type="submit" class="btn btn-outline-primary" value="Change">
+                                                </div>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                                <input type="hidden" name="action" value="delete">
+                                                <input type="hidden" name="user_id" value="<?php echo $id; ?>">
+                                                <input type="submit" class="btn btn-danger" value="Delete">
+                                            </form>
+                                        </td>
+                                    <?php } ?>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

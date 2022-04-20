@@ -5,7 +5,7 @@ require_once "db_conn_PostalService.php";
 $name = $email = $message = "";
 $name_err = $email_err = $message_err = $success = $error = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] !== true) {
         if (empty(trim($_POST["name"]))) $name_err = "Please enter a name.";
         else if (strlen(trim($_POST["name"])) > 75) $name_err = "Name can be no longer than 75 characters.";
         else $name = trim($_POST["name"]);
@@ -57,17 +57,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                     <a href="contact-us.php" class="nav-item nav-link active">Contact Us</a>
                 </ul>
-                <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
-                    <a href="index.php" class="navbar-brand"><span style="margin-right:7.3rem">Postal Office</style></a>
-                <?php } else { ?>
-                    <a href="index.php" class="navbar-brand"><span style="margin-right:7.8rem">Postal Office</style></a>
-                <?php } ?>
+                <a href="index.php" class="navbar-brand">Postal Office</a>
                 <ul class="nav navbar-nav ms-auto">
-                    <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
+                    <?php if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] === true) { ?>
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account Options</a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <?php if ($_SESSION["is_employee"] > "1") { ?>
+                                <?php if ($_SESSION["access_level"] > "1") { ?>
                                     <a href="database-access.php" class="dropdown-item">Database Access</a>
                                 <?php } ?>
                                 <a href="my-account.php" class="dropdown-item">My Account</a>
@@ -93,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         echo $success;
                         echo $error;
                     ?>
-                    <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
+                    <?php if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] === true) { ?>
                         <div class="m-3">
                             <label class="form-label">Full Name</label>
                             <input type="text" name="name" class="form-control-plaintext" value="<?php echo $_SESSION["name"]; ?>" id="inputName" disabled>

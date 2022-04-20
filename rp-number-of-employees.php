@@ -1,15 +1,18 @@
 <?php
 session_start();
 require "db_conn_PostalService.php";
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] !== true) {
     header("location:sign-in.php");
     exit;
 }
-if ($_SESSION["is_employee"] == "1") {
+if ($_SESSION["access_level"] == "1") {
     header("location:index.php");
     exit;
-} else {}
-$loc_id_err = "";
+}
+if ($_SESSION["access_level"] == "2") {
+    header("location:database-access.php");
+    exit;
+}
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["loc_id"]))) $loc_id_err = '<div class="alert alert-danger" role="alert">Please enter a location ID.</div>';
     else $loc_id = trim($_POST["loc_id"]);
@@ -18,41 +21,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($loc_id_err)) {
         if ($stmt1 = mysqli_prepare($conn_PostalService, $sql1)) {
             mysqli_stmt_bind_param($stmt1, "i", $loc_id);
-            mysqli_stmt_execute($stmt1);
-            mysqli_stmt_bind_result($stmt1, $total);
-            mysqli_stmt_fetch($stmt1);
-            $showtotal = '<p>Total Employees at Location '.$loc_id.': '.$total.'</p>';
-            mysqli_stmt_close($stmt1);
+            if (mysqli_stmt_execute($stmt1)) {
+                mysqli_stmt_bind_result($stmt1, $total);
+                mysqli_stmt_fetch($stmt1);
+                $showtotal = '<p>Total Employees at Location '.$loc_id.': '.$total.'</p>';
+                mysqli_stmt_close($stmt1);
+            }
         }
         if ($stmt2 = mysqli_prepare($conn_PostalService, $sql2)) {
             mysqli_stmt_bind_param($stmt2, "i", $loc_id);
-            mysqli_stmt_execute($stmt2);
-            mysqli_stmt_bind_result($stmt2, $emp_id, $fname, $lname, $man_id, $emp_date);
-            $showtable = '
-            <table class="table table-bordered table-primary table-hover align-middle">
-                <thead>
-                    <th scope="col">Employee ID</th>
-                    <th scope="col">First Name</th>
-                    <th scope="col">Last Name</th>
-                    <th scope="col">Manager ID</th>
-                    <th scope="col">Employment Date</th>
-                </thead>
-                <tbody>';
-            while (mysqli_stmt_fetch($stmt2)) {
-                $showtable .= '<tr><td>';
-                $showtable .= $emp_id;
-                $showtable .= '</td><td>';
-                $showtable .= $fname;
-                $showtable .= '</td><td>';
-                $showtable .= $lname;
-                $showtable .= '</td><td>';
-                $showtable .= $man_id;
-                $showtable .= '</td><td>';
-                $showtable .= $emp_date;
-                $showtable .= '</td></tr>';
+            if (mysqli_stmt_execute($stmt2)) {
+                mysqli_stmt_bind_result($stmt2, $emp_id, $fname, $lname, $man_id, $emp_date);
+                $showtable = '
+                <div class="table-responsive">
+                    <table class="table table-bordered table-primary table-striped table-sm align-middle caption-top">
+                        <caption>'.$showtotal.'</caption>
+                        <thead>
+                            <th scope="col">Employee ID</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Manager ID</th>
+                            <th scope="col">Employment Date</th>
+                        </thead>
+                        <tbody>';
+                while (mysqli_stmt_fetch($stmt2)) {
+                    $showtable .= '<tr><td>';
+                    $showtable .= $emp_id;
+                    $showtable .= '</td><td>';
+                    $showtable .= $fname;
+                    $showtable .= '</td><td>';
+                    $showtable .= $lname;
+                    $showtable .= '</td><td>';
+                    $showtable .= $man_id;
+                    $showtable .= '</td><td>';
+                    $showtable .= $emp_date;
+                    $showtable .= '</td></tr>';
+                }
+                $showtable .= '</tbody></table></div>';
+                mysqli_stmt_close($stmt2);
             }
-            $showtable .= '</tbody></table>';
-            mysqli_stmt_close($stmt2);
         }
     }
 }
@@ -105,6 +112,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="container-fluid">
                     <ul class="nav navbar-nav me-auto">
                         <span id="name" class="nav-item">Logged in as: <?php echo $_SESSION["name"] ?></span>
+                        <span id="name" class="nav-item">, Employee ID: <?php echo $_SESSION["employee_id"] ?></span>
+                        <span id="name" class="nav-item">, Access Level: <?php if ($_SESSION["access_level"] == "3") echo 'Manager'; else echo 'Employee'; ?></span>
                     </ul>
                     <span class="navbar-brand mx-auto">Reports</span>
                     <ul class="nav navbar-nav ms-auto">
@@ -145,18 +154,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </ul>
                             </div>
                         </li>
-                        <li class="mb-1">
-                            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
-                                Reports
-                            </button>
-                            <div class="collapse show" id="reports-collapse">
-                                <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
-                                    <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
-                                    <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
-                                    <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
-                                </ul>
-                            </div>
-                        </li>
+                        <?php if ($_SESSION["access_level"] == "3") { ?>
+                            <li class="mb-1">
+                                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
+                                    Reports
+                                </button>
+                                <div class="collapse show" id="reports-collapse">
+                                    <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
+                                        <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
+                                        <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
+                                        <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        <?php } ?>
                     </ul>
                 </div>
             </div>
@@ -168,14 +179,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="input-group">
                             <a href=""><button type="button" class="btn btn-outline-secondary">Refresh</button></a>
                             <span class="input-group-text">Location ID</span>
-                            <input type="number" name="loc_id" class="form-control" value="<?php echo $loc_id; ?>" min="1">
+                            <input type="number" name="loc_id" class="form-control" value="<?php echo $loc_id; ?>" min="1" placeholder="Location ID">
                             <input type="submit" class="btn btn-outline-primary" value="Generate">
                         </div>
                     </form>
                 </div>
                 <?php
                     echo $showtable;
-                    echo $showtotal;
                 ?>
             </div>
         </div>

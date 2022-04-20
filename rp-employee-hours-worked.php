@@ -1,16 +1,18 @@
 <?php
 session_start();
 require "db_conn_PostalService.php";
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] !== true) {
     header("location:sign-in.php");
     exit;
 }
-if ($_SESSION["is_employee"] == "1") {
+if ($_SESSION["access_level"] == "1") {
     header("location:index.php");
     exit;
-} else {}
-$emp_id_err = $from_date_err = $to_date_err = $err = "";
-$sql1 = $sql2 = "";
+}
+if ($_SESSION["access_level"] == "2") {
+    header("location:database-access.php");
+    exit;
+}
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["emp_id"]))) $emp_id_err = '<div class="alert alert-danger" role="alert">Please enter an employee ID.</div>';
     else $emp_id = trim($_POST["emp_id"]);
@@ -30,39 +32,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($stmt1 = mysqli_prepare($conn_PostalService, $sql1)) {
             if (!empty($from_date) && !empty($to_date)) mysqli_stmt_bind_param($stmt1, "iss", $emp_id, $from_date, $to_date);
             else mysqli_stmt_bind_param($stmt1, "i", $emp_id);
-            mysqli_stmt_execute($stmt1);
-            mysqli_stmt_bind_result($stmt1, $total);
-            mysqli_stmt_fetch($stmt1);
-            $showtotal = '<p>Total Hours Worked: '.$total.'</p>';
-            mysqli_stmt_close($stmt1);
+            if (mysqli_stmt_execute($stmt1)) {
+                mysqli_stmt_bind_result($stmt1, $total);
+                mysqli_stmt_fetch($stmt1);
+                $showtotal = '<p>Total Hours Worked: '.$total.'</p>';
+                mysqli_stmt_close($stmt1);
+            }
         }
         if ($stmt2 = mysqli_prepare($conn_PostalService, $sql2)) {
             if (!empty($from_date) && !empty($to_date)) mysqli_stmt_bind_param($stmt2, "iss", $emp_id, $from_date, $to_date);
             else mysqli_stmt_bind_param($stmt2, "i", $emp_id);
-            mysqli_stmt_execute($stmt2);
-            mysqli_stmt_bind_result($stmt2, $shift_id, $new_emp_id, $shift_start, $shift_end);
-            $showtable = '
-            <table class="table table-bordered table-primary table-hover align-middle">
-                <thead>
-                    <th scope="col">Shift ID</th>
-                    <th scope="col">Employee ID</th>
-                    <th scope="col">Shift Start</th>
-                    <th scope="col">Shift End</th>
-                </thead>
-                <tbody>';
-            while (mysqli_stmt_fetch($stmt2)) {
-                $showtable .= '<tr><td>';
-                $showtable .= $shift_id;
-                $showtable .= '</td><td>';
-                $showtable .= $new_emp_id;
-                $showtable .= '</td><td>';
-                $showtable .= $shift_start;
-                $showtable .= '</td><td>';
-                $showtable .= $shift_end;
-                $showtable .= '</td></tr>';
+            if (mysqli_stmt_execute($stmt2)) {
+                mysqli_stmt_bind_result($stmt2, $shift_id, $new_emp_id, $shift_start, $shift_end);
+                $showtable = '
+                <div class="table-responsive">
+                    <table class="table table-bordered table-primary table-striped table-sm align-middle caption-top">
+                        <caption>'.$showtotal.'</caption>
+                        <thead>
+                            <th scope="col">Shift ID</th>
+                            <th scope="col">Employee ID</th>
+                            <th scope="col">Shift Start</th>
+                            <th scope="col">Shift End</th>
+                        </thead>
+                        <tbody>';
+                while (mysqli_stmt_fetch($stmt2)) {
+                    $showtable .= '<tr><td>';
+                    $showtable .= $shift_id;
+                    $showtable .= '</td><td>';
+                    $showtable .= $new_emp_id;
+                    $showtable .= '</td><td>';
+                    $showtable .= $shift_start;
+                    $showtable .= '</td><td>';
+                    $showtable .= $shift_end;
+                    $showtable .= '</td></tr>';
+                }
+                $showtable .= '</tbody></table></div>';
+                mysqli_stmt_close($stmt2);
             }
-            $showtable .= '</tbody></table>';
-            mysqli_stmt_close($stmt2);
         }
     }
 }
@@ -115,6 +121,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="container-fluid">
                     <ul class="nav navbar-nav me-auto">
                         <span id="name" class="nav-item">Logged in as: <?php echo $_SESSION["name"] ?></span>
+                        <span id="name" class="nav-item">, Employee ID: <?php echo $_SESSION["employee_id"] ?></span>
+                        <span id="name" class="nav-item">, Access Level: <?php if ($_SESSION["access_level"] == "3") echo 'Manager'; else echo 'Employee'; ?></span>
                     </ul>
                     <span class="navbar-brand mx-auto">Reports</span>
                     <ul class="nav navbar-nav ms-auto">
@@ -155,18 +163,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </ul>
                             </div>
                         </li>
-                        <li class="mb-1">
-                            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
-                                Reports
-                            </button>
-                            <div class="collapse show" id="reports-collapse">
-                                <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
-                                    <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
-                                    <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
-                                    <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
-                                </ul>
-                            </div>
-                        </li>
+                        <?php if ($_SESSION["access_level"] == "3") { ?>
+                            <li class="mb-1">
+                                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
+                                    Reports
+                                </button>
+                                <div class="collapse show" id="reports-collapse">
+                                    <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
+                                        <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
+                                        <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
+                                        <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        <?php } ?>
                     </ul>
                 </div>
             </div>
@@ -183,7 +193,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="input-group">
                             <a href=""><button type="button" class="btn btn-outline-secondary">Refresh</button></a>
                             <span class="input-group-text">Employee ID</span>
-                            <input type="number" name="emp_id" class="form-control" value="<?php echo $emp_id; ?>" min="1">
+                            <input type="number" name="emp_id" class="form-control" value="<?php echo $emp_id; ?>" min="1" placeholder="Employee ID">
                             <span class="input-group-text">From Date</span>
                             <input type="date" name="from_date" class="form-control" value="<?php echo $from_date; ?>" id="datePickerID1">
                             <span class="input-group-text">To Date</span>
@@ -194,7 +204,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <?php
                     echo $showtable;
-                    echo $showtotal;
                 ?>
             </div>
         </div>

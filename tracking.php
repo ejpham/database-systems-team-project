@@ -1,8 +1,6 @@
 <?php
 session_start();
 require_once "db_conn_PostalService.php";
-$tracking = "";
-$tracking_err = $success = $error = $stat = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["trackingNum"]))) $tracking_err = "Please enter a tracking number.";
     else $tracking = trim($_POST["trackingNum"]);
@@ -14,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stat = $row["status"];
         }
         if (!empty($row)) {
-            $success = '<div class="alert alert-success" role="alert">Successfully Retrieved your mail status.</div>';
+            $success = '<div class="alert alert-success" role="alert">Mail Status: '.$stat.'</div>';
         }
         else $error = '<div class="alert alert-danger" role="alert">Could not find your package based on this tracking number.</div>';
     }
@@ -44,17 +42,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <a href="pricing.php" class="nav-item nav-link">Pricing</a>
                     <a href="contact-us.php" class="nav-item nav-link">Contact Us</a>
                 </ul>
-                <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
-                    <a href="index.php" class="navbar-brand"><span style="margin-right:7.3rem">Postal Office</style></a>
-                <?php } else { ?>
-                    <a href="index.php" class="navbar-brand"><span style="margin-right:7.8rem">Postal Office</style></a>
-                <?php } ?>
+                <a href="index.php" class="navbar-brand">Postal Office</a>
                 <ul class="nav navbar-nav ms-auto">
-                    <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) { ?>
+                    <?php if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] === true) { ?>
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account Options</a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <?php if ($_SESSION["is_employee"] > "1") { ?>
+                                <?php if ($_SESSION["access_level"] > "1") { ?>
                                     <a href="database-access.php" class="dropdown-item">Database Access</a>
                                 <?php } ?>
                                 <a href="my-account.php" class="dropdown-item">My Account</a>
@@ -80,7 +74,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <?php
                         echo $success;
                         echo $error;
-                        if (!empty($stat)) echo "Mail Status: " . $stat;
                     ?>
                     <div class="m-3">
                         <label class="form-label">Tracking Number</label>

@@ -1,18 +1,17 @@
 <?php
 session_start();
 require "db_conn_PostalService.php";
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] !== true) {
     header("location:sign-in.php");
     exit;
 }
-if ($_SESSION["is_employee"] == "1") {
+if ($_SESSION["access_level"] == "1") {
     header("location:index.php");
     exit;
-} else {}
+}
 $sql = "SELECT * FROM PostalService.Vehicle_Use";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $log_id, $veh_id, $emp_id, $date_dep, $date_ret, $start_id, $end_id, $miles_drive);
+    if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $log_id, $veh_id, $emp_id, $date_dep, $date_ret, $start_id, $end_id, $miles_drive);
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
@@ -23,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $run = "INSERT INTO PostalService.Vehicle_Use (vehicle_id, driven_by_employee_id, start_location_id) VALUES (?, ?, ?);";
         if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
             mysqli_stmt_bind_param($stmt, "iii", $veh_id, $emp_id, $start_id);
-            mysqli_stmt_execute($stmt);
+            if (mysqli_stmt_execute($stmt));
         }
     }
     else if (trim($_POST["action"]) == "update") {
@@ -33,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $run = "UPDATE PostalService.Vehicle_Use SET date_returned = now(), end_location_id = ?, miles_driven = ? WHERE log_id = ?;";
         if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
             mysqli_stmt_bind_param($stmt, "iii", $end_id, $miles_drive, $log_id);
-            mysqli_stmt_execute($stmt);
+            if (mysqli_stmt_execute($stmt));
         }
     }
     header("refresh:0;");
@@ -87,6 +86,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="container-fluid">
                     <ul class="nav navbar-nav me-auto">
                         <span id="name" class="nav-item">Logged in as: <?php echo $_SESSION["name"] ?></span>
+                        <span id="name" class="nav-item">, Employee ID: <?php echo $_SESSION["employee_id"] ?></span>
+                        <span id="name" class="nav-item">, Access Level: <?php if ($_SESSION["access_level"] == "3") echo 'Manager'; else echo 'Employee'; ?></span>
                     </ul>
                     <span class="navbar-brand mx-auto">Postal Service</span>
                     <ul class="nav navbar-nav ms-auto">
@@ -127,88 +128,94 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </ul>
                             </div>
                         </li>
-                        <li class="mb-1">
-                            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
-                                Reports
-                            </button>
-                            <div class="collapse show" id="reports-collapse">
-                                <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
-                                    <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
-                                    <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
-                                    <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
-                                </ul>
-                            </div>
-                        </li>
+                        <?php if ($_SESSION["access_level"] == "3") { ?>
+                            <li class="mb-1">
+                                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="true">
+                                    Reports
+                                </button>
+                                <div class="collapse show" id="reports-collapse">
+                                    <ul class="btn-toggle-van list-unstyled fw-normal pb-1 small">
+                                        <li><a href="rp-employee-hours-worked.php" class="nav-item nav-link rounded">Employee Hours</a></li>
+                                        <li><a href="rp-number-of-employees.php" class="nav-item nav-link rounded">Number of Employees at Location</a></li>
+                                        <li><a href="rp-packages-sent-out.php" class="nav-item nav-link rounded">Packages Sent Out</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        <?php } ?>
                     </ul>
                 </div>
             </div>
             <div class="col">
-                <h6 class="display-6">Vehicle Use</h6>
-                <table class="table table-bordered table-primary table-hover align-middle">
-                    <thead>
-                        <th scope="col">Log ID</th>
-                        <th scope="col">Vehicle ID</th>
-                        <th scope="col">Driven by Employee ID</th>
-                        <th scope="col">Date Departed</th>
-                        <th scope="col">Date Returned</th>
-                        <th scope="col">Start Location ID</th>
-                        <th scope="col">End Location ID</th>
-                        <th scope="col">Miles Driven</th>
-                        <th scope="col"></th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                <input type="hidden" name="action" value="add">
-                                <td></td>
-                                <td><input type="number" name="veh_id" class="form-control" min="1"></td>
-                                <td><input type="number" name="emp_id" class="form-control" min="1"></td>
-                                <td></td>
-                                <td></td>
-                                <td><input type="number" name="start_id" class="form-control" min="1"></td>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <input type="submit" class="btn btn-success" value="Clock In">
-                                </td>
-                            </form>
-                        </tr>
-                        <?php while (mysqli_stmt_fetch($stmt)) { ?>
-                            <tr>
-                                <?php if ($date_ret == "" && $end_id == "" && $miles_drive == "") { ?>
-                                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                    <input type="hidden" name="action" value="update">
-                                    <input type="hidden" name="log_id" value="<?php echo $log_id; ?>">
-                                    <td><?php echo $log_id; ?></td>
-                                    <td><?php echo $veh_id; ?></td>
-                                    <td><?php echo $emp_id; ?></td>
-                                    <td><?php echo $date_dep; ?></td>
-                                    <td></td>
-                                    <td><?php echo $start_id; ?></td>
-                                    <td><input type="number" name="end_id" class="form-control" min="1"></td>
-                                    <td><input type="number" name="miles_drive" class="form-control"></td>
-                                    <td><input type="submit" class="btn btn-warning" value="Clock Out"></td>
-                                </form>
-                                <?php } else { ?>
-                                    <td><?php echo $log_id; ?></td>
-                                    <td><?php echo $veh_id; ?></td>
-                                    <td><?php echo $emp_id; ?></td>
-                                    <td><?php echo $date_dep; ?></td>
-                                    <td><?php echo $date_ret ?></td>
-                                    <td><?php echo $start_id; ?></td>
-                                    <td><?php echo $end_id; ?></td>
-                                    <td><?php echo $miles_drive; ?></td>
-                                    <td></td>
-                                <?php } ?>
-                            </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="m-4 row justify-content-center">
-            <div class="col-auto">
                 <a href="ps-vehicles.php"><button class="btn btn-outline-primary">Back</button></a>
+                <h6 class="display-6">Vehicle Use</h6>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-primary table-striped table-hover table-sm align-middle">
+                        <thead>
+                            <th scope="col">Log ID</th>
+                            <th scope="col">Veh. ID</th>
+                            <th scope="col">Driven by Emp. ID</th>
+                            <th scope="col">Date Departed</th>
+                            <th scope="col">Date Returned</th>
+                            <th scope="col">Start Loc. ID</th>
+                            <th scope="col">End Loc. ID</th>
+                            <th scope="col">Miles Driven</th>
+                            <th scope="col"></th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                    <input type="hidden" name="action" value="add">
+                                    <td></td>
+                                    <td><input type="number" name="veh_id" class="form-control" min="1" placeholder="Vehicle ID"></td>
+                                    <td>
+                                        <?php if ($_SESSION["access_level"] == "2") { ?>
+                                            <input type="number" name="emp_id" class="form-control-plaintext" min="1" value="<?php echo $_SESSION["employee_id"]; ?>" readonly>
+                                        <?php } else { ?>
+                                            <input type="number" name="emp_id" class="form-control" min="1" placeholder="Employee ID">
+                                        <?php } ?>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><input type="number" name="start_id" class="form-control" min="1" placeholder="Location ID"></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <input type="submit" class="btn btn-success" value="Clock In">
+                                    </td>
+                                </form>
+                            </tr>
+                            <?php while (mysqli_stmt_fetch($stmt)) { ?>
+                                <tr>
+                                    <?php if ($date_ret == "" && $end_id == "" && $miles_drive == "") { ?>
+                                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                        <input type="hidden" name="action" value="update">
+                                        <input type="hidden" name="log_id" value="<?php echo $log_id; ?>">
+                                        <td><?php echo $log_id; ?></td>
+                                        <td><?php echo $veh_id; ?></td>
+                                        <td><?php echo $emp_id; ?></td>
+                                        <td><?php echo $date_dep; ?></td>
+                                        <td></td>
+                                        <td><?php echo $start_id; ?></td>
+                                        <td><input type="number" name="end_id" class="form-control" min="1"></td>
+                                        <td><input type="number" name="miles_drive" class="form-control"></td>
+                                        <td><input type="submit" class="btn btn-warning" value="Clock Out"></td>
+                                    </form>
+                                    <?php } else { ?>
+                                        <td><?php echo $log_id; ?></td>
+                                        <td><?php echo $veh_id; ?></td>
+                                        <td><?php echo $emp_id; ?></td>
+                                        <td><?php echo $date_dep; ?></td>
+                                        <td><?php echo $date_ret ?></td>
+                                        <td><?php echo $start_id; ?></td>
+                                        <td><?php echo $end_id; ?></td>
+                                        <td><?php echo $miles_drive; ?></td>
+                                        <td></td>
+                                    <?php } ?>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
