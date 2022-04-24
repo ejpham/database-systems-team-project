@@ -5,10 +5,10 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location:sign-in.php");
     exit;
 }
-if ($_SESSION["is_employee"] == "1") {
+if ($_SESSION["access_level"] == "1") {
     header("location:index.php");
     exit;
-} else {}
+}
 $sql = "SELECT * FROM PostalService.Company_Vehicle";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
     mysqli_stmt_execute($stmt);
@@ -17,7 +17,6 @@ if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
     if ($_POST["action"] == "add") {
-        
         if(!empty(trim($_POST["miles"])) && is_numeric(trim($_POST["miles"])))
             $miles = trim($_POST["miles"]);
 
@@ -161,12 +160,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <th scope="col">Vehicle Miles</th>
                         <th scope="col">Vehicle Cost</th>
                         <th scope="col">Vehicle Type</th>
-                        <?php if ($_SESSION["is_employee"] == "3") { ?>
+                        <?php if ($_SESSION["access_level"] == "3") { ?>
                         <th scope="col"></th>
                         <?php } ?>
                     </thead>
                     <tbody>
-                        <?php if ($_SESSION["is_employee"] == "3") { ?>
+                        <?php if ($_SESSION["access_level"] == "3") { ?>
                             <tr>
                                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                                     <input type="hidden" name="action" value="add">
@@ -187,7 +186,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <td><?php echo $miles; ?></td>
                                     <td><?php echo $cost; ?></td>
                                     <td><?php echo $type; ?></td>
-                                    <?php if ($_SESSION["is_employee"] == "3") { ?>
+                                    <?php if ($_SESSION["access_level"] == "3") { ?>
                                         <td><input type="submit" class="btn btn-danger" value="Delete"></td>
                                     <?php } ?>
                                 </form>

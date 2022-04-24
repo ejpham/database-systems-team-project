@@ -1,10 +1,9 @@
 Logins for Website:
-    manager@uh.edu 123456 (access level {is_employee} =3)
-    employee@uh.edu 123456 (access level {is_employee} =2)
-    customer@uh.edu 123456 (access level {is_employee} =1)
+    manager@uh.edu  123456 (access_level = 3)
+    employee@uh.edu 123456 (access_level = 2)
+    customer@uh.edu 123456 (access_level = 1)
     
-    
-The sections in this readme file consist of the .php file and the description of its corresponding page on the web application. 
+The sections in this readme file consist of the .php file and the description of its corresponding page on the web application.
 
 Customer Page (Everyone):
 
@@ -119,7 +118,7 @@ Database Access (Employee & Manager Only):
 
             ps-managers.php
             ()
-            is_employee {
+            access_level {
                 1 = customer
                 2 = employee
                 3 = manager
