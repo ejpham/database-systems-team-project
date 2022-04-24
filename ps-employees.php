@@ -11,7 +11,7 @@ if ($_SESSION["access_level"] == "1") {
 }
 $sql = "SELECT * FROM PostalService.Employee";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-    if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $emp_id, $fname, $minit, $lname, $dob, $addr, $city, $state, $zip, $email, $pnum, $ssn, $m_id, $u_id);
+    if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $emp_id, $fname, $minit, $lname, $dob, $addr, $city, $state, $zip, $email, $pnum, $ssn, $m_id, $u_id, $strikes);
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!empty(trim($_POST["phone_num"])) && strlen(trim($_POST["phone_num"])) == 10) $pnum = trim($_POST["phone_num"]);
         if (!empty(trim($_POST["ssn"])) && strlen(trim($_POST["ssn"])) == 9) $ssn = trim($_POST["ssn"]);
         if (!empty($fname) && !empty($lname) && !empty($dob) && !empty($addr) && !empty($city) && !empty($state) && !empty($zip) && !empty($email) && !empty($pnum) && !empty($ssn)){
-            $run = "INSERT INTO PostalService.Employee (first_name, minit, last_name, dob, home_address, home_city, home_state, home_zipcode, email, phone_number, ssn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $run = "INSERT INTO PostalService.Employee (first_name, minit, last_name, dob, home_address, home_city, home_state, home_zipcode, email, phone_number, ssn, Strikes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
             if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
                 mysqli_stmt_bind_param($stmt, "sssssssssss", $fname, $minit, $lname, $dob, $addr, $city, $state, $zip, $email, $pnum, $ssn);
                 if (mysqli_stmt_execute($stmt));
