@@ -51,7 +51,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <?php if ($_SESSION["access_level"] > "1") { ?>
                                     <a href="database-access.php" class="dropdown-item">Database Access</a>
                                 <?php } ?>
-                                <a href="my-account.php" class="dropdown-item">My Account</a>
                                 <a href="sign-out.php" class="dropdown-item">Sign Out</a>
                             </div>
                         </li>
