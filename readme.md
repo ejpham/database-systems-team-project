@@ -127,18 +127,29 @@ Database Access (Employee & Manager Only):
         Locations:
             
             ps-locations.php
-            ()
-            location_dept {
-                1 = postal office
-                2 = warehouse
-                3 = corporate
-            }
+            (The Locations page shows a table of the registered locations that the Postal Service utilizes. 
+            As an Employee, only the Location ID, Address, City, State, Zipcode, and Department type of that location are visible. 
+            However as a Manager, in addition to the Location information being available, those of Manager status are able to add 
+            a new registered location to the table as well as remove any locations from the table.)
         Vehicles:
             
             ps-vehicles.php
-            ()
+            (By accessing the Vehicles page, you are presented with a table that displays the Vehicle ID, total Vehicle 
+            Miles [that the Vehicle has driven during its time registered in the Postal Office], Vehicle Cost, 
+            and Vehicle Type of a registered Vehicle. When logged on as an Employee, you are only able to view 
+            the table information. On the other hand, when logged on as a Manager, you are able to view the table 
+            information as well as add a new vehicle to register or delete a vehicle from the 
+            table [this happens when a vehicle is sold/needed to get rid of].)
+            
             ps-vechicle-use.php
-            ()
+            (You can view the Vehicle Use page by clicking on the Vehicle Use button on the bottom of the Vehicles page. 
+            This page is to keep track of the times a registered Vehicle is used during an Employee Shift. 
+            Both Employees and Managers are able to check the table for the Vehicle's Log ID, Vehicle ID number, 
+            the Employee ID of the Employee that drove that Vehicle, the Date Departed and Returned, the Start Location ID, 
+            the End Location ID, and the Miles Driven. Employees and Managers are also both able to clock in a 
+            "shift" when using a Vehicle by inputting the Vehicle ID and Start Location ID. Once their shift is finished, 
+            the Vehicle needs to be clocked out along with the End Location ID and the Miles Driven for that shift; 
+            the Miles Driven amount is then added to the total Vehicle Miles on the Vehicles Page.)
         Contact Logs:
             
             ps-contact-logs.php
