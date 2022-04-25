@@ -153,7 +153,10 @@ Database Access (Employee & Manager Only):
         Contact Logs:
             
             ps-contact-logs.php
-            ()
+            (The Contact Logs page is used to display all of the messages sent from the Customers on the 
+            Contact Us page. This table includes information such as the Log ID of the message, the 
+            Customer's Full Name, E-mail Address, the Message they sent, and the Date Received of that Message. 
+            Both Employees and Managers are able to view this page.)
     Web Logins:
 
         Users:
@@ -161,7 +164,8 @@ Database Access (Employee & Manager Only):
             wl-users.php
             ()
     Reports:
-
+        [Only Managers are able to view the Reports section of the Database Access page.]
+        
         Employee Hours:
 
             rp-employee-hours-worked.php
