@@ -194,7 +194,11 @@ Database Access (Employee & Manager Only):
             Location [displayed above the box with that Location's ID number] as well as each individual Employee's ID, 
             First Name, Last Name, Manager ID [if they have one], and their Employement Date. Any newly added or removed 
             Employees will be shown in the table once the Refresh button is clicked.)
-        Total Miles Driven by Vehicle:
+        Packages Sent Out:
         
-            rp-miles-driven-by-vehicle.php
-            ()
+            rp-packages-sent-out.php
+            (This report page is to show information of all Mail Orders made to this Postal Office. By inputting a 
+            From Date and To Date, you are presented with a report of all Mail Orders made within that time frame as 
+            well as, above the report table, the total amount of letters and packages sent altogether and the gross revenue 
+            of all of those sent Mail Orders. This information in the table includes the Mail Type, the From Address and 
+            To Address of the Mail Order, the Delivered On date and time, and the Shipping Cost.)
