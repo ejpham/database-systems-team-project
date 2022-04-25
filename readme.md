@@ -1,4 +1,5 @@
 Logins for Website:
+
     manager@uh.edu  123456 (access_level = 3)
     employee@uh.edu 123456 (access_level = 2)
     customer@uh.edu 123456 (access_level = 1)
