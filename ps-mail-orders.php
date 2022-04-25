@@ -20,7 +20,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $run = "UPDATE PostalService.MailOrders SET status = ? WHERE order_id = ?;";
     if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
         mysqli_stmt_bind_param($stmt, "si", $status, $order_id);
-        if (mysqli_stmt_execute($stmt));
+        try {
+            if (mysqli_stmt_execute($stmt));
+        }
+        catch (mysqli_sql_exception $e) {}
     }
     header("refresh:0;");
 }

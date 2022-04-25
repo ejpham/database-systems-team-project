@@ -26,8 +26,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_name = $name;
             $param_email = $email;
             $param_message = $message;
-            if (mysqli_stmt_execute($stmt)) $success = '<div class="alert alert-success" role="alert">Your message has been sent.</div>';
-            else $error = '<div class="alert alert-danger" role="alert">Your message could not be sent.</div>';
+            try {
+                if (mysqli_stmt_execute($stmt)) $success = '<div class="alert alert-success" role="alert">Your message has been sent.</div>';
+                else $error = '<div class="alert alert-danger" role="alert">Your message could not be sent.</div>';
+            }
+            catch (mysqli_sql_exception $e) {}
         }
     }
     mysqli_close($conn_WebLogins);

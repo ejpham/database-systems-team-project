@@ -14,7 +14,10 @@ if ($_SESSION["access_level"] == "1") {
 
 $sql = "SELECT location_id, location_address, location_city, location_state, location_zipcode, location_dept FROM PostalService.Location ORDER BY location_id ASC";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-    if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $location_id, $location_address, $location_city, $location_state, $location_zipcode, $location_dept);
+    try {
+        if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $location_id, $location_address, $location_city, $location_state, $location_zipcode, $location_dept);
+    }
+    catch (mysqli_sql_exception $e) {}
 }
 
 
@@ -35,7 +38,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $run = "INSERT INTO PostalService.Location (location_address, location_city, location_state, location_zipcode, location_dept) VALUES (?, ?, ?, ?, ?)";
             if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
                 mysqli_stmt_bind_param($stmt, "sssss", $location_address, $location_city, $location_state, $location_zipcode, $location_dept);
-                if (mysqli_stmt_execute($stmt));
+                try {
+                    if (mysqli_stmt_execute($stmt));
+                }
+                catch (mysqli_sql_exception $e) {}
             }
         }
     }
@@ -44,7 +50,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $run = "DELETE FROM PostalService.Location WHERE location_id = ?";
         if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
             mysqli_stmt_bind_param($stmt, "i", $location_id);
-            mysqli_stmt_execute($stmt);
+            try {
+                mysqli_stmt_execute($stmt);
+            }
+            catch (mysqli_sql_exception $e) {}
         }
     }
     header("refresh:0;");

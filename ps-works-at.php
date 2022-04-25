@@ -11,7 +11,10 @@ if ($_SESSION["access_level"] == "1") {
 }
 $sql = "SELECT * FROM PostalService.WORKS_AT ORDER BY location_id ASC, employee_id ASC";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-    if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $emp_id, $loc_id, $emp_date);
+    try {
+        if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $emp_id, $loc_id, $emp_date);
+    }
+    catch (mysqli_sql_exception $e) {}
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
@@ -21,7 +24,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $run = "INSERT INTO PostalService.WORKS_AT (employee_id, location_id) VALUES (?, ?);";
         if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
             mysqli_stmt_bind_param($stmt, "ii", $emp_id, $loc_id);
-            if (mysqli_stmt_execute($stmt));
+            try {
+                if (mysqli_stmt_execute($stmt));
+            }
+            catch (mysqli_sql_exception $e) {}
         }
     }
     else if ($_POST["action"] == "update") {
@@ -30,7 +36,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $run = "UPDATE PostalService.WORKS_AT SET location_id = ?, employment_date = (curdate()) WHERE employee_id = ?";
         if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
             mysqli_stmt_bind_param($stmt, "ii", $emp_id, $loc_id);
-            if (mysqli_stmt_execute($stmt));
+            try {
+                if (mysqli_stmt_execute($stmt));
+            }
+            catch (mysqli_sql_exception $e) {}
         }
     }
     else if ($_POST["action"] == "delete") {
@@ -38,7 +47,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $run = "DELETE FROM PostalService.WORKS_AT WHERE employee_id = ?;";
         if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
             mysqli_stmt_bind_param($stmt, "i", $emp_id);
-            if (mysqli_stmt_execute($stmt));
+            try {
+                if (mysqli_stmt_execute($stmt));
+            }
+            catch (mysqli_sql_exception $e) {}
         }
     }
     header("refresh:0;");

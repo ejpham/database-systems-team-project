@@ -11,7 +11,10 @@ if ($_SESSION["access_level"] == "1") {
 }
 $sql = "SELECT * FROM PostalService.Mail ORDER BY mail_id DESC";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-    if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $mail_id, $mail_type, $from_name, $from_address, $from_city, $from_state, $from_zipcode, $to_name, $to_address, $to_city, $to_state, $to_zipcode, $shipping_class, $shipping_cost, $label_created, $delivered_on, $tracking_number);
+    try {
+        if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $mail_id, $mail_type, $from_name, $from_address, $from_city, $from_state, $from_zipcode, $to_name, $to_address, $to_city, $to_state, $to_zipcode, $shipping_class, $shipping_cost, $label_created, $delivered_on, $tracking_number);
+    }
+    catch (mysqli_sql_exception $e) {}
 }
 ?>
 

@@ -11,7 +11,7 @@ if ($_SESSION["access_level"] == "1") {
 }
 $sql = "SELECT * FROM PostalService.Employee";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-    if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $emp_id, $fname, $minit, $lname, $dob, $addr, $city, $state, $zip, $email, $pnum, $ssn, $m_id, $u_id, $strikes);
+    if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $emp_id, $fname, $minit, $lname, $dob, $addr, $city, $state, $zip, $email, $pnum, $ssn, $m_id, $u_id, $strikes, $wage);
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
@@ -27,11 +27,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!empty(trim($_POST["email"]))) $email = trim($_POST["email"]);
         if (!empty(trim($_POST["phone_num"])) && strlen(trim($_POST["phone_num"])) == 10) $pnum = trim($_POST["phone_num"]);
         if (!empty(trim($_POST["ssn"])) && strlen(trim($_POST["ssn"])) == 9) $ssn = trim($_POST["ssn"]);
-        if (!empty($fname) && !empty($lname) && !empty($dob) && !empty($addr) && !empty($city) && !empty($state) && !empty($zip) && !empty($email) && !empty($pnum) && !empty($ssn)){
-            $run = "INSERT INTO PostalService.Employee (first_name, minit, last_name, dob, home_address, home_city, home_state, home_zipcode, email, phone_number, ssn, Strikes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
+        if (!empty(trim($_POST["wage"]))) $wage = trim($_POST["wage"]);
+        if (!empty($fname) && !empty($lname) && !empty($dob) && !empty($addr) && !empty($city) && !empty($state) && !empty($zip) && !empty($email) && !empty($pnum) && !empty($ssn) && !empty($wage)){
+            $run = "INSERT INTO PostalService.Employee (first_name, minit, last_name, dob, home_address, home_city, home_state, home_zipcode, email, phone_number, ssn, hourly_wage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
-                mysqli_stmt_bind_param($stmt, "sssssssssss", $fname, $minit, $lname, $dob, $addr, $city, $state, $zip, $email, $pnum, $ssn);
-                if (mysqli_stmt_execute($stmt));
+                mysqli_stmt_bind_param($stmt, "sssssssssssd", $fname, $minit, $lname, $dob, $addr, $city, $state, $zip, $email, $pnum, $ssn, $wage);
+                try {
+                    if (mysqli_stmt_execute($stmt));
+                }
+                catch (mysqli_sql_exception $e) {
+                    
+                }
+            }
+        }
+    }
+    else if ($_POST["action"] == "edit") {
+        $emp_id = trim($_POST["emp_id"]);
+        if (!empty(trim($_POST["fname"]))) $fname = trim($_POST["fname"]);
+        $minit = trim($_POST["minit"]);
+        if (!empty(trim($_POST["lname"]))) $lname = trim($_POST["lname"]);
+        if (!empty(trim($_POST["dob"]))) $dob = trim($_POST["dob"]);
+        if (!empty(trim($_POST["address"]))) $addr = trim($_POST["address"]);
+        if (!empty(trim($_POST["city"]))) $city = trim($_POST["city"]);
+        if (!empty(trim($_POST["state"]))) $state = trim($_POST["state"]);
+        if (!empty(trim($_POST["zip"]))) $zip = trim($_POST["zip"]);
+        if (!empty(trim($_POST["email"]))) $email = trim($_POST["email"]);
+        if (!empty(trim($_POST["phone_num"])) && strlen(trim($_POST["phone_num"])) == 10) $pnum = trim($_POST["phone_num"]);
+        if (!empty(trim($_POST["ssn"])) && strlen(trim($_POST["ssn"])) == 9) $ssn = trim($_POST["ssn"]);
+        if (!empty(trim($_POST["wage"]))) $wage = trim($_POST["wage"]);
+        if (!empty($fname) && !empty($lname) && !empty($dob) && !empty($addr) && !empty($city) && !empty($state) && !empty($zip) && !empty($email) && !empty($pnum) && !empty($ssn) && !empty($wage)){
+            $run = "UPDATE PostalService.Employee SET first_name = ?, minit = ?, last_name = ?, dob = ?, home_address = ?, home_city = ?, home_state = ?, home_zipcode = ?, email = ?, phone_number = ?, ssn = ?, hourly_wage = ? WHERE employee_id = ?";
+            if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
+                mysqli_stmt_bind_param($stmt, "sssssssssssdi", $fname, $minit, $lname, $dob, $addr, $city, $state, $zip, $email, $pnum, $ssn, $wage, $emp_id);
+                try {
+                    if (mysqli_stmt_execute($stmt));
+                }
+                catch (mysqli_sql_exception $e) {
+                    
+                }
             }
         }
     }
@@ -40,7 +73,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $run = "DELETE FROM PostalService.Employee WHERE employee_id = ?";
         if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
             mysqli_stmt_bind_param($stmt, "i", $emp_id);
-            if (mysqli_stmt_execute($stmt));
+            try {
+                if (mysqli_stmt_execute($stmt));
+            }
+            catch (mysqli_sql_exception $e) {
+                
+            }
         }
     }
     header("refresh:0;");
@@ -176,6 +214,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <th scope="col">Man. ID</th>
                                 <th scope="col">User ID</th>
                                 <th scope="col">Strikes</th>
+                                <th scope="col">Hourly Wage</th>
                                 <th scope="col"></th>
                             <?php } else { ?>
                                 <th scope="col">Emp. ID</th>
@@ -193,6 +232,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <th scope="col">Man. ID</th>
                                 <th scope="col">User ID</th>
                                 <th scope="col">Strikes</th>
+                                <th scope="col">Hourly Wage</th>
                             <?php } ?>
                         </thead>
                         <tbody>
@@ -204,7 +244,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <td><input class="form-control" type="text" name="fname" maxlength="30" placeholder="First Name"></td>
                                         <td><input class="form-control" type="text" name="minit" maxlength="1" oninput="this.value = this.value.toUpperCase();" placeholder="M.I."></td>
                                         <td><input class="form-control" type="text" name="lname" maxlength="30" placeholder="Last Name"></td>
-                                        <td class=""><input class="form-control" type="date" name="dob"></td>
+                                        <td><input class="form-control" type="date" name="dob"></td>
                                         <td><input class="form-control" type="text" name="address" maxlength="255" placeholder="Address"></td>
                                         <td><input class="form-control" type="text" name="city" maxlength="50" placeholder="City"></td>
                                         <td>
@@ -270,16 +310,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <td></td>
                                         <td></td>
                                         <td></td>
+                                        <td><input class="form-control" type="currency" name="wage" min="0" placeholder="0.00"></td>
                                         <td><input type="submit" name="submit" class="btn btn-primary" value="Add"></td>
                                     </form>
                                 </tr>
-                            <?php } ?>
-                            <?php while (mysqli_stmt_fetch($stmt)) { ?>
+                            <?php }
+                            while (mysqli_stmt_fetch($stmt)) { ?>
                             <tr>
                                 <?php if ($_SESSION["access_level"] == "3") { ?>
-                                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="emp_id" value="<?php echo $emp_id; ?>">
                                     <td><?php echo $emp_id; ?></td>
                                     <td><?php echo $fname; ?></td>
                                     <td><?php echo $minit; ?></td>
@@ -295,8 +333,86 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <td><?php echo $m_id; ?></td>
                                     <td><?php echo $u_id; ?></td>
                                     <td><?php echo $strikes; ?></td>
-                                    <td><input type="submit" class="btn btn-danger" value="Delete"></td>
-                                </form>
+                                    <td><?php echo $wage; ?></td>
+                                    <td>
+                                        <?php 
+                                        echo '<button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal'.$emp_id.'">Edit</button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="editModal'.$emp_id.'" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLabel'.$emp_id.'" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="modalLabel'.$emp_id.'">Edit Employee</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'">
+                                                        <input type="hidden" name="action" value="edit">
+                                                        <input type="hidden" name="emp_id" value="'.$emp_id.'">
+                                                        <div class="modal-body">
+                                                            <div class="m-3">
+                                                                <label class="form-label">First Name</label>
+                                                                <input class="form-control" type="text" name="fname" maxlength="30" value="'.$fname.'">
+                                                            </div>
+                                                            <div class="m-3">
+                                                                <label class="form-label">M. Init.</label>
+                                                                <input class="form-control" type="text" name="minit" maxlength="1" value="'.$minit.'">
+                                                            </div>
+                                                            <div class="m-3">
+                                                                <label class="form-label">Last Name</label>
+                                                                <input class="form-control" type="text" name="lname" maxlength="30" value="'.$lname.'">
+                                                            </div>
+                                                            <div class="m-3">
+                                                                <label class="form-label">Date of Birth</label>
+                                                                <input class="form-control" type="date" name="dob" value="'.$dob.'">
+                                                            </div>
+                                                            <div class="m-3">
+                                                                <label class="form-label">Home Address</label>
+                                                                <input class="form-control" type="text" name="address" maxlength="255" value="'.$addr.'">
+                                                            </div>
+                                                            <div class="m-3">
+                                                                <label class="form-label">City</label>
+                                                                <input class="form-control" type="text" name="city" maxlength="50" value="'.$city.'">
+                                                            </div>
+                                                            <div class="m-3">
+                                                                <label class="form-label">State</label>
+                                                                <input class="form-control" type="text" name="state" maxlength="2" value="'.$state.'">
+                                                            </div>
+                                                            <div class="m-3">
+                                                                <label class="form-label">Zip Code</label>
+                                                                <input class="form-control" type="text" name="zip" maxlength="5" value="'.$zip.'">
+                                                            </div>
+                                                            <div class="m-3">
+                                                                <label class="form-label">E-mail Address</label>
+                                                                <input class="form-control" type="text" name="email" maxlength="75" value="'.$email.'">
+                                                            </div>
+                                                            <div class="m-3">
+                                                                <label class="form-label">Phone Number</label>
+                                                                <input class="form-control" type="text" name="phone_num" maxlength="10" value="'.$pnum.'">
+                                                            </div>
+                                                            <div class="m-3">
+                                                                <label class="form-label">Social Security Number</label>
+                                                                <input class="form-control" type="text" name="ssn" maxlength="9" value="'.$ssn.'">
+                                                            </div>
+                                                            <div class="m-3">
+                                                                <label class="form-label">Hourly Wage</label>
+                                                                <input class="form-control" type="currency" name="wage" min="0" value="'.$wage.'">
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <input type="submit" class="btn btn-primary" value="Save changes"></button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>';
+                                        ?>
+                                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="emp_id" value="<?php echo $emp_id; ?>">
+                                            <input type="submit" class="btn btn-danger" value="Delete">
+                                        </form>
+                                    </td>
                                 <?php } else { ?>
                                     <td><?php if ($_SESSION["employee_id"] == $emp_id) echo $emp_id; ?></td>
                                     <td><?php echo $fname; ?></td>
@@ -313,6 +429,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <td><?php echo $m_id; ?></td>
                                     <td><?php if ($_SESSION["employee_id"] == $emp_id) echo $u_id; ?></td>
                                     <td><?php if ($_SESSION["employee_id"] == $emp_id) echo $strikes; ?></td>
+                                    <td><?php if ($_SESSION["employee_id"] == $emp_id) echo $wage; ?></td>
                                 <?php } ?>
                             </tr>
                             <?php } ?>

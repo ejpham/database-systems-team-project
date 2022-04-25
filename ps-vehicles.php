@@ -11,8 +11,11 @@ if ($_SESSION["access_level"] == "1") {
 }
 $sql = "SELECT * FROM PostalService.Company_Vehicle";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $veh_id, $miles, $cost, $type);
+    try {
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_bind_result($stmt, $veh_id, $miles, $cost, $type);
+    }
+    catch (mysqli_sql_exception $e) {}
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
@@ -34,7 +37,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $run = "INSERT INTO PostalService.Company_Vehicle (vehicle_miles, vehicle_cost, vehicle_type) VALUES (?, ?, ?)";
             if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
                 mysqli_stmt_bind_param($stmt, "ids", $miles, $cost, $type);
-                mysqli_stmt_execute($stmt);
+                try {
+                    mysqli_stmt_execute($stmt);
+                }
+                catch (mysqli_sql_exception $e) {}
             }
         }
     }
@@ -43,7 +49,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $run = "DELETE FROM PostalService.Company_Vehicle WHERE vehicle_id = ?";
         if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
             mysqli_stmt_bind_param($stmt, "i", $veh_id);
-            mysqli_stmt_execute($stmt);
+            try {
+                mysqli_stmt_execute($stmt);
+            }
+            catch (mysqli_sql_exception $e) {}
         }
     }
     header("refresh:0;");
@@ -153,6 +162,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
             <div class="col">
+                <a href="ps-vehicle-use.php"><button class="btn btn-outline-primary">Vehicle Use</button></a>
                 <h6 class="display-6">Vehicles</h6>
                 <table class="table table-bordered table-primary table-hover align-middle">
                     <thead>
@@ -194,11 +204,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <?php } ?>
                     </tbody>
                 </table>
-            </div>
-        </div>
-        <div class="m-4 row justify-content-center">
-            <div class="col-auto">
-                <a href="ps-vehicle-use.php"><button class="btn btn-outline-primary">Vehicle Use</button></a>
             </div>
         </div>
     </div>

@@ -11,7 +11,10 @@ if ($_SESSION["access_level"] == "1") {
 }
 $sql = "SELECT * FROM PostalService.Vehicle_Use";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-    if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $log_id, $veh_id, $emp_id, $date_dep, $date_ret, $start_id, $end_id, $miles_drive);
+    try {
+        if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $log_id, $veh_id, $emp_id, $date_dep, $date_ret, $start_id, $end_id, $miles_drive);
+    }
+    catch (mysqli_sql_exception $e) {}
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
@@ -22,7 +25,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $run = "INSERT INTO PostalService.Vehicle_Use (vehicle_id, driven_by_employee_id, start_location_id) VALUES (?, ?, ?);";
         if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
             mysqli_stmt_bind_param($stmt, "iii", $veh_id, $emp_id, $start_id);
-            if (mysqli_stmt_execute($stmt));
+            try {
+                if (mysqli_stmt_execute($stmt));
+            }
+            catch (mysqli_sql_exception $e) {}
         }
     }
     else if (trim($_POST["action"]) == "update") {
@@ -32,7 +38,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $run = "UPDATE PostalService.Vehicle_Use SET date_returned = now(), end_location_id = ?, miles_driven = ? WHERE log_id = ?;";
         if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
             mysqli_stmt_bind_param($stmt, "iii", $end_id, $miles_drive, $log_id);
-            if (mysqli_stmt_execute($stmt));
+            try {
+                if (mysqli_stmt_execute($stmt));
+            }
+            catch (mysqli_sql_exception $e) {}
         }
     }
     header("refresh:0;");

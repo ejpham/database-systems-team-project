@@ -10,25 +10,31 @@ if ($_SESSION["access_level"] == "1") {
     exit;
 }
 if ($stmt = mysqli_prepare($conn_PostalService, "SELECT * FROM PostalService.Employee_Shift")) {
-    if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $shift_id, $emp_id, $shift_start, $shift_end);
-    $shifts = array();
-    while (mysqli_stmt_fetch($stmt)) {
-        $row = array($shift_id, $emp_id, $shift_start, $shift_end);
-        array_push($shifts, $row);
+    try {
+        if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $shift_id, $emp_id, $shift_start, $shift_end);
+        $shifts = array();
+        while (mysqli_stmt_fetch($stmt)) {
+            $row = array($shift_id, $emp_id, $shift_start, $shift_end);
+            array_push($shifts, $row);
+        }
+        mysqli_stmt_close($stmt);
     }
-    mysqli_stmt_close($stmt);
+    catch (mysqli_sql_exception $e) {}
 }
 if ($stmt_select_employee = mysqli_prepare($conn_PostalService, "SELECT employee_id, first_name, last_name FROM PostalService.Employee")) {
-    if (mysqli_stmt_execute($stmt_select_employee)) {
-        mysqli_stmt_store_result($stmt_select_employee);
-        mysqli_stmt_bind_result($stmt_select_employee, $emp_id, $fname, $lname);
-        $results = array();
-        while (mysqli_stmt_fetch($stmt_select_employee)) {
-            $row = array($emp_id, $fname, $lname);
-            array_push($results, $row);
+    try {
+        if (mysqli_stmt_execute($stmt_select_employee)) {
+            mysqli_stmt_store_result($stmt_select_employee);
+            mysqli_stmt_bind_result($stmt_select_employee, $emp_id, $fname, $lname);
+            $results = array();
+            while (mysqli_stmt_fetch($stmt_select_employee)) {
+                $row = array($emp_id, $fname, $lname);
+                array_push($results, $row);
+            }
+            mysqli_stmt_close($stmt_select_employee);
         }
-        mysqli_stmt_close($stmt_select_employee);
     }
+    catch (mysqli_sql_exception $e) {}
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
@@ -37,7 +43,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $run = "INSERT INTO PostalService.Employee_Shift (employee_id) VALUES (?);";
         if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
             mysqli_stmt_bind_param($stmt, "i", $emp_id);
-            if (mysqli_stmt_execute($stmt));
+            try {
+                if (mysqli_stmt_execute($stmt));
+            }
+            catch (mysqli_sql_exception $e) {}
         }
     }
     else if ($_POST["action"] == "update") {
@@ -45,7 +54,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $run = "UPDATE PostalService.Employee_Shift SET shift_end = now() WHERE shift_id = ?";
         if ($stmt = mysqli_prepare($conn_PostalService, $run)) {
             mysqli_stmt_bind_param($stmt, "i", $shift_id);
-            if (mysqli_stmt_execute($stmt));
+            try {
+                if (mysqli_stmt_execute($stmt));
+            }
+            catch (mysqli_sql_exception $e) {}
         }
     }
     header("refresh:0;");

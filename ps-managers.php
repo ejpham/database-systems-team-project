@@ -11,7 +11,10 @@ if ($_SESSION["access_level"] == "1") {
 }
 $sql = "SELECT * FROM PostalService.Manager";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-    if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $man_id, $lname, $emp_id);
+    try {
+        if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $man_id, $lname, $emp_id);
+    }
+    catch (mysqli_sql_exception $e) {}
 }
 $err = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

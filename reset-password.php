@@ -37,12 +37,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         mysqli_stmt_bind_param($stmt, "ss", $param_password, $param_email);
                         $param_password = password_hash($new_password, PASSWORD_BCRYPT);
                         $param_email = $email;
-                        if (mysqli_stmt_execute($stmt)) {
-                            $success = '<div class="alert alert-success" role="alert">Successfully changed password.</div>';
-                            header("refresh:1; url=sign-in.php");
+                        try {
+                            if (mysqli_stmt_execute($stmt)) {
+                                $success = '<div class="alert alert-success" role="alert">Successfully changed password.</div>';
+                                header("refresh:1; url=sign-in.php");
+                            }
+                            else $error = '<div class="alert alert-danger" role="alert">Oops! Something went wrong. Please try again later.</div>';
+                            mysqli_stmt_close($stmt);
                         }
-                        else $error = '<div class="alert alert-danger" role="alert">Oops! Something went wrong. Please try again later.</div>';
-                        mysqli_stmt_close($stmt);
+                        catch (mysqli_sql_exception $e) {}
                     }
                 }
             }

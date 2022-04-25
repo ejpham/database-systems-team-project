@@ -11,7 +11,10 @@ if ($_SESSION["access_level"] == "1") {
 }
 $sql = "SELECT * FROM PostalService.Contact_Logs ORDER BY message_id DESC";
 if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
-    if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $message_id, $full_name, $email, $message, $received);
+    try {
+        if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $message_id, $full_name, $email, $message, $received);
+    }
+    catch (mysqli_sql_exception $e) {}
 }
 ?>
 
