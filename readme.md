@@ -117,12 +117,12 @@ Database Access (Employee & Manager Only):
         Managers:
 
             ps-managers.php
-            ()
-            access_level {
-                1 = customer
-                2 = employee
-                3 = manager
-            }
+            (The Managers page is used to display the employees that are assigned the Manager role in the Postal Office. 
+            You are only able to access this page if you are either an Employee or a Manager: access_level 
+            {1 = customer, 2 = employee, 3 = manager}. Accounts for this Postal Service are assigned an access_level number.
+            Employees are only able to view the Managers table that displays the Manager ID, Last Name of that Manager,
+            and that Manager's Employee ID. Managers, however, are able to view the table as well as add a new employee
+            as a manager and delete a manager from the table.)
 
         Locations:
             
