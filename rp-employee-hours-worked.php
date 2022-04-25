@@ -61,8 +61,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $lname = $results[$i][2];
                     }
                 }
-                if (!empty($from_date) && !empty($to_date)) $showtotal = '<p>Total Hours Worked for '.$fname.' '.$lname.' (ID: '.$employee.') from '.$from_date.' to '.$to_date.': '.$total.'</p>';
-                else $showtotal = '<p>Total Hours Worked for '.$fname.' '.$lname.' (ID: '.$employee.'): '.$total.'</p>';
+                if (!empty($from_date) && !empty($to_date)) $showtotal = 'Total Hours Worked for '.$fname.' '.$lname.' (ID: '.$employee.') from '.$from_date.' to '.$to_date.': '.$total.'.';
+                else $showtotal = 'Total Hours Worked for '.$fname.' '.$lname.' (ID: '.$employee.'): '.$total.'.';
                 mysqli_stmt_close($stmt1);
             }
             else $err = '<div class="alert alert-danger" role="alert">Something went wrong, sql1 inside prepare.</div>';

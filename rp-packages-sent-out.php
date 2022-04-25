@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $totalMail = 0;
                 mysqli_stmt_bind_result($stmt1, $totalMail);
                 mysqli_stmt_fetch($stmt1);
-                $showtotalMail = 'Total mail sent: '.$totalMail.'';
+                $showtotalMail = 'Total mail sent from '.$from_date.' to '.$to_date.': '.$totalMail.' letters/packages.';
                 mysqli_stmt_close($stmt1);
             }
         }
@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $totalPrice = 0;
                 mysqli_stmt_bind_result($stmt2, $totalPrice);
                 mysqli_stmt_fetch($stmt2);
-                $showtotalPrice = 'Gross revenue of mail sent: $'.number_format($totalPrice, 2, '.', ',').'';
+                $showtotalPrice = 'Gross revenue of mail sent from '.$from_date.' to '.$to_date.': $'.number_format($totalPrice, 2, '.', ',').'.';
                 mysqli_stmt_close($stmt2);
             }
         }

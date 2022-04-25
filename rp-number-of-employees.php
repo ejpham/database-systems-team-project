@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $loc_dept = $results[$i][4];
                     }
                 }
-                $showtotal = '<p>Total Employees at '.$loc_dept.' (ID: '.$loc_id.') in '.$loc_city.', '.$loc_state.' '.$loc_zip.': '.$total.'</p>';
+                $showtotal = 'Total Employees at '.$loc_dept.' (ID: '.$loc_id.') in '.$loc_city.', '.$loc_state.' '.$loc_zip.': '.$total.'.';
                 mysqli_stmt_close($stmt1);
             }
         }

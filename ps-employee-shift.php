@@ -9,9 +9,26 @@ if ($_SESSION["access_level"] == "1") {
     header("location:index.php");
     exit;
 }
-$sql = "SELECT * FROM PostalService.Employee_Shift";
-if ($stmt = mysqli_prepare($conn_PostalService, $sql)) {
+if ($stmt = mysqli_prepare($conn_PostalService, "SELECT * FROM PostalService.Employee_Shift")) {
     if (mysqli_stmt_execute($stmt)) mysqli_stmt_bind_result($stmt, $shift_id, $emp_id, $shift_start, $shift_end);
+    $shifts = array();
+    while (mysqli_stmt_fetch($stmt)) {
+        $row = array($shift_id, $emp_id, $shift_start, $shift_end);
+        array_push($shifts, $row);
+    }
+    mysqli_stmt_close($stmt);
+}
+if ($stmt_select_employee = mysqli_prepare($conn_PostalService, "SELECT employee_id, first_name, last_name FROM PostalService.Employee")) {
+    if (mysqli_stmt_execute($stmt_select_employee)) {
+        mysqli_stmt_store_result($stmt_select_employee);
+        mysqli_stmt_bind_result($stmt_select_employee, $emp_id, $fname, $lname);
+        $results = array();
+        while (mysqli_stmt_fetch($stmt_select_employee)) {
+            $row = array($emp_id, $fname, $lname);
+            array_push($results, $row);
+        }
+        mysqli_stmt_close($stmt_select_employee);
+    }
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_close($stmt);
@@ -160,7 +177,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <td></td>
                                     <td>
                                         <?php if ($_SESSION["access_level"] == "3") { ?>
-                                            <input type="number" name="emp_id" class="form-control" min="1" placeholder="Employee ID">
+                                            <select class="form-select" name="employee">
+                                                <option selected disabled>Employees</option>
+                                                <?php for ($i = 0; $i < sizeof($results); $i++) { ?>
+                                                    <option value="<?php echo $results[$i][0]; ?>"><?php echo $results[$i][1].' '.$results[$i][2].' (ID: '.$results[$i][0].')'; ?></option>
+                                                <?php } ?>
+                                            </select>
                                         <?php } else { ?>
                                             <input type="number" name="emp_id" class="form-control-plaintext" min="1" value="<?php echo $_SESSION["employee_id"]; ?>" readonly>
                                         <?php } ?>
@@ -172,26 +194,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     </td>
                                 </form>
                             </tr>
-                            <?php while (mysqli_stmt_fetch($stmt)) { ?>
+                            <?php for ($i = 0; $i < sizeof($shifts); $i++) { ?>
                                 <tr>
                                     <?php if ($_SESSION["access_level"] == "2") { // employee
-                                        if ($_SESSION["employee_id"] == $emp_id) { // only show shifts for that employee
+                                        if ($_SESSION["employee_id"] == $shifts[$i][1]) { // only show shifts for that employee
                                             if ($shift_end == "") { // shift not over ?>
                                                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                                                     <input type="hidden" name="action" value="update">
                                                     <input type="hidden" name="shift_id" value="<?php echo $shift_id; ?>">
-                                                    <td><?php echo $shift_id; ?></td>
-                                                    <td><?php echo $emp_id; ?></td>
-                                                    <td><?php echo $shift_start; ?></td>
-                                                    <td><?php echo $shift_end; ?></td>
+                                                    <td><?php echo $shifts[$i][0]; ?></td>
+                                                    <td><?php echo $shifts[$i][1]; ?></td>
+                                                    <td><?php echo $shifts[$i][2]; ?></td>
+                                                    <td><?php echo $shifts[$i][3]; ?></td>
                                                     <td><input class="btn btn-warning align-self-start" type="submit" value="Clock Out"></td>
                                                 </form>
                                             <?php }
                                             else { // old shifts ?>
-                                                <td><?php echo $shift_id; ?></td>
-                                                <td><?php echo $emp_id; ?></td>
-                                                <td><?php echo $shift_start; ?></td>
-                                                <td><?php echo $shift_end; ?></td>
+                                                <td><?php echo $shifts[$i][0]; ?></td>
+                                                <td><?php echo $shifts[$i][1]; ?></td>
+                                                <td><?php echo $shifts[$i][2]; ?></td>
+                                                <td><?php echo $shifts[$i][3]; ?></td>
                                                 <td></td>
                                             <?php }
                                         }
@@ -200,18 +222,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                                                 <input type="hidden" name="action" value="update">
                                                 <input type="hidden" name="shift_id" value="<?php echo $shift_id; ?>">
-                                                <td><?php echo $shift_id; ?></td>
-                                                <td><?php echo $emp_id; ?></td>
-                                                <td><?php echo $shift_start; ?></td>
-                                                <td><?php echo $shift_end; ?></td>
+                                                <td><?php echo $shifts[$i][0]; ?></td>
+                                                <td><?php echo $shifts[$i][1]; ?></td>
+                                                <td><?php echo $shifts[$i][2]; ?></td>
+                                                <td><?php echo $shifts[$i][3]; ?></td>
                                                 <td><input class="btn btn-warning align-self-start" type="submit" value="Clock Out"></td>
                                             </form>
                                         <?php }
                                         else { // old shifts ?>
-                                            <td><?php echo $shift_id; ?></td>
-                                            <td><?php echo $emp_id; ?></td>
-                                            <td><?php echo $shift_start; ?></td>
-                                            <td><?php echo $shift_end; ?></td>
+                                            <td><?php echo $shifts[$i][0]; ?></td>
+                                            <td><?php for ($j = 0; $j < sizeof($results); $j++) {
+                                                if ($shifts[$i][1] == $results[$j][0]) echo $results[$j][1].' '.$results[$j][2];
+                                            }
+                                            ?></td>
+                                            <td><?php echo $shifts[$i][2]; ?></td>
+                                            <td><?php echo $shifts[$i][3]; ?></td>
                                             <td></td>
                                         <?php }
                                     } ?>
