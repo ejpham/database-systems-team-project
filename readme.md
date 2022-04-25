@@ -162,7 +162,16 @@ Database Access (Employee & Manager Only):
         Users:
             
             wl-users.php
-            ()
+            (By accessing the Users Page under the Web Logins section, you are able to view the information of 
+            registered Users that have accounts for this Postal Service. The information includes the User ID number,
+            the User's Name, E-mail Address, the Date Created for their account, and the User's Access Level. When logged 
+            in as an Employee, you are only allowed to view the information of Users with an Access Level of 1; Employees 
+            are not allowed to view information of other Employees or Managers and can only delete Users with an Access Level 
+            of 1 [a Customer] from the table [which deletes that account from the Postal Service]. By being logged in 
+            as a Manager, you have access to every registered User's information on the table and are allowed to delete 
+            any User from the table. In addition to this, Managers are the only ones able to change the Access Levels 
+            of Users, which is used to register new Employees once they have created an account, giving those Employees 
+            access to the Database Access page.)
     Reports:
         [Only Managers are able to view the Reports section of the Database Access page.]
         
