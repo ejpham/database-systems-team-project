@@ -32,7 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 if ($result = mysqli_query($conn_PostalService, "SELECT employee_id FROM PostalService.Employee WHERE email = '$email'")) {
                                     $row = mysqli_fetch_assoc($result);
                                     $_SESSION["employee_id"] = $row["employee_id"];
-                                    $success = '<div class="alert alert-success" role="alert">Employee login successful.</div>';
+                                    if ($_SESSION["access_level"] == "2") $success = '<div class="alert alert-success" role="alert">Employee login successful.</div>';
+                                    else $success = '<div class="alert alert-success" role="alert">Manager login successful.</div>';
                                 }
                                 else $error = '<div class="alert alert-danger" role="alert">Could not grab employee ID.</div>';
                             }

@@ -160,21 +160,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="table-responsive">
                     <table class="table table-bordered table-primary table-striped table-hover table-sm align-middle">
                         <thead>
-                            <th scope="col">Emp. ID</th>
-                            <th scope="col">First Name</th>
-                            <th scope="col">M.I.</th>
-                            <th scope="col">Last Name</th>
-                            <th scope="col">Date of Birth</th>
-                            <th scope="col">Home Address</th>
-                            <th scope="col">City</th>
-                            <th scope="col">State</th>
-                            <th scope="col">Zip Code</th>
-                            <th scope="col">E-mail Address</th>
-                            <th scope="col">Phone Number</th>
-                            <th scope="col">SSN</th>
-                            <th scope="col">Man. ID</th>
-                            <th scope="col">User ID</th>
-                            <?php if ($_SESSION["access_level"] == "3") { ?><th scope="col"></th><?php } ?>
+                            <?php if ($_SESSION["access_level"] == "3") { ?>
+                                <th scope="col">Emp. ID</th>
+                                <th scope="col">First Name</th>
+                                <th scope="col">M.I.</th>
+                                <th scope="col">Last Name</th>
+                                <th scope="col">Date of Birth</th>
+                                <th scope="col">Home Address</th>
+                                <th scope="col">City</th>
+                                <th scope="col">State</th>
+                                <th scope="col">Zip Code</th>
+                                <th scope="col">E-mail Address</th>
+                                <th scope="col">Phone Number</th>
+                                <th scope="col">SSN</th>
+                                <th scope="col">Man. ID</th>
+                                <th scope="col">User ID</th>
+                                <th scope="col">Strikes</th>
+                                <th scope="col"></th>
+                            <?php } else { ?>
+                                <th scope="col">Emp. ID</th>
+                                <th scope="col">First Name</th>
+                                <th scope="col">M.I.</th>
+                                <th scope="col">Last Name</th>
+                                <th scope="col">Date of Birth</th>
+                                <th scope="col">Home Address</th>
+                                <th scope="col">City</th>
+                                <th scope="col">State</th>
+                                <th scope="col">Zip Code</th>
+                                <th scope="col">E-mail Address</th>
+                                <th scope="col">Phone Number</th>
+                                <th scope="col">SSN</th>
+                                <th scope="col">Man. ID</th>
+                                <th scope="col">User ID</th>
+                                <th scope="col">Strikes</th>
+                            <?php } ?>
                         </thead>
                         <tbody>
                             <?php if ($_SESSION["access_level"] == "3") { ?>
@@ -250,31 +269,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <td><input class="form-control" type="text" name="ssn" maxlength="9" placeholder="123456789"></td>
                                         <td></td>
                                         <td></td>
+                                        <td></td>
                                         <td><input type="submit" name="submit" class="btn btn-primary" value="Add"></td>
                                     </form>
                                 </tr>
-                            <?php } else {} ?>
+                            <?php } ?>
                             <?php while (mysqli_stmt_fetch($stmt)) { ?>
                             <tr>
+                                <?php if ($_SESSION["access_level"] == "3") { ?>
                                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="emp_id" value="<?php echo $emp_id; ?>">
-                                    <td><?php if ($_SESSION["access_level"] == "3") { echo $emp_id; } ?></td>
+                                    <td><?php echo $emp_id; ?></td>
                                     <td><?php echo $fname; ?></td>
                                     <td><?php echo $minit; ?></td>
                                     <td><?php echo $lname; ?></td>
-                                    <td><?php if ($_SESSION["access_level"] == "3") { echo $dob; } ?></td>
-                                    <td><?php if ($_SESSION["access_level"] == "3") { echo $addr; } ?></td>
-                                    <td><?php if ($_SESSION["access_level"] == "3") { echo $city; } ?></td>
-                                    <td><?php if ($_SESSION["access_level"] == "3") { echo $state; } ?></td>
-                                    <td><?php if ($_SESSION["access_level"] == "3") { echo $zip; } ?></td>
+                                    <td><?php echo $dob; ?></td>
+                                    <td><?php echo $addr; ?></td>
+                                    <td><?php echo $city; ?></td>
+                                    <td><?php echo $state; ?></td>
+                                    <td><?php echo $zip; ?></td>
                                     <td><?php echo $email; ?></td>
-                                    <td><?php if ($_SESSION["access_level"] == "3") { echo $pnum; } ?></td>
-                                    <td><?php if ($_SESSION["access_level"] == "3") { echo $ssn; } ?></td>
+                                    <td><?php echo $pnum; ?></td>
+                                    <td><?php echo $ssn; ?></td>
                                     <td><?php echo $m_id; ?></td>
                                     <td><?php echo $u_id; ?></td>
-                                    <?php if ($_SESSION["access_level"] == "3") { ?><td><input type="submit" class="btn btn-danger" value="Delete"></td><?php } ?>
+                                    <td><?php echo $strikes; ?></td>
+                                    <td><input type="submit" class="btn btn-danger" value="Delete"></td>
                                 </form>
+                                <?php } else { ?>
+                                    <td><?php if ($_SESSION["employee_id"] == $emp_id) echo $emp_id; ?></td>
+                                    <td><?php echo $fname; ?></td>
+                                    <td><?php echo $minit; ?></td>
+                                    <td><?php echo $lname; ?></td>
+                                    <td><?php if ($_SESSION["employee_id"] == $emp_id) echo $dob; ?></td>
+                                    <td><?php if ($_SESSION["employee_id"] == $emp_id) echo $addr; ?></td>
+                                    <td><?php if ($_SESSION["employee_id"] == $emp_id) echo $city; ?></td>
+                                    <td><?php if ($_SESSION["employee_id"] == $emp_id) echo $state; ?></td>
+                                    <td><?php if ($_SESSION["employee_id"] == $emp_id) echo $zip; ?></td>
+                                    <td><?php echo $email; ?></td>
+                                    <td><?php if ($_SESSION["employee_id"] == $emp_id) echo $pnum; ?></td>
+                                    <td><?php if ($_SESSION["employee_id"] == $emp_id) echo $ssn; ?></td>
+                                    <td><?php echo $m_id; ?></td>
+                                    <td><?php if ($_SESSION["employee_id"] == $emp_id) echo $u_id; ?></td>
+                                    <td><?php if ($_SESSION["employee_id"] == $emp_id) echo $strikes; ?></td>
+                                <?php } ?>
                             </tr>
                             <?php } ?>
                         </tbody>

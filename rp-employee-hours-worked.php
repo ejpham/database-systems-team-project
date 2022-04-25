@@ -13,35 +13,64 @@ if ($_SESSION["access_level"] == "2") {
     header("location:database-access.php");
     exit;
 }
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (empty(trim($_POST["emp_id"]))) $emp_id_err = '<div class="alert alert-danger" role="alert">Please enter an employee ID.</div>';
-    else $emp_id = trim($_POST["emp_id"]);
-    if (empty(trim($_POST["from_date"])) && !empty(trim($_POST["to_date"]))) $from_date_err = '<div class="alert alert-danger" role="alert">Please enter a from date.</div>';
-    else if (!empty(trim($_POST["from_date"])) && empty(trim($_POST["to_date"]))) $to_date_err = '<div class="alert alert-danger" role="alert">Please enter a to date.</div>';
-    else if (!empty(trim($_POST["from_date"])) && !empty(trim($_POST["to_date"]))) {
-        $from_date = trim($_POST["from_date"]);
-        $to_date = trim($_POST["to_date"]);
-        $sql1 = "SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(shift_end , shift_start)))) FROM PostalService.Employee_Shift WHERE employee_id = ? AND DATE(?) <= DATE(shift_start) AND DATE(?) >= DATE(shift_end)";
-        $sql2 = "SELECT * FROM PostalService.Employee_Shift WHERE employee_id = ? AND DATE(?) <= DATE(shift_start) AND DATE(?) >= DATE(shift_end)";
+if ($stmt_select_employee = mysqli_prepare($conn_PostalService, "SELECT employee_id, first_name, last_name FROM PostalService.Employee")) {
+    if (mysqli_stmt_execute($stmt_select_employee)) {
+        mysqli_stmt_store_result($stmt_select_employee);
+        mysqli_stmt_bind_result($stmt_select_employee, $emp_id, $fname, $lname);
+        $results = array();
+        while (mysqli_stmt_fetch($stmt_select_employee)) {
+            $row = array($emp_id, $fname, $lname);
+            array_push($results, $row);
+        }
+        mysqli_stmt_close($stmt_select_employee);
     }
-    else {
+}
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (empty(trim($_POST["employee"])))
+        $employee_err = '<div class="alert alert-danger" role="alert">Please select an employee.</div>';
+    else
+        $employee = trim($_POST["employee"]);
+    if (empty(trim($_POST["from_date"])) && !empty(trim($_POST["to_date"]))) // only to date selected
+        $from_date_err = '<div class="alert alert-danger" role="alert">Please enter a from date.</div>';
+    else if (!empty(trim($_POST["from_date"])) && empty(trim($_POST["to_date"]))) // only from date selected
+        $to_date_err = '<div class="alert alert-danger" role="alert">Please enter a to date.</div>';
+    else if (!empty(trim($_POST["from_date"])) && !empty(trim($_POST["to_date"]))) { // both dates selected
+        if ($from_date > $to_date) // from date is later than to date
+            $from_date_err = '<div class="alert alert-danger" role="alert">The selected from date is later than the selected to date.</div>';
+        else {
+            $from_date = trim($_POST["from_date"]);
+            $to_date = trim($_POST["to_date"]);
+            $sql1 = "SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(shift_end , shift_start)))) FROM PostalService.Employee_Shift WHERE employee_id = ? AND DATE(?) <= DATE(shift_start) AND DATE(?) >= DATE(shift_end)";
+            $sql2 = "SELECT * FROM PostalService.Employee_Shift WHERE employee_id = ? AND DATE(?) <= DATE(shift_start) AND DATE(?) >= DATE(shift_end)";
+        }
+    }
+    else { // no dates selected
         $sql1 = "SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(shift_end , shift_start)))) FROM PostalService.Employee_Shift WHERE employee_id = ?;";
         $sql2 = "SELECT * FROM PostalService.Employee_Shift WHERE employee_id = ?";
     }
-    if (empty($emp_id_err) && empty($from_date_err) && empty($to_date_err)) {
+    if (empty($employee_err) && empty($from_date_err) && empty($to_date_err)) {
         if ($stmt1 = mysqli_prepare($conn_PostalService, $sql1)) {
-            if (!empty($from_date) && !empty($to_date)) mysqli_stmt_bind_param($stmt1, "iss", $emp_id, $from_date, $to_date);
-            else mysqli_stmt_bind_param($stmt1, "i", $emp_id);
+            if (!empty($from_date) && !empty($to_date)) mysqli_stmt_bind_param($stmt1, "iss", $employee, $from_date, $to_date);
+            else mysqli_stmt_bind_param($stmt1, "i", $employee);
             if (mysqli_stmt_execute($stmt1)) {
                 mysqli_stmt_bind_result($stmt1, $total);
                 mysqli_stmt_fetch($stmt1);
-                $showtotal = '<p>Total Hours Worked: '.$total.'</p>';
+                for ($i = 0; $i < sizeof($results); $i++) {
+                    if ($results[$i][0] == $employee) {
+                        $fname = $results[$i][1];
+                        $lname = $results[$i][2];
+                    }
+                }
+                if (!empty($from_date) && !empty($to_date)) $showtotal = '<p>Total Hours Worked for '.$fname.' '.$lname.' (ID: '.$employee.') from '.$from_date.' to '.$to_date.': '.$total.'</p>';
+                else $showtotal = '<p>Total Hours Worked for '.$fname.' '.$lname.' (ID: '.$employee.'): '.$total.'</p>';
                 mysqli_stmt_close($stmt1);
             }
+            else $err = '<div class="alert alert-danger" role="alert">Something went wrong, sql1 inside prepare.</div>';
         }
+        else $err = '<div class="alert alert-danger" role="alert">Something went wrong, sql1 outside prepare.</div>';
         if ($stmt2 = mysqli_prepare($conn_PostalService, $sql2)) {
-            if (!empty($from_date) && !empty($to_date)) mysqli_stmt_bind_param($stmt2, "iss", $emp_id, $from_date, $to_date);
-            else mysqli_stmt_bind_param($stmt2, "i", $emp_id);
+            if (!empty($from_date) && !empty($to_date)) mysqli_stmt_bind_param($stmt2, "iss", $employee, $from_date, $to_date);
+            else mysqli_stmt_bind_param($stmt2, "i", $employee);
             if (mysqli_stmt_execute($stmt2)) {
                 mysqli_stmt_bind_result($stmt2, $shift_id, $new_emp_id, $shift_start, $shift_end);
                 $showtable = '
@@ -69,7 +98,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $showtable .= '</tbody></table></div>';
                 mysqli_stmt_close($stmt2);
             }
+            else $err = '<div class="alert alert-danger" role="alert">Something went wrong, sql2 inside prepare.</div>';
         }
+        else $err = '<div class="alert alert-danger" role="alert">Something went wrong, sql2 outside prepare.</div>';
     }
 }
 ?>
@@ -183,7 +214,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="col">
                 <h6 class="display-6">Total Employee Hours Worked</h6>
                 <?php
-                    echo $emp_id_err;
+                    echo $employee_err;
                     echo $from_date_err;
                     echo $to_date_err;
                     echo $err;
@@ -192,8 +223,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                         <div class="input-group">
                             <a href=""><button type="button" class="btn btn-outline-secondary">Refresh</button></a>
-                            <span class="input-group-text">Employee ID</span>
-                            <input type="number" name="emp_id" class="form-control" value="<?php echo $emp_id; ?>" min="1" placeholder="Employee ID">
+                            <span class="input-group-text">Select Employee</span>
+                            <select class="form-select" name="employee">
+                                <option selected disabled>Employees</option>
+                                <?php for ($i = 0; $i < sizeof($results); $i++) { ?>
+                                    <option value="<?php echo $results[$i][0]; ?>"><?php echo $results[$i][1].' '.$results[$i][2].' (ID: '.$results[$i][0].')'; ?></option>
+                                <?php } ?>
+                            </select>
                             <span class="input-group-text">From Date</span>
                             <input type="date" name="from_date" class="form-control" value="<?php echo $from_date; ?>" id="datePickerID1">
                             <span class="input-group-text">To Date</span>

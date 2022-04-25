@@ -13,9 +13,21 @@ if ($_SESSION["access_level"] == "2") {
     header("location:database-access.php");
     exit;
 }
+if ($stmt_select_location = mysqli_prepare($conn_PostalService, "SELECT location_id, location_city, location_state, location_zipcode, location_dept FROM PostalService.Location")) {
+    if (mysqli_stmt_execute($stmt_select_location)) {
+        mysqli_stmt_store_result($stmt_select_location);
+        mysqli_stmt_bind_result($stmt_select_location, $loc_id, $loc_city, $loc_state, $loc_zip, $loc_dept);
+        $results = array();
+        while (mysqli_stmt_fetch($stmt_select_location)) {
+            $row = array($loc_id, $loc_city, $loc_state, $loc_zip, $loc_dept);
+            array_push($results, $row);
+        }
+        mysqli_stmt_close($stmt_select_location);
+    }
+}
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (empty(trim($_POST["loc_id"]))) $loc_id_err = '<div class="alert alert-danger" role="alert">Please enter a location ID.</div>';
-    else $loc_id = trim($_POST["loc_id"]);
+    if (empty(trim($_POST["location"]))) $loc_id_err = '<div class="alert alert-danger" role="alert">Please select a location.</div>';
+    else $loc_id = trim($_POST["location"]);
     $sql1 = "SELECT COUNT(*) FROM PostalService.WORKS_AT WHERE location_id = ?";
     $sql2 = "SELECT PostalService.Employee.employee_id, first_name, last_name, manager_id, PostalService.WORKS_AT.employment_date FROM PostalService.Employee, PostalService.WORKS_AT WHERE PostalService.WORKS_AT.employee_id = PostalService.Employee.employee_id AND PostalService.WORKS_AT.location_id = ?";
     if (empty($loc_id_err)) {
@@ -24,7 +36,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (mysqli_stmt_execute($stmt1)) {
                 mysqli_stmt_bind_result($stmt1, $total);
                 mysqli_stmt_fetch($stmt1);
-                $showtotal = '<p>Total Employees at Location '.$loc_id.': '.$total.'</p>';
+                for ($i = 0; $i < sizeof($results); $i++) {
+                    if ($results[$i][0] == $loc_id) {
+                        $loc_city = $results[$i][1];
+                        $loc_state = $results[$i][2];
+                        $loc_zip = $results[$i][3];
+                        $loc_dept = $results[$i][4];
+                    }
+                }
+                $showtotal = '<p>Total Employees at '.$loc_dept.' (ID: '.$loc_id.') in '.$loc_city.', '.$loc_state.' '.$loc_zip.': '.$total.'</p>';
                 mysqli_stmt_close($stmt1);
             }
         }
@@ -178,8 +198,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                         <div class="input-group">
                             <a href=""><button type="button" class="btn btn-outline-secondary">Refresh</button></a>
-                            <span class="input-group-text">Location ID</span>
-                            <input type="number" name="loc_id" class="form-control" value="<?php echo $loc_id; ?>" min="1" placeholder="Location ID">
+                            <span class="input-group-text">Location</span>
+                            <select class="form-select" name="location">
+                                <option selected disabled>Locations</option>
+                                <?php for ($i = 0; $i < sizeof($results); $i++) { ?>
+                                    <option value="<?php echo $results[$i][0]; ?>"><?php echo $results[$i][4].': '.$results[$i][1].', '.$results[$i][2].' '.$results[$i][3]; ?></option>
+                                <?php } ?>
+                            </select>
                             <input type="submit" class="btn btn-outline-primary" value="Generate">
                         </div>
                     </form>

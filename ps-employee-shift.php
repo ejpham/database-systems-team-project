@@ -174,35 +174,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </tr>
                             <?php while (mysqli_stmt_fetch($stmt)) { ?>
                                 <tr>
-                                    <?php if ($_SESSION["access_level"] == "2") { ?>
-                                        <?php if ($shift_end == "") { ?>
+                                    <?php if ($_SESSION["access_level"] == "2") { // employee
+                                        if ($_SESSION["employee_id"] == $emp_id) { // only show shifts for that employee
+                                            if ($shift_end == "") { // shift not over ?>
+                                                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                                    <input type="hidden" name="action" value="update">
+                                                    <input type="hidden" name="shift_id" value="<?php echo $shift_id; ?>">
+                                                    <td><?php echo $shift_id; ?></td>
+                                                    <td><?php echo $emp_id; ?></td>
+                                                    <td><?php echo $shift_start; ?></td>
+                                                    <td><?php echo $shift_end; ?></td>
+                                                    <td><input class="btn btn-warning align-self-start" type="submit" value="Clock Out"></td>
+                                                </form>
+                                            <?php }
+                                            else { // old shifts ?>
+                                                <td><?php echo $shift_id; ?></td>
+                                                <td><?php echo $emp_id; ?></td>
+                                                <td><?php echo $shift_start; ?></td>
+                                                <td><?php echo $shift_end; ?></td>
+                                                <td></td>
+                                            <?php }
+                                        }
+                                    } else { // manager
+                                        if ($shift_end == "") { // shift not over ?>
                                             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                                                 <input type="hidden" name="action" value="update">
                                                 <input type="hidden" name="shift_id" value="<?php echo $shift_id; ?>">
                                                 <td><?php echo $shift_id; ?></td>
                                                 <td><?php echo $emp_id; ?></td>
                                                 <td><?php echo $shift_start; ?></td>
-                                                <td></td>
-                                                <td><input type="submit" class="btn btn-warning" value="Clock Out"></td>
+                                                <td><?php echo $shift_end; ?></td>
+                                                <td><input class="btn btn-warning align-self-start" type="submit" value="Clock Out"></td>
                                             </form>
-                                        <?php } else if ($_SESSION["employee_id"] == $emp_id) { ?>
+                                        <?php }
+                                        else { // old shifts ?>
                                             <td><?php echo $shift_id; ?></td>
                                             <td><?php echo $emp_id; ?></td>
                                             <td><?php echo $shift_start; ?></td>
-                                            <td><?php echo $shift_end ?></td>
+                                            <td><?php echo $shift_end; ?></td>
                                             <td></td>
-                                        <?php } ?>
-                                    <?php } else { ?>
-                                        <td><?php echo $shift_id; ?></td>
-                                        <td><?php echo $emp_id; ?></td>
-                                        <td><?php echo $shift_start; ?></td>
-                                        <td><?php echo $shift_end ?></td>
-                                        <td>
-                                            <?php if ($shift_end == "") { ?>
-                                                <input type="submit" class="btn btn-warning" value="Clock Out">
-                                            <?php } ?>
-                                        </td>
-                                    <?php } ?>
+                                        <?php }
+                                    } ?>
                                 </tr>
                             <?php } ?>
                         </tbody>
