@@ -202,3 +202,14 @@ Database Access (Employee & Manager Only):
             well as, above the report table, the total amount of letters and packages sent altogether and the gross revenue 
             of all of those sent Mail Orders. This information in the table includes the Mail Type, the From Address and 
             To Address of the Mail Order, the Delivered On date and time, and the Shipping Cost.)
+TRIGGERS: 
+
+    MailChecker:
+    
+        This trigger makes it so no more mail other than 4 peices of mail can be sent to a certain address per 24 hours. This is so an address does not get spammed with mail.
+    Employee_Salary_Checker:
+    
+        This trigger makes it so when adding a new employee, their initial salary cannot be greater than any existing manager's salary. If the salary is greater, then the employee does not get inserted into the database.
+    Employee_ShiftStrike_Adder:
+    
+        This trigger makes it so when an employee clocks out and their shift was greater than 8 hours, a strike gets placed into their account. Anytime an employee reaches a multiple of 3 strikes, their salary gets decreased by 10 cents.
