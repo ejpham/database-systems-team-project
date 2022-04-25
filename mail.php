@@ -100,10 +100,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             else $param_shipping_class = $packSpeed;
             $param_shipping_cost = $price;
             $param_tracking = $tracking;
+            try{
             if (mysqli_stmt_execute($stmt)) $success = '<div class="alert alert-success" role="alert">Your order has been processed successfully.</div>';
             else $error = '<div class="alert alert-danger" role="alert">Your order could not be accommodated.</div>';
+            }
+            catch(mysqli_sql_exception $e){
+                $error = '<div class="alert alert-danger" role="alert">Four packages have been sent to this address in the past 24 hours, no more will be taken.</div>';
+            }
         }
-        else $error = '<div class="alert alert-danger" role="alert">Your order could not be accommodated.</div>';
         if (empty($error)) {
             if ($stmt2 = mysqli_prepare($conn_PostalService, $sql2)) {
                 mysqli_stmt_bind_param($stmt2, "sssiss", $param_tracking, $param_status, $param_packageSize, $param_packageWeight, $param_billingAdd, $param_sendersEmail);
@@ -116,7 +120,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (mysqli_stmt_execute($stmt2)) $success = '<div class="alert alert-success" role="alert">Your order has been processed successfully.</div>';
                 else $error = '<div class="alert alert-danger" role="alert">Your order could not be accommodated.</div>';
             }
-            else $error = '<div class="alert alert-danger" role="alert">Your order could not be accommodated.</div>';
         }
     }
     mysqli_close($conn_WebLogins);
@@ -155,6 +158,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <?php if ($_SESSION["access_level"] > "1") { ?>
                                     <a href="database-access.php" class="dropdown-item">Database Access</a>
                                 <?php } ?>
+                                <a href="my-account.php" class="dropdown-item">My Account</a>
                                 <a href="sign-out.php" class="dropdown-item">Sign Out</a>
                             </div>
                         </li>
