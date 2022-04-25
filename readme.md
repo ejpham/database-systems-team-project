@@ -178,11 +178,22 @@ Database Access (Employee & Manager Only):
         Employee Hours:
 
             rp-employee-hours-worked.php
-            ()
+            (The use for the Employee Hours page is to view an Employee's Total Hours Worked. This is accomplished by 
+            selecting an Employee by using their Employee ID and selecting the timeframe in which they have worked. 
+            With a given From Date and To Date, that Employee's Shifts for that timeframe are then displayed based on 
+            the Shift ID, the Employee ID, the Shift Start time, and Shift End time. In addition to this, above the table
+            is displayed a statement that shows the Total Hours Worked for that employee from the selected timeframe. If 
+            an Employee has recently finished a new Shift, you can press the Refresh button at the top and that recently 
+            finished Shift will show up in the table.)
         Number of Employeess at Location:
         
             rp-number-of-employees.php
-            ()
+            (The Number of Employees at Location page is used to find the number of Employees that are currently assigned 
+            at a specific registered Location for the Postal Serivce. By clicking the dropdown box and picking a 
+            registered Location's Address, you are able to see the amount of Employees working at that
+            Location [displayed above the box with that Location's ID number] as well as each individual Employee's ID, 
+            First Name, Last Name, Manager ID [if they have one], and their Employement Date. Any newly added or removed 
+            Employees will be shown in the table once the Refresh button is clicked.)
         Total Miles Driven by Vehicle:
         
             rp-miles-driven-by-vehicle.php
